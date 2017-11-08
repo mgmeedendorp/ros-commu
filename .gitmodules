@@ -1,0 +1,8 @@
+[submodule "cv_camera"]
+	path = src/cv_camera
+	url = https://github.com/OTL/cv_camera.git
+
+[submodule "caffe"]
+	path = src/ssd/caffe
+	url = https://github.com/weiliu89/caffe.git
+	branch = ssd
