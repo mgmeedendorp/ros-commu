@@ -1,0 +1,13 @@
+# The string to utter.
+string utterance
+
+# Whether to block this thread until the CommU is done uttering. Utter time is approximated,
+# since the CommU does not support this natively.
+bool blocking
+
+# Whether to utter using the english text-to-speech engine. When english is False, utterances will
+# be produced using the japanese text-to-speech engine.
+bool english
+---
+# Whether the CommU received the utter command successfully.
+bool success
