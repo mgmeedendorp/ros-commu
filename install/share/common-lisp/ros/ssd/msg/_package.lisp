@@ -1,0 +1,11 @@
+(cl:defpackage ssd-msg
+  (:use )
+  (:export
+   "<BOUNDINGBOX>"
+   "BOUNDINGBOX"
+   "<CLASSIFIEDOBJECT>"
+   "CLASSIFIEDOBJECT"
+   "<CLASSIFIEDOBJECTARRAY>"
+   "CLASSIFIEDOBJECTARRAY"
+  ))
+
