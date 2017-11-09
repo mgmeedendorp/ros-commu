@@ -42,7 +42,7 @@ class DebugHandler:
             while not rospy.is_shutdown():
                 print(self.latest_cv_image)
 
-                rospy.log('tick')
+                rospy.loginfo('tick')
 
                 if self.latest_cv_image is not None:
                     if cv2.getWindowProperty('window-name', 0) < 0:
