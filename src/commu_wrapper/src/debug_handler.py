@@ -19,8 +19,6 @@ class DebugHandler:
         rospy.loginfo("Subscribing to '%s' topic for images..", camera_topic)
         rospy.Subscriber(camera_topic, Image, self.image_received)
 
-        rospy.on_shutdown(self.close_window)
-
         self.spin_image_window()
 
     def image_received(self, data):
@@ -40,27 +38,18 @@ class DebugHandler:
             rospy.loginfo("Starting image worker thread.")
 
             while not rospy.is_shutdown():
-
                 if self.latest_cv_image is not None:
-                    #if cv2.getWindowProperty(self.window_name, 0) < 0:
-                    #    break
-
-                    rospy.loginfo("Updating image..")
-
                     cv2.imshow(self.window_name, self.latest_cv_image)
 
-                if (cv2.waitKey(1000/60) & 0xFF) == 27:
+                if (cv2.waitKey(1000/30) & 0xFF) == 27:
                     rospy.loginfo("Closing window because ESC was pressed")
-                    self.close_window()
+                    cv2.destroyWindow(self.window_name)
                     break
 
             rospy.loginfo("Stopping image worker thread.")
 
         self.thread = Thread(target=worker)
         self.thread.start()
-
-    def close_window(self):
-        cv2.destroyWindow(self.window_name)
 
 
 
