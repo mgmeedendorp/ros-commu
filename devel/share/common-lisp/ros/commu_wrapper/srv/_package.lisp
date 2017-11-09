@@ -1,0 +1,15 @@
+(cl:defpackage commu_wrapper-srv
+  (:use )
+  (:export
+   "COMMULOOK"
+   "<COMMULOOK-REQUEST>"
+   "COMMULOOK-REQUEST"
+   "<COMMULOOK-RESPONSE>"
+   "COMMULOOK-RESPONSE"
+   "COMMUUTTER"
+   "<COMMUUTTER-REQUEST>"
+   "COMMUUTTER-REQUEST"
+   "<COMMUUTTER-RESPONSE>"
+   "COMMUUTTER-RESPONSE"
+  ))
+
