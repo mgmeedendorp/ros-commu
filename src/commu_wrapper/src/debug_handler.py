@@ -8,7 +8,7 @@ import rospy
 
 class DebugHandler:
 
-    def __init__(self, camera_topic, window_name="Debug window (press ESC to close)"):
+    def __init__(self, camera_topic, window_name="Debug window"):
         rospy.loginfo("Initializing DebugHandler..")
         self.window_name = window_name
         self.image_bridge = CvBridge()
