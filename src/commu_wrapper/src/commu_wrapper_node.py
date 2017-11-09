@@ -60,7 +60,7 @@ if __name__ == '__main__':
     rospy.loginfo("-c, --isclassificationtopic: \t%s", args.isclassificationtopic)
 
     if bool(args.debug):
-        wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image, args.isclassificationtopic))
+        wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image, bool(args.isclassificationtopic)))
     else:
         wrapper = CommUWrapper(args.ipaddress, int(args.port))
 
