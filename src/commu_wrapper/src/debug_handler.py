@@ -22,6 +22,8 @@ class DebugHandler:
         rospy.loginfo("Subscribing to '%s' topic for images..", camera_topic)
         rospy.Subscriber(camera_topic, Image, self.image_received)
 
+        rospy.on_shutdown(self.close_window)
+
         self.spin_image_window()
 
     def image_received(self, data):
