@@ -99,6 +99,7 @@
 (setf (get button_input::BinaryButtonInputRequest :definition-)
       "---
 uint8 response
+
 ")
 
 (setf (get button_input::BinaryButtonInputResponse :md5sum-) "59064532f110d857c53f36f4ab7ad30a")
@@ -106,6 +107,7 @@ uint8 response
 (setf (get button_input::BinaryButtonInputResponse :definition-)
       "---
 uint8 response
+
 ")
 
 

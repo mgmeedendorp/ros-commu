@@ -138,6 +138,7 @@ struct Definition< ::button_input::BinaryButtonInputResponse_<ContainerAllocator
   static const char* value()
   {
     return "uint8 response\n\
+\n\
 ";
   }
 
