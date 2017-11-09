@@ -47,7 +47,8 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--ipaddress", default="127.0.0.1")
     parser.add_argument("-p", "--port", default="6019")
     parser.add_argument("-d", "--debug", default="False")
-    parser.add_argument("-m", "--image", default="/camera/color/image_raw")
+    parser.add_argument("-m", "--image", required=True)
+    parser.add_argument("-c", "--isclassificationtopic", required=True)
     args = parser.parse_args()
 
     rospy.loginfo("Starting commu_wrapper_node..")
@@ -55,10 +56,11 @@ if __name__ == '__main__':
     rospy.loginfo("-i, --ipaddress: \t%s", args.ipaddress)
     rospy.loginfo("-p, --port: \t%s", args.port)
     rospy.loginfo("-d, --debug: \t%s", args.debug)
-    rospy.loginfo("-i, --image: \t%s", args.image)
+    rospy.loginfo("-m, --image: \t%s", args.image)
+    rospy.loginfo("-c, --isclassificationtopic: \t%s", args.isclassificationtopic)
 
     if bool(args.debug):
-        wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image))
+        wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image, args.isclassificationtopic))
     else:
         wrapper = CommUWrapper(args.ipaddress, int(args.port))
 

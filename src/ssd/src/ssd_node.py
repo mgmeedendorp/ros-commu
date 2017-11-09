@@ -47,6 +47,7 @@ def listener():
 
             msg = ClassifiedObjectArray()
             msg.objects = []
+            msg.image = latest_image_data
 
             for obj in objects:
                 msg.objects.append(obj.to_msg())
