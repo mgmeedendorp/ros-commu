@@ -2,9 +2,9 @@ from .helper.robot.cumhelper import CUMHelper
 from .debug_handler import DebugHandler
 import rospy
 
-class CommUWrapper:
 
-    def __init__(self, commu_ip = "127.0.0.1", commu_port = 6019, debug_handler = None):
+class CommUWrapper:
+    def __init__(self, commu_ip="127.0.0.1", commu_port=6019, debug_handler=None):
         # type: (str, int, DebugHandler) -> CommUWrapper
         """
         Instantiates a new CommUWrapper instance. This wraps all the functions of the CommU Helper python library,
@@ -18,7 +18,7 @@ class CommUWrapper:
 
         rospy.loginfo("CommUWrapper instance created.")
 
-    def utter(self, utterance, blocking = False, english = True):
+    def utter(self, utterance, blocking=False, english=True):
         # type: (str, bool, bool) -> bool
         """
         Makes the CommU utter the specified string.
@@ -36,7 +36,6 @@ class CommUWrapper:
         else:
             return self.cumhelper.say(utterance, blocking)
 
-
     def look(self, look, resolution, translation, rotation):
         # type: (dict, dict, dict, dict) -> bool
         """
@@ -50,9 +49,7 @@ class CommUWrapper:
         :return: Whether the operation was received by the CommU successfully.
         """
 
-
-
-        #TODO: figure out how this works on the CommU
+        # TODO: figure out how this works on the CommU
         rospy.loginfo("Look is not implemented on the CommU yet!. Please note that this will not affect the robot!")
 
         return True
