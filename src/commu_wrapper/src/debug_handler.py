@@ -16,9 +16,6 @@ class DebugHandler:
         self.latest_cv_image = None
         self.thread = None
 
-        rospy.loginfo("Initializing DebugHandler cv2 window with name: '%s'..", window_name)
-        cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
-
         rospy.loginfo("Subscribing to '%s' topic for images..", camera_topic)
         rospy.Subscriber(camera_topic, Image, self.image_received)
 
@@ -43,6 +40,9 @@ class DebugHandler:
                 print(self.latest_cv_image)
 
                 rospy.loginfo('tick')
+
+                rospy.loginfo("Initializing DebugHandler cv2 window with name: '%s'..", window_name)
+                cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
 
                 if self.latest_cv_image is not None:
                     #if cv2.getWindowProperty(self.window_name, 0) < 0:
