@@ -8,7 +8,7 @@ sensor_msgs/CameraInfo camera_info
 # The offset of the camera position from the head of the robot.
 geometry_msgs/Transform camera_transform
 
-The (look_x, look_y) coordinates, specifying where in the camera image the robot should look
+# The (look_x, look_y) coordinates, specifying where in the camera image the robot should look
 int8 look_x
 int8 look_y
 
