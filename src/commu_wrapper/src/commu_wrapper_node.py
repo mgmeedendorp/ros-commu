@@ -45,7 +45,7 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--ipaddress", default="127.0.0.1")
     parser.add_argument("-p", "--port", default="6019")
     parser.add_argument("-d", "--debug", default="False")
-    parser.add_argument("-i", "--image", default="/camera/color/image_raw")
+    parser.add_argument("-m", "--image", default="/camera/color/image_raw")
     args = parser.parse_args()
 
     rospy.loginfo("Starting commu_wrapper_node..")
