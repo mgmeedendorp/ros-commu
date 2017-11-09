@@ -34,15 +34,12 @@ class DebugHandler:
             return
 
         def worker():
+            rospy.loginfo("Initializing DebugHandler cv2 window with name: '%s'..", self.window_name)
+            cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
+
             rospy.loginfo("Starting image worker thread.")
 
             while not rospy.is_shutdown():
-                print(self.latest_cv_image)
-
-                rospy.loginfo('tick')
-
-                rospy.loginfo("Initializing DebugHandler cv2 window with name: '%s'..", self.window_name)
-                cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
 
                 if self.latest_cv_image is not None:
                     #if cv2.getWindowProperty(self.window_name, 0) < 0:
