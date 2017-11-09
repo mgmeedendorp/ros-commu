@@ -54,12 +54,11 @@ if __name__ == '__main__':
     rospy.loginfo("-i, --image: %s", args.image)
 
     if bool(args.debug):
-        wrapper = CommUWrapper(args.ipaddress, int(args.port))
-    else:
         wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image))
+    else:
+        wrapper = CommUWrapper(args.ipaddress, int(args.port))
 
     rospy.init_node("commu_wrapper")
-
 
     init_message_listener(wrapper)
 
