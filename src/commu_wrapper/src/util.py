@@ -34,10 +34,10 @@ def draw_bounding_boxes(cv_image, classification_results):
     text_margin = 5
 
     for result in classification_results:
-        top_left = np.array((result.xmin, result.ymin))
-        bottom_right = np.array((result.xmax, result.ymax))
+        top_left = np.array((result.bbox.x_min, result.bbox.y_min))
+        bottom_right = np.array((result.bbox.x_min + result.bbox.x_size, result.bbox.y_min + result.bbox.y_size))
 
-        text = '{:.2f}: {}'.format(result.score, result.label_name)
+        text = '{:.2f}: {}'.format(result.score, result.label)
 
         color = random_color()
 
