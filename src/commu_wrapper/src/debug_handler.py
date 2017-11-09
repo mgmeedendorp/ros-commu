@@ -41,7 +41,7 @@ class DebugHandler:
 
                 rospy.loginfo('tick')
 
-                rospy.loginfo("Initializing DebugHandler cv2 window with name: '%s'..", window_name)
+                rospy.loginfo("Initializing DebugHandler cv2 window with name: '%s'..", self.window_name)
                 cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
 
                 if self.latest_cv_image is not None:
