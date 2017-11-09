@@ -41,11 +41,9 @@ class DebugHandler:
                 if self.latest_cv_image is not None:
                     cv2.imshow(self.window_name, self.latest_cv_image)
 
-                if (cv2.waitKey(1000/30) & 0xFF) == 27:
-                    rospy.loginfo("Closing window because ESC was pressed")
-                    cv2.destroyWindow(self.window_name)
-                    break
+                cv2.waitKey(1000 / 30)
 
+            cv2.destroyWindow(self.window_name)
             rospy.loginfo("Stopping image worker thread.")
 
         self.thread = Thread(target=worker)
