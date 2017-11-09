@@ -1,8 +1,8 @@
 import argparse
 
 import rospy
-from .debug_handler import DebugHandler
-from .wrapper import CommUWrapper
+from debug_handler import DebugHandler
+from wrapper import CommUWrapper
 from commu_wrapper.srv import CommUUtter, CommUUtterResponse, CommULook, CommULookResponse
 
 
