@@ -27,7 +27,6 @@ class DebugHandler:
         self.spin_image_window()
 
     def image_received(self, data):
-        rospy.loginfo("Received image.")
         self.latest_cv_image = self.image_bridge.imgmsg_to_cv2(data, "bgr8")
 
     def spin_image_window(self):
@@ -42,6 +41,8 @@ class DebugHandler:
                 if self.latest_cv_image is not None:
                     if cv2.getWindowProperty('window-name', 0) < 0:
                         break
+
+                    rospy.loginfo("Updating image..")
 
                     cv2.imshow(self.window_name, self.latest_cv_image)
 
