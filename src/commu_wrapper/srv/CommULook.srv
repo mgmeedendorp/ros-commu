@@ -1,0 +1,18 @@
+# This service defines a look-at-position action for a CommU robot. This is done by providing an (`look_x`, `look_y`) position the
+# robot should look at, the camera resolution in `camera_info` and the pose of the camera in `camera_pose`
+
+
+# The CameraInfo object for the camera used to capture the image
+sensor_msgs/CameraInfo camera_info
+
+# The offset of the camera position from the head of the robot.
+geometry_msgs/Transform camera_transform
+
+The (look_x, look_y) coordinates, specifying where in the camera image the robot should look
+int8 look_x
+int8 look_y
+
+---
+
+#Whether the look operation was received by the CommU.
+bool success
