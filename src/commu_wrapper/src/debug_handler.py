@@ -37,6 +37,8 @@ class DebugHandler:
             return
 
         def worker():
+            rospy.loginfo("Starting image worker thread.")
+
             while not rospy.is_shutdown():
                 print(self.latest_cv_image)
 
@@ -52,6 +54,8 @@ class DebugHandler:
                     rospy.loginfo("Closing window because ESC was pressed")
                     cv2.destroyWindow(self.window_name)
                     break
+
+            rospy.loginfo("Stopping image worker thread.")
 
         self.thread = Thread(target=worker)
         self.thread.start()
