@@ -45,8 +45,8 @@ class DebugHandler:
                 rospy.loginfo('tick')
 
                 if self.latest_cv_image is not None:
-                    if cv2.getWindowProperty(self.window_name, 0) < 0:
-                        break
+                    #if cv2.getWindowProperty(self.window_name, 0) < 0:
+                    #    break
 
                     rospy.loginfo("Updating image..")
 
