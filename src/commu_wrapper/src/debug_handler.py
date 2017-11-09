@@ -37,7 +37,7 @@ class DebugHandler:
             return
 
         def worker():
-            while True:
+            while not rospy.is_shutdown():
                 if self.latest_cv_image is not None:
                     if cv2.getWindowProperty('window-name', 0) < 0:
                         break

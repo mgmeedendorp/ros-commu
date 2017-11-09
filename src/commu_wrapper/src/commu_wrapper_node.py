@@ -52,10 +52,10 @@ if __name__ == '__main__':
 
     rospy.loginfo("Starting commu_wrapper_node..")
     rospy.loginfo("Arguments:")
-    rospy.loginfo("-i, --ipaddress: %s", args.ipaddress)
-    rospy.loginfo("-p, --port: %s", args.port)
-    rospy.loginfo("-d, --debug: %s", args.debug)
-    rospy.loginfo("-i, --image: %s", args.image)
+    rospy.loginfo("-i, --ipaddress:\t %s", args.ipaddress)
+    rospy.loginfo("-p, --port:\t %s", args.port)
+    rospy.loginfo("-d, --debug:\t %s", args.debug)
+    rospy.loginfo("-i, --image:\t %s", args.image)
 
     if bool(args.debug):
         wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image))
