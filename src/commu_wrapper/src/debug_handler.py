@@ -52,7 +52,7 @@ class DebugHandler:
 
                     cv2.imshow(self.window_name, self.latest_cv_image)
 
-                if cv2.waitKey(1/60) & 0xFF == 27:
+                if (cv2.waitKey(1/60) & 0xFF) == 27:
                     rospy.loginfo("Closing window because ESC was pressed")
                     self.close_window()
                     break
@@ -64,7 +64,6 @@ class DebugHandler:
 
     def close_window(self):
         cv2.destroyWindow(self.window_name)
-        cv2.destroyAllWindows()
 
 
 
