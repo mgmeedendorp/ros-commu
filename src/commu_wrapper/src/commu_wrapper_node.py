@@ -41,6 +41,8 @@ def init_message_listener(wrapper):
 
 
 if __name__ == '__main__':
+    rospy.init_node("commu_wrapper")
+
     parser = argparse.ArgumentParser(description="utility for CommUManager")
     parser.add_argument("-i", "--ipaddress", default="127.0.0.1")
     parser.add_argument("-p", "--port", default="6019")
@@ -59,8 +61,6 @@ if __name__ == '__main__':
         wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image))
     else:
         wrapper = CommUWrapper(args.ipaddress, int(args.port))
-
-    rospy.init_node("commu_wrapper")
 
     init_message_listener(wrapper)
 
