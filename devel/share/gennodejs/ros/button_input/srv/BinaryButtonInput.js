@@ -120,6 +120,7 @@ class BinaryButtonInputResponse {
     return `
     uint8 response
     
+    
     `;
   }
 

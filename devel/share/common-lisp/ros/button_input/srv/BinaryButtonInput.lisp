@@ -94,10 +94,10 @@
   "59064532f110d857c53f36f4ab7ad30a")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<BinaryButtonInput-response>)))
   "Returns full string definition for message of type '<BinaryButtonInput-response>"
-  (cl:format cl:nil "uint8 response~%~%~%"))
+  (cl:format cl:nil "uint8 response~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'BinaryButtonInput-response)))
   "Returns full string definition for message of type 'BinaryButtonInput-response"
-  (cl:format cl:nil "uint8 response~%~%~%"))
+  (cl:format cl:nil "uint8 response~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <BinaryButtonInput-response>))
   (cl:+ 0
      1
