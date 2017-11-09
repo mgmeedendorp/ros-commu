@@ -46,7 +46,14 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--image", default="/camera/color/image_raw")
     args = parser.parse_args()
 
-    if(args.debug):
+    rospy.loginfo("Starting commu_wrapper_node..")
+    rospy.loginfo("Arguments:")
+    rospy.loginfo("-i, --ipaddress: %s", args.ipaddress)
+    rospy.loginfo("-p, --port: %s", args.port)
+    rospy.loginfo("-d, --debug: %s", args.debug)
+    rospy.loginfo("-i, --image: %s", args.image)
+
+    if bool(args.debug):
         wrapper = CommUWrapper(args.ipaddress, int(args.port))
     else:
         wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image))
