@@ -22,11 +22,15 @@ class DebugHandler:
         rospy.loginfo("Subscribing to '%s' topic for images..", camera_topic)
         rospy.Subscriber(camera_topic, Image, self.image_received)
 
+        self.spin_image_window()
+
     def image_received(self, data):
         rospy.loginfo("Received image.")
         self.latest_cv_image = self.image_bridge.imgmsg_to_cv2(data, "bgr8")
 
     def spin_image_window(self):
+        rospy.loginfo("Starting window image thread...")
+
         if self.thread is not None:
             rospy.loginfo("Someone tried to start two image windows of the same instance. This is not supposed to happen.")
             return
