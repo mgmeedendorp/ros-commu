@@ -48,7 +48,7 @@ class DebugHandler:
         cv_image = util.add_alpha_layer(cv_image, 0)
         cv_image = util.draw_image_margin(cv_image, self.image_margin)
 
-        self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects)
+        self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects, self.image_margin)
 
     def commu_utter_received(self, utterance, blocking, english):
         cv_image = np.zeros(self.image_size, np.uint8)

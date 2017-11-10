@@ -20,7 +20,7 @@ def time_usage(func):
     return wrapper
 
 
-def draw_bounding_boxes(cv_image, classification_results):
+def draw_bounding_boxes(cv_image, classification_results, offset=0):
     # type: (np.array, ssd.msg.ClassifiedObjectArray) -> (np.array)
     """
     Draws classification bounding boxes on image
@@ -35,9 +35,9 @@ def draw_bounding_boxes(cv_image, classification_results):
     text_margin = 5
 
     for result in classification_results:
-        top_left = np.array((int(result.bbox.x_min), int(result.bbox.y_min)))
+        top_left = np.array((int(result.bbox.x_min + offset), int(result.bbox.y_min + offset)))
         bottom_right = np.array(
-            (int(result.bbox.x_min + result.bbox.x_size), int(result.bbox.y_min + result.bbox.y_size)))
+            (int(result.bbox.x_min + result.bbox.x_size + offset), int(result.bbox.y_min + result.bbox.y_size + offset)))
 
         text = '{:.2f}: {}'.format(result.score, result.label)
 
@@ -52,7 +52,7 @@ def draw_bounding_boxes(cv_image, classification_results):
 
         cv2.rectangle(cv_image, (text_bottom_left[0] - text_margin, text_bottom_left[1] + text_margin),
                       (text_top_right[0] + text_margin * 2, text_top_right[1] - text_margin * 2),
-                      (color[0], color[1], color[2]), thickness=cv2.FILLED)
+                      (color[0], color[1], color[2], 255), thickness=cv2.FILLED)
 
         cv2.putText(cv_image, text, (text_bottom_left[0], text_bottom_left[1]), font, font_scale, (0, 0, 0, 255),
                     thickness=font_thickness)
