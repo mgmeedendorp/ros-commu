@@ -155,7 +155,7 @@ def add_alpha_layer(cv_image, value = 255):
     return cv2.merge((b, g, r, alpha))
 
 
-def draw_image_margin(cv_image, margin_size=50, margin_color=(1, 1, 1)):
+def draw_image_margin(cv_image, margin_size=50, margin_color=(0, 0, 0)):
     # type: (np.array, int, (int, int, int)) -> np.array
     """
     Draw a margin around an image of the specified color and size.
