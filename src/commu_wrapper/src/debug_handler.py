@@ -43,12 +43,14 @@ class DebugHandler:
         self.latest_cv_image = util.image_to_opencv(data.image)
         self.image_size = self.latest_cv_image.shape
 
-        cv_image = np.zeros((self.image_size[0], self.image_size[1], 4), np.uint8)
+        cv_image = np.zeros(self.image_size, np.uint8)
+        cv_image = util.add_alpha_layer(cv_image)
 
         self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects)
 
     def commu_utter_received(self, utterance, blocking, english):
-        cv_image = np.zeros((self.image_size[0], self.image_size[1], 4), np.uint8)
+        cv_image = np.zeros(self.image_size, np.uint8)
+        cv_image = util.add_alpha_layer(cv_image)
 
         string = "Saying: {}".format(utterance)
 
@@ -58,7 +60,8 @@ class DebugHandler:
         self.latest_utter_until = time.time() + util.approximate_say_time(utterance)
 
     def commu_look_received(self, look, resolution, translation, rotation):
-        cv_image = np.zeros((resolution['x'], resolution['y'], 4), np.uint8)
+        cv_image = np.zeros((resolution['x'], resolution['y'], 3), np.uint8)
+        cv_image = util.add_alpha_layer(cv_image)
 
         cv_image = util.draw_crosshair(cv_image, look['x'], look['y'])
 
