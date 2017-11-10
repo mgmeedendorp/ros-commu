@@ -172,7 +172,7 @@ def draw_image_margin(cv_image, margin_size=50):
 
     print new_image
 
-    return cv_image
+    return new_image
 
 
 def draw_overlay_image(base_cv_image, overlay_cv_image):
