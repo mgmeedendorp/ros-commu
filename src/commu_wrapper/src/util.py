@@ -170,8 +170,6 @@ def draw_image_margin(cv_image, margin_size=50):
     new_image = np.full(new_shape, 255, cv_image.dtype)
     new_image[margin_size:margin_size + shape[0], margin_size:margin_size + shape[1]] = cv_image
 
-    print new_image
-
     return new_image
 
 
