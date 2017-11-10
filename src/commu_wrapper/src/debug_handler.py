@@ -84,6 +84,8 @@ class DebugHandler:
             with_margin = util.draw_image_margin(self.latest_classification_image)
             downsized = np.ones(self.display_image.shape, self.display_image.dtype)
 
+            print self.display_image.shape
+
             downsized[0:self.display_image.shape[0]-1, 0:self.display_image.shape[1]-1] = with_margin[0:self.display_image.shape[0]-1, 0:self.display_image.shape[1]-1]
 
             print downsized.shape
