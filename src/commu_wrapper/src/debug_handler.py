@@ -20,6 +20,7 @@ class DebugHandler:
         self.latest_utter_cv_image = None
         self.latest_utter_until = time.time()
         self.latest_look_cv_image = None
+        self.latest_classification_image = None
 
         self.display_image = None
 
@@ -40,8 +41,11 @@ class DebugHandler:
         self.latest_cv_image = util.image_to_opencv(data)
 
     def classification_received(self, data):
-        cv_image = util.image_to_opencv(data.image)
-        self.latest_cv_image = util.draw_bounding_boxes(cv_image, data.objects)
+        self.latest_cv_image = util.image_to_opencv(data.image)
+
+        cv_image = np.zeros((300, 300, 4), np.uint8)
+
+        self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects)
 
     def commu_utter_received(self, utterance, blocking, english):
         cv_image = np.zeros((300, 300, 4), np.uint8)
@@ -63,10 +67,11 @@ class DebugHandler:
     def merge_images(self):
         merge_look_image = self.latest_look_cv_image is not None
         merge_utter_image = self.latest_utter_until >= time.time()
+        merge_classification_image = self.latest_classification_image is not None
 
         self.display_image = util.draw_image_margin(self.latest_cv_image)
 
-        if merge_look_image and merge_utter_image:
+        if merge_look_image or merge_utter_image or merge_classification_image:
             self.display_image = util.add_alpha_layer(self.display_image)
 
         if merge_utter_image:
@@ -74,6 +79,9 @@ class DebugHandler:
 
         if merge_look_image:
             self.display_image = util.draw_overlay_image(self.display_image, self.latest_look_cv_image)
+
+        if merge_classification_image:
+            self.display_image = util.draw_overlay_image(self.display_image, self.latest_classification_image)
 
     def spin_image_window(self):
         rospy.loginfo("Starting window image thread...")
