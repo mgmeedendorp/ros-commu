@@ -71,8 +71,8 @@ class DebugHandler:
 
         self.display_image = util.draw_image_margin(self.latest_cv_image)
 
-        if merge_look_image or merge_utter_image or merge_classification_image:
-            self.display_image = util.add_alpha_layer(self.display_image)
+      #  if merge_look_image or merge_utter_image or merge_classification_image:
+       #     self.display_image = util.add_alpha_layer(self.display_image)
 
 
         if merge_utter_image:
