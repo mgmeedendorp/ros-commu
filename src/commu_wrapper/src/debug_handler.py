@@ -82,7 +82,7 @@ class DebugHandler:
 
         if merge_classification_image:
             with_margin = util.draw_image_margin(self.latest_classification_image)
-            downsized = with_margin[0:self.display_image.shape[0], 0:self.display_image.shape[1], with_margin.shape[2]]
+            downsized = with_margin[0:self.display_image.shape[0]-1, 0:self.display_image.shape[1]-1, with_margin.shape[2]-1]
             self.display_image = util.draw_overlay_image(self.display_image, downsized)
 
     def spin_image_window(self):
