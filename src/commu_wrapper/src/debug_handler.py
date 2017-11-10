@@ -64,10 +64,10 @@ class DebugHandler:
         merge_look_image = self.latest_look_cv_image is not None
         merge_utter_image = self.latest_utter_until >= time.time()
 
+        self.display_image = util.draw_image_margin(self.latest_cv_image)
+
         if merge_look_image and merge_utter_image:
-            self.display_image = util.add_alpha_layer(self.latest_cv_image)
-        else:
-            self.display_image = self.latest_cv_image
+            self.display_image = util.add_alpha_layer(self.display_image)
 
         if merge_utter_image:
             self.display_image = util.draw_overlay_image(self.display_image, self.latest_utter_cv_image)
