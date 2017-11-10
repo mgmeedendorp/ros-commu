@@ -85,7 +85,7 @@ class DebugHandler:
         def worker():
             rospy.loginfo("Initializing DebugHandler cv2 window with name: '%s'..", self.window_name)
             cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
-            cv2.resizeWindow(self.window_name, 640, 480)
+            cv2.resizeWindow(self.window_name, 1280, 960)
 
             rospy.loginfo("Starting image worker thread.")
 
