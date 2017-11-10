@@ -126,9 +126,11 @@ def image_to_opencv(image_data):
     except CvBridgeError as e:
         print(e)
 
-
 def random_color():
-    return random.sample(xrange(0, 255), 3).append(255)
+    def r():
+        return random.sample(xrange(0, 255))
+
+    return (r(), r(), r(), 255)
 
 
 def approximate_say_time(utterance):
