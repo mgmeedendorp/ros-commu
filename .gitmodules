@@ -10,3 +10,7 @@
 	path = src/cv_camera
 	url = https://github.com/OTL/cv_camera
 	branch = master
+[submodule "src/realsense_person"]
+	path = src/realsense_person
+	url = https://github.com/IntelEuclid/realsense_person.git
+	branch = master
