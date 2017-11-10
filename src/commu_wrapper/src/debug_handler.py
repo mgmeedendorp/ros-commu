@@ -16,6 +16,7 @@ class DebugHandler:
         self.window_name = window_name
         self.image_bridge = CvBridge()
 
+        self.image_size = (100, 100, 3)
         self.latest_cv_image = None
         self.latest_utter_cv_image = None
         self.latest_utter_until = time.time()
@@ -40,13 +41,14 @@ class DebugHandler:
 
     def classification_received(self, data):
         self.latest_cv_image = util.image_to_opencv(data.image)
+        self.image_size = self.latest_cv_image.shape
 
-        cv_image = np.zeros((300, 300, 4), np.uint8)
+        cv_image = np.zeros((self.image_size[0], self.image_size[1], 4), np.uint8)
 
         self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects)
 
     def commu_utter_received(self, utterance, blocking, english):
-        cv_image = np.zeros((300, 300, 4), np.uint8)
+        cv_image = np.zeros((self.image_size[0], self.image_size[1], 4), np.uint8)
 
         string = "Saying: {}".format(utterance)
 
@@ -82,15 +84,8 @@ class DebugHandler:
 
         if merge_classification_image:
             with_margin = util.draw_image_margin(self.latest_classification_image)
-            downsized = np.ones(self.display_image.shape, self.display_image.dtype)
 
-            print self.display_image.shape
-
-            downsized[0:self.display_image.shape[0]-1, 0:self.display_image.shape[1]-1] = with_margin[0:self.display_image.shape[0]-1, 0:self.display_image.shape[1]-1]
-
-            print downsized.shape
-
-            self.display_image = util.draw_overlay_image(self.display_image, downsized)
+            self.display_image = util.draw_overlay_image(self.display_image, with_margin)
 
     def spin_image_window(self):
         rospy.loginfo("Starting window image thread...")
