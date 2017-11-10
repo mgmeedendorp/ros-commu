@@ -127,7 +127,10 @@ def image_to_opencv(image_data):
         print(e)
 
 def random_color():
-    return random.sample(xrange(0, 255), 3)
+    color3 = random.sample(xrange(0, 255), 3)
+    color3.append(255)
+    return color3
+
 
 
 def approximate_say_time(utterance):

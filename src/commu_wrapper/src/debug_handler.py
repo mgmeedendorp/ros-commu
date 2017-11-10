@@ -15,6 +15,7 @@ class DebugHandler:
         rospy.loginfo("Initializing DebugHandler..")
         self.window_name = window_name
         self.image_bridge = CvBridge()
+        self.image_margin = 50
 
         self.image_size = (100, 100, 3)
         self.latest_cv_image = None
@@ -45,12 +46,14 @@ class DebugHandler:
 
         cv_image = np.zeros(self.image_size, np.uint8)
         cv_image = util.add_alpha_layer(cv_image, 0)
+        cv_image = util.draw_image_margin(cv_image, self.image_margin)
 
         self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects)
 
     def commu_utter_received(self, utterance, blocking, english):
         cv_image = np.zeros(self.image_size, np.uint8)
         cv_image = util.add_alpha_layer(cv_image, 0)
+        cv_image = util.draw_image_margin(cv_image, self.image_margin)
 
         string = "Saying: {}".format(utterance)
 
@@ -62,8 +65,9 @@ class DebugHandler:
     def commu_look_received(self, look, resolution, translation, rotation):
         cv_image = np.zeros((resolution['x'], resolution['y'], 3), np.uint8)
         cv_image = util.add_alpha_layer(cv_image, 0)
+        cv_image = util.draw_image_margin(cv_image, self.image_margin)
 
-        cv_image = util.draw_crosshair(cv_image, look['x'], look['y'])
+        cv_image = util.draw_crosshair(cv_image, look['x'] + self.image_margin, look['y'] + self.image_margin)
 
         self.latest_look_cv_image = cv_image
 
@@ -74,25 +78,14 @@ class DebugHandler:
 
         self.display_image = util.draw_image_margin(self.latest_cv_image)
 
-      #  if merge_look_image or merge_utter_image or merge_classification_image:
-       #     self.display_image = util.add_alpha_layer(self.display_image)
-
-
         if merge_utter_image:
-            with_margin = util.draw_image_margin(self.latest_utter_cv_image)
-            self.display_image = util.draw_overlay_image(self.display_image, with_margin)
+            self.display_image = util.draw_overlay_image(self.display_image, self.latest_utter_cv_image)
 
         if merge_look_image:
-            with_margin = util.draw_image_margin(self.latest_look_cv_image)
-            self.display_image = util.draw_overlay_image(self.display_image, with_margin)
+            self.display_image = util.draw_overlay_image(self.display_image, self.latest_look_cv_image)
 
         if merge_classification_image:
-            with_margin = util.draw_image_margin(self.latest_classification_image)
-
-            print self.display_image.shape
-            print with_margin.shape
-
-            self.display_image = util.draw_overlay_image(self.display_image, with_margin)
+            self.display_image = util.draw_overlay_image(self.display_image, self.latest_classification_image)
 
     def spin_image_window(self):
         rospy.loginfo("Starting window image thread...")
