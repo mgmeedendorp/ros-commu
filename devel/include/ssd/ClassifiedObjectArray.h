@@ -16,6 +16,7 @@
 #include <ros/message_operations.h>
 
 #include <ssd/ClassifiedObject.h>
+#include <sensor_msgs/Image.h>
 
 namespace ssd
 {
@@ -25,10 +26,12 @@ struct ClassifiedObjectArray_
   typedef ClassifiedObjectArray_<ContainerAllocator> Type;
 
   ClassifiedObjectArray_()
-    : objects()  {
+    : objects()
+    , image()  {
     }
   ClassifiedObjectArray_(const ContainerAllocator& _alloc)
-    : objects(_alloc)  {
+    : objects(_alloc)
+    , image(_alloc)  {
   (void)_alloc;
     }
 
@@ -36,6 +39,9 @@ struct ClassifiedObjectArray_
 
    typedef std::vector< ::ssd::ClassifiedObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::ssd::ClassifiedObject_<ContainerAllocator> >::other >  _objects_type;
   _objects_type objects;
+
+   typedef  ::sensor_msgs::Image_<ContainerAllocator>  _image_type;
+  _image_type image;
 
 
 
@@ -71,7 +77,7 @@ namespace message_traits
 
 
 // BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
-// {'ssd': ['/home/maurice/catkin_ws/src/ssd/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg']}
+// {'sensor_msgs': ['/opt/ros/kinetic/share/sensor_msgs/cmake/../msg'], 'ssd': ['/home/maurice/catkin_ws/src/ssd/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'geometry_msgs': ['/opt/ros/kinetic/share/geometry_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
 
@@ -114,12 +120,12 @@ struct MD5Sum< ::ssd::ClassifiedObjectArray_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "59f286ee6aa871e16584f755f2af5a21";
+    return "ccc40aeeae1ee53272e491b81bf276de";
   }
 
   static const char* value(const ::ssd::ClassifiedObjectArray_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x59f286ee6aa871e1ULL;
-  static const uint64_t static_value2 = 0x6584f755f2af5a21ULL;
+  static const uint64_t static_value1 = 0xccc40aeeae1ee532ULL;
+  static const uint64_t static_value2 = 0x72e491b81bf276deULL;
 };
 
 template<class ContainerAllocator>
@@ -141,6 +147,9 @@ struct Definition< ::ssd::ClassifiedObjectArray_<ContainerAllocator> >
     return "# An array of ClassifiedObject messages\n\
 \n\
 ClassifiedObject[] objects\n\
+\n\
+#The classified image\n\
+sensor_msgs/Image image\n\
 ================================================================================\n\
 MSG: ssd/ClassifiedObject\n\
 # A message representing an object that was classified using caffe.\n\
@@ -180,6 +189,35 @@ float64 x_min\n\
 float64 y_min\n\
 float64 x_size\n\
 float64 y_size\n\
+================================================================================\n\
+MSG: sensor_msgs/Image\n\
+# This message contains an uncompressed image\n\
+# (0, 0) is at top-left corner of image\n\
+#\n\
+\n\
+Header header        # Header timestamp should be acquisition time of image\n\
+                     # Header frame_id should be optical frame of camera\n\
+                     # origin of frame should be optical center of cameara\n\
+                     # +x should point to the right in the image\n\
+                     # +y should point down in the image\n\
+                     # +z should point into to plane of the image\n\
+                     # If the frame_id here and the frame_id of the CameraInfo\n\
+                     # message associated with the image conflict\n\
+                     # the behavior is undefined\n\
+\n\
+uint32 height         # image height, that is, number of rows\n\
+uint32 width          # image width, that is, number of columns\n\
+\n\
+# The legal values for encoding are in file src/image_encodings.cpp\n\
+# If you want to standardize a new string format, join\n\
+# ros-users@lists.sourceforge.net and send an email proposing a new encoding.\n\
+\n\
+string encoding       # Encoding of pixels -- channel meaning, ordering, size\n\
+                      # taken from the list of strings in include/sensor_msgs/image_encodings.h\n\
+\n\
+uint8 is_bigendian    # is this data bigendian?\n\
+uint32 step           # Full row length in bytes\n\
+uint8[] data          # actual matrix data, size is (step * rows)\n\
 ";
   }
 
@@ -199,6 +237,7 @@ namespace serialization
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
       stream.next(m.objects);
+      stream.next(m.image);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -225,6 +264,9 @@ struct Printer< ::ssd::ClassifiedObjectArray_<ContainerAllocator> >
       s << indent;
       Printer< ::ssd::ClassifiedObject_<ContainerAllocator> >::stream(s, indent + "    ", v.objects[i]);
     }
+    s << indent << "image: ";
+    s << std::endl;
+    Printer< ::sensor_msgs::Image_<ContainerAllocator> >::stream(s, indent + "  ", v.image);
   }
 };
 

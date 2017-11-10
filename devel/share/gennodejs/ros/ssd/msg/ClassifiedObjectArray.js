@@ -12,6 +12,7 @@ const _arrayDeserializer = _deserializer.Array;
 const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
 let ClassifiedObject = require('./ClassifiedObject.js');
+let sensor_msgs = _finder('sensor_msgs');
 
 //-----------------------------------------------------------
 
@@ -20,6 +21,7 @@ class ClassifiedObjectArray {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.objects = null;
+      this.image = null;
     }
     else {
       if (initObj.hasOwnProperty('objects')) {
@@ -27,6 +29,12 @@ class ClassifiedObjectArray {
       }
       else {
         this.objects = [];
+      }
+      if (initObj.hasOwnProperty('image')) {
+        this.image = initObj.image
+      }
+      else {
+        this.image = new sensor_msgs.msg.Image();
       }
     }
   }
@@ -39,6 +47,8 @@ class ClassifiedObjectArray {
     obj.objects.forEach((val) => {
       bufferOffset = ClassifiedObject.serialize(val, buffer, bufferOffset);
     });
+    // Serialize message field [image]
+    bufferOffset = sensor_msgs.msg.Image.serialize(obj.image, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -53,6 +63,8 @@ class ClassifiedObjectArray {
     for (let i = 0; i < len; ++i) {
       data.objects[i] = ClassifiedObject.deserialize(buffer, bufferOffset)
     }
+    // Deserialize message field [image]
+    data.image = sensor_msgs.msg.Image.deserialize(buffer, bufferOffset);
     return data;
   }
 
@@ -61,6 +73,7 @@ class ClassifiedObjectArray {
     object.objects.forEach((val) => {
       length += ClassifiedObject.getMessageSize(val);
     });
+    length += sensor_msgs.msg.Image.getMessageSize(object.image);
     return length + 4;
   }
 
@@ -71,7 +84,7 @@ class ClassifiedObjectArray {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '59f286ee6aa871e16584f755f2af5a21';
+    return 'ccc40aeeae1ee53272e491b81bf276de';
   }
 
   static messageDefinition() {
@@ -80,6 +93,9 @@ class ClassifiedObjectArray {
     # An array of ClassifiedObject messages
     
     ClassifiedObject[] objects
+    
+    #The classified image
+    sensor_msgs/Image image
     ================================================================================
     MSG: ssd/ClassifiedObject
     # A message representing an object that was classified using caffe.
@@ -119,6 +135,36 @@ class ClassifiedObjectArray {
     float64 y_min
     float64 x_size
     float64 y_size
+    ================================================================================
+    MSG: sensor_msgs/Image
+    # This message contains an uncompressed image
+    # (0, 0) is at top-left corner of image
+    #
+    
+    Header header        # Header timestamp should be acquisition time of image
+                         # Header frame_id should be optical frame of camera
+                         # origin of frame should be optical center of cameara
+                         # +x should point to the right in the image
+                         # +y should point down in the image
+                         # +z should point into to plane of the image
+                         # If the frame_id here and the frame_id of the CameraInfo
+                         # message associated with the image conflict
+                         # the behavior is undefined
+    
+    uint32 height         # image height, that is, number of rows
+    uint32 width          # image width, that is, number of columns
+    
+    # The legal values for encoding are in file src/image_encodings.cpp
+    # If you want to standardize a new string format, join
+    # ros-users@lists.sourceforge.net and send an email proposing a new encoding.
+    
+    string encoding       # Encoding of pixels -- channel meaning, ordering, size
+                          # taken from the list of strings in include/sensor_msgs/image_encodings.h
+    
+    uint8 is_bigendian    # is this data bigendian?
+    uint32 step           # Full row length in bytes
+    uint8[] data          # actual matrix data, size is (step * rows)
+    
     `;
   }
 
@@ -136,6 +182,13 @@ class ClassifiedObjectArray {
     }
     else {
       resolved.objects = []
+    }
+
+    if (msg.image !== undefined) {
+      resolved.image = sensor_msgs.msg.Image.Resolve(msg.image)
+    }
+    else {
+      resolved.image = new sensor_msgs.msg.Image()
     }
 
     return resolved;

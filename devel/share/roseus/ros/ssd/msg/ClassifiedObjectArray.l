@@ -10,19 +10,23 @@
 
 (in-package "ROS")
 ;;//! \htmlinclude ClassifiedObjectArray.msg.html
+(if (not (find-package "SENSOR_MSGS"))
+  (ros::roseus-add-msgs "sensor_msgs"))
 
 
 (defclass ssd::ClassifiedObjectArray
   :super ros::object
-  :slots (_objects ))
+  :slots (_objects _image ))
 
 (defmethod ssd::ClassifiedObjectArray
   (:init
    (&key
     ((:objects __objects) (let (r) (dotimes (i 0) (push (instance ssd::ClassifiedObject :init) r)) r))
+    ((:image __image) (instance sensor_msgs::Image :init))
     )
    (send-super :init)
    (setq _objects __objects)
+   (setq _image __image)
    self)
   (:objects
    (&rest __objects)
@@ -31,11 +35,20 @@
      (progn
        (if __objects (setq _objects (car __objects)))
        _objects)))
+  (:image
+   (&rest __image)
+   (if (keywordp (car __image))
+       (send* _image __image)
+     (progn
+       (if __image (setq _image (car __image)))
+       _image)))
   (:serialization-length
    ()
    (+
     ;; ssd/ClassifiedObject[] _objects
     (apply #'+ (send-all _objects :serialization-length)) 4
+    ;; sensor_msgs/Image _image
+    (send _image :serialization-length)
     ))
   (:serialize
    (&optional strm)
@@ -46,6 +59,8 @@
      (dolist (elem _objects)
        (send elem :serialize s)
        )
+     ;; sensor_msgs/Image _image
+       (send _image :serialize s)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
@@ -57,16 +72,21 @@
      (dolist (elem- _objects)
      (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
      ))
+   ;; sensor_msgs/Image _image
+     (send _image :deserialize buf ptr-) (incf ptr- (send _image :serialization-length))
    ;;
    self)
   )
 
-(setf (get ssd::ClassifiedObjectArray :md5sum-) "59f286ee6aa871e16584f755f2af5a21")
+(setf (get ssd::ClassifiedObjectArray :md5sum-) "ccc40aeeae1ee53272e491b81bf276de")
 (setf (get ssd::ClassifiedObjectArray :datatype-) "ssd/ClassifiedObjectArray")
 (setf (get ssd::ClassifiedObjectArray :definition-)
       "# An array of ClassifiedObject messages
 
 ClassifiedObject[] objects
+
+#The classified image
+sensor_msgs/Image image
 ================================================================================
 MSG: ssd/ClassifiedObject
 # A message representing an object that was classified using caffe.
@@ -106,10 +126,40 @@ float64 x_min
 float64 y_min
 float64 x_size
 float64 y_size
+================================================================================
+MSG: sensor_msgs/Image
+# This message contains an uncompressed image
+# (0, 0) is at top-left corner of image
+#
+
+Header header        # Header timestamp should be acquisition time of image
+                     # Header frame_id should be optical frame of camera
+                     # origin of frame should be optical center of cameara
+                     # +x should point to the right in the image
+                     # +y should point down in the image
+                     # +z should point into to plane of the image
+                     # If the frame_id here and the frame_id of the CameraInfo
+                     # message associated with the image conflict
+                     # the behavior is undefined
+
+uint32 height         # image height, that is, number of rows
+uint32 width          # image width, that is, number of columns
+
+# The legal values for encoding are in file src/image_encodings.cpp
+# If you want to standardize a new string format, join
+# ros-users@lists.sourceforge.net and send an email proposing a new encoding.
+
+string encoding       # Encoding of pixels -- channel meaning, ordering, size
+                      # taken from the list of strings in include/sensor_msgs/image_encodings.h
+
+uint8 is_bigendian    # is this data bigendian?
+uint32 step           # Full row length in bytes
+uint8[] data          # actual matrix data, size is (step * rows)
+
 ")
 
 
 
-(provide :ssd/ClassifiedObjectArray "59f286ee6aa871e16584f755f2af5a21")
+(provide :ssd/ClassifiedObjectArray "ccc40aeeae1ee53272e491b81bf276de")
 
 
