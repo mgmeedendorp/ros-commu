@@ -72,8 +72,8 @@ class DebugHandler:
         self.display_image = util.draw_image_margin(self.latest_cv_image)
 
         if merge_look_image or merge_utter_image or merge_classification_image:
-            print "abc"
             self.display_image = util.add_alpha_layer(self.display_image)
+
 
         if merge_utter_image:
             with_margin = util.draw_image_margin(self.latest_utter_cv_image)
@@ -85,6 +85,9 @@ class DebugHandler:
 
         if merge_classification_image:
             with_margin = util.draw_image_margin(self.latest_classification_image)
+
+            print self.display_image.shape
+            print with_margin.shape
 
             self.display_image = util.draw_overlay_image(self.display_image, with_margin)
 

@@ -151,11 +151,7 @@ def add_alpha_layer(cv_image, value = 255):
     b, g, r = cv2.split(cv_image)
     alpha = np.full(b.shape, value, dtype=b.dtype)
 
-    merged = cv2.merge((b, g, r, alpha))
-
-    print merged.shape
-
-    return merged
+    return cv2.merge((b, g, r, alpha))
 
 
 def draw_image_margin(cv_image, margin_size=50):
