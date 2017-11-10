@@ -165,7 +165,9 @@ def draw_image_margin(cv_image, margin_size=50, margin_color=(1, 1, 1)):
     :return: The image with a margin.
     """
     shape = cv_image.shape
+    print shape
     new_shape = (shape[0] + margin_size * 2, shape[1] + margin_size * 2, shape[2])
+    print new_shape
 
     new_image = np.ones(new_shape, np.uint8) * margin_color
     new_image[margin_size:margin_size + shape[0], margin_size:margin_size + shape[1]] = cv_image
