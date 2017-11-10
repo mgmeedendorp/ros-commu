@@ -54,7 +54,7 @@ def draw_bounding_boxes(cv_image, classification_results):
                       (text_top_right[0] + text_margin * 2, text_top_right[1] - text_margin * 2),
                       (color[0], color[1], color[2]), thickness=cv2.FILLED)
 
-        cv2.putText(cv_image, text, (text_bottom_left[0], text_bottom_left[1]), font, font_scale, (0, 0, 0),
+        cv2.putText(cv_image, text, (text_bottom_left[0], text_bottom_left[1]), font, font_scale, (0, 0, 0, 255),
                     thickness=font_thickness)
     return cv_image
 
@@ -128,7 +128,7 @@ def image_to_opencv(image_data):
 
 
 def random_color():
-    return random.sample(xrange(0, 255), 3)
+    return random.sample(xrange(0, 255), 3).append(255)
 
 
 def approximate_say_time(utterance):
