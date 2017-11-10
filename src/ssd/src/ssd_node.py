@@ -37,7 +37,7 @@ def callback(data):
 
 
 def listener():
-    rospy.Subscriber("/camera/color/image_raw", Image, callback)
+    rospy.Subscriber("/cv_camera/image_raw", Image, callback)
 
     while not rospy.is_shutdown():
         if (latest_image_data != None):
