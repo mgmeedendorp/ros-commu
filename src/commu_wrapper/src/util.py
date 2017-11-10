@@ -165,15 +165,14 @@ def draw_image_margin(cv_image, margin_size=50, margin_color=(255, 255, 255)):
     :return: The image with a margin.
     """
     shape = cv_image.shape
-    print shape
     new_shape = (shape[0] + margin_size * 2, shape[1] + margin_size * 2, shape[2])
 
     new_image = np.ones(new_shape, np.uint8) * margin_color
     new_image[margin_size:margin_size + shape[0], margin_size:margin_size + shape[1]] = cv_image
 
-    print new_image.shape
+    print new_image
 
-    return new_image
+    return cv_image
 
 
 def draw_overlay_image(base_cv_image, overlay_cv_image):
