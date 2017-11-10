@@ -31,6 +31,9 @@ class CommUWrapper:
         """
         rospy.loginfo("Saying '%s' in %s..", utterance, ("English" if english else "Japanese"))
 
+        if self.debug_handler is not None:
+            self.debug_handler.commu_utter_received(utterance, blocking, english)
+
         if english:
             return self.cumhelper.say_eng(utterance, blocking)
         else:
@@ -43,11 +46,14 @@ class CommUWrapper:
         to the base of the head of the CommU should be provided.
         :param look: A dict containing the x ([0, resolution.x>) and y ([0, resolution.y>) coordinates specifying where
             the CommU should look.
-        :param resolution: The resolution of the camera image.
+        :param resolution: The resolution of the camera image. A dict containing x and y.
         :param translation: The translation of the camera relative to the base of the head of the robot (for now).
         :param rotation: The rotation of the camera relative to the base of the head of the robot (for now).
         :return: Whether the operation was received by the CommU successfully.
         """
+
+        if self.debug_handler is not None:
+            self.debug_handler.commu_look_received(look, resolution, translation, rotation)
 
         # TODO: figure out how this works on the CommU
         rospy.loginfo("Look is not implemented on the CommU yet!. Please note that this will not affect the robot!")
