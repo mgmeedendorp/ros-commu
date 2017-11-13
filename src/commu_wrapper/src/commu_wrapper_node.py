@@ -47,8 +47,8 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--ipaddress", default="127.0.0.1")
     parser.add_argument("-p", "--port", default="6019")
     parser.add_argument("-d", "--debug", default="False")
-    parser.add_argument("-m", "--image", required=True)
-    parser.add_argument("-c", "--isclassificationtopic", required=True)
+    parser.add_argument("-m", "--image", default="/ssd_node/classification_result")
+    parser.add_argument("-c", "--isclassificationtopic", default=True)
     args = parser.parse_args()
 
     rospy.loginfo("Starting commu_wrapper_node..")
