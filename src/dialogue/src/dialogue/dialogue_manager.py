@@ -42,6 +42,7 @@ class DialogueManager:
         if threaded:
             thread = threading.Thread(target=self.__start_worker(utter, perpetual))
             thread.daemon = True
+            thread.start()
         else:
             self.__start_worker(utter, perpetual)
 
