@@ -114,6 +114,8 @@ def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_sc
                       (text_top_right[0] + text_margin * 2, text_top_right[1] - text_margin * 2),
                       background_color, thickness=cv2.FILLED)
 
+    print "Drawing text {} at x {}, y {}".format(text, text_bottom_left[0], text_bottom_left[1])
+
     cv2.putText(cv_image, text, (text_bottom_left[0], text_bottom_left[1]), font, font_scale, color,
                 thickness=font_thickness)
 
