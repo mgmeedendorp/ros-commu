@@ -122,7 +122,7 @@ class DialogueManager:
         """
         t = DialogueTopic(topic, priority)
 
-        if not self.has_topic(topic):
+        if self.has_topic(topic):
             rospy.logdebug("Trying to add {} to the topics, but a topic with that label already exists! Skipping..".format(topic))
             return
 
