@@ -57,7 +57,7 @@ class DebugHandler:
 
         string = "Saying: {}".format(utterance)
 
-        cv_image = util.draw_text(cv_image, string, 0, 0, background=True, color=(0, 0, 0, 255), background_color=(1, 1, 1, 255))
+        cv_image = util.draw_text(cv_image, string, 0, 0, background=True, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
 
         self.latest_utter_cv_image = cv_image
         self.latest_utter_until = time.time() + util.approximate_say_time(utterance)
