@@ -13,10 +13,15 @@ def classification_result_callback(manager, data):
     for obj in data.objects:
         priority = 0.5
 
-        if obj.label == "person":
-            priority = 0.0
+        short_term_history = manager.get_topic_history()[-10:]
 
-        manager.add_topic(obj.label, priority)
+        count = short_term_history.count(obj.label)
+
+        if count > 0:
+            priority -= 0.3 * count
+
+        if priority > 0:
+            manager.add_topic(obj.label, priority)
 
 
 def init_message_listeners(manager):

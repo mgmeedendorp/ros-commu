@@ -25,6 +25,8 @@ class DialogueManager:
         self.switching_topic = False
         self.should_interrupt = False
 
+        self.topic_history = []
+
         self.__add_topic_event = threading.Event()
 
     def start(self, utter, threaded=False, perpetual=True):
@@ -64,6 +66,8 @@ class DialogueManager:
                 self.switching_topic = False
 
                 rospy.loginfo("New topic: {}".format(self.current_topic.label))
+
+                self.topic_history.append(self.current_topic.label)
 
                 while self.current_dialogue.dialogue_remaining():
                     if self.switching_topic or self.should_interrupt:
@@ -198,6 +202,14 @@ class DialogueManager:
         rospy.loginfo("Deleting {} from the topic list.".format(topic.label))
 
         self.topics.remove(topic)
+
+    def get_topic_history(self):
+        # type: () -> List[str]
+        """
+        Get the topic history for this dialogue manager. This contains all topics have been, or are, talked about.
+        :return: All topics talked about in the past and the current topic.
+        """
+        return self.topic_history
 
 
 class DialogueTopic:
