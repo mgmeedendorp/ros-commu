@@ -58,7 +58,7 @@ class DebugHandler:
         cv_image = util.add_alpha_layer(cv_image, 0)
         cv_image = util.draw_image_margin(cv_image, self.image_margin)
 
-        string = "Saying: {}".format(utterance)
+        string = "Saying: \"{}\"...".format(utterance)
 
         cv_image = util.draw_crosshair(cv_image, 100, 100)
         cv_image = util.draw_text(cv_image, string, 0, 0, background=True, color=(0, 0, 0, 255), background_color=(255, 0, 0, 255))

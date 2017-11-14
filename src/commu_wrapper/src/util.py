@@ -109,7 +109,7 @@ def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_sc
     text_bottom_left = np.array((x + text_margin, y + text_height + text_margin))
 
     if background:
-        cv2.rectangle(cv_image, (x, y), (x + text_width + text_margin * 2, y + text_height + text_margin * 3),
+        cv2.rectangle(cv_image, (x, y), (x + text_width + text_margin * 2, y + text_height + text_margin * 2),
                       background_color, thickness=cv2.FILLED)
 
     cv2.putText(cv_image, text, (text_bottom_left[0], text_bottom_left[1]), font, font_scale, color,
@@ -123,6 +123,7 @@ def image_to_opencv(image_data):
         return bridge.imgmsg_to_cv2(image_data, "bgr8")
     except CvBridgeError as e:
         print(e)
+
 
 def random_color():
     color3 = random.sample(xrange(0, 255), 3)
