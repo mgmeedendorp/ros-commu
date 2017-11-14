@@ -55,4 +55,6 @@ if __name__ == '__main__':
 
     manager.start(utter, threaded=True, perpetual=True)
 
+    rospy.on_shutdown(manager.stop())
+
     rospy.spin()
