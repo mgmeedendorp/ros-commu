@@ -8,7 +8,7 @@ from util import get_srv_function
 
 
 def classification_result_callback(manager, data):
-    print "Received classification results with {} objects.".format(len(data.objects))
+    rospy.logdebug("Received classification results with {} objects.".format(len(data.objects)))
 
     for obj in data.objects:
         priority = 0.5
@@ -55,9 +55,7 @@ if __name__ == '__main__':
 
     manager.start(utter, threaded=True, perpetual=True)
 
-    rospy.on_shutdown(manager.stop())
-
     try:
         rospy.spin()
     except KeyboardInterrupt:
-        manager.stop()
+        manager.stop(force=True)

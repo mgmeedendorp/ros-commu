@@ -86,14 +86,19 @@ class DialogueManager:
                 rospy.loginfo("DialogueManager is done talking. Stopping..")
                 self.__cleanup()
 
-    def stop(self):
+    def stop(self, force=False):
         # type: () -> None
         """
         Request the DialogueManager to stop. This will continue the dialogue until the next point where the dialogue can
         be cancelled.
+        :param force: If this is true, don't wait for the conversation to finish.
         """
         rospy.loginfo("DialogueManager received stop request.")
         self.should_interrupt = True
+
+        if force:
+            self.__cleanup()
+            self.topics = {}
 
     def __cleanup(self):
         # type: () -> None
