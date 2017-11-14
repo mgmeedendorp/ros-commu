@@ -1,3 +1,5 @@
+import rospy
+
 from dialogue_input import NoResponse, BinaryResponse, AnyResponse
 
 
@@ -34,6 +36,7 @@ class Dialogue:
         response = self.current_line.request_response().get_response()
 
         if self.should_cancel and self.current_line.can_cancel():
+            rospy.loginfo("Dialogue cancelled.")
             self.is_canceled = True
 
         self.current_line = self.current_line.get_next_line(response)
@@ -62,6 +65,8 @@ class Dialogue:
         """
         Request to cancel this dialogue as soon as a DialogueLine is reached that can be canceled.
         """
+        rospy.loginfo("Dialogue cancel requested.")
+
         self.should_cancel = True
 
 
