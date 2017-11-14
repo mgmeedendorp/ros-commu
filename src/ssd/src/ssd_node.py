@@ -27,6 +27,7 @@ bridge = CvBridge()
 
 publisher = None
 
+
 def publisher():
     global publisher
     publisher = rospy.Publisher('ssd_node/classification_result', ClassifiedObjectArray, queue_size=5)

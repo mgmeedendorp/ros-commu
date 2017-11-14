@@ -1,16 +1,12 @@
 #!/usr/bin/env python
+import argparse
 import random
 
 import rospy
-import time
-import argparse
-
-import sys
-
-from helper.robot.cumhelper import CUMHelper
 from ssd.msg import ClassifiedObjectArray
 
-from dialogue.dialogue_definitions import get_dialogue_for_label
+from helper.robot.cumhelper import CUMHelper
+from src.dialogue.src.dialogue.dialogue_definitions import get_dialogue_for_label
 
 latest_objects = None
 

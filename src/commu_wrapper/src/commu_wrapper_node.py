@@ -33,7 +33,7 @@ def look_callback(wrapper):
         return CommULookResponse(success)
 
 
-def init_message_listener(wrapper):
+def init_message_listeners(wrapper):
     rospy.loginfo("Initializing CommU wrapper node message listener.")
 
     rospy.Service('/commu_wrapper/utter', CommUUtter, utter_callback(wrapper))
@@ -64,6 +64,6 @@ if __name__ == '__main__':
     else:
         wrapper = CommUWrapper(args.ipaddress, int(args.port))
 
-    init_message_listener(wrapper)
+    init_message_listeners(wrapper)
 
     rospy.spin()
