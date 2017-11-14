@@ -51,8 +51,6 @@ class DebugHandler:
         self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects, self.image_margin)
 
     def commu_utter_received(self, utterance, blocking, english):
-        print "debug utter"
-
         cv_image = np.zeros(self.image_size, np.uint8)
         cv_image = util.add_alpha_layer(cv_image, 0)
         cv_image = util.draw_image_margin(cv_image, self.image_margin)
@@ -63,8 +61,6 @@ class DebugHandler:
 
         self.latest_utter_cv_image = cv_image
         self.latest_utter_until = time.time() + util.approximate_say_time(utterance)
-
-        print str(self.latest_utter_until) + " " + str(time.time())
 
     def commu_look_received(self, look, resolution, translation, rotation):
         cv_image = np.zeros((resolution['x'], resolution['y'], 3), np.uint8)
@@ -81,6 +77,8 @@ class DebugHandler:
         merge_classification_image = self.latest_classification_image is not None
 
         self.display_image = util.draw_image_margin(self.latest_cv_image)
+
+        print merge_utter_image
 
         if merge_utter_image:
             print 'mergin utter image'
