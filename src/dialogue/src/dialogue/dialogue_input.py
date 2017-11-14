@@ -1,7 +1,7 @@
 import time
 import rospy
 from button_input.srv import BinaryButtonInput
-from dialogue.util import *
+from util import *
 
 
 class AbstractDialogueResponse:
