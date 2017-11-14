@@ -120,7 +120,7 @@ class DialogueManager:
         :param topic: The topic to add.
         :param priority: The priority of the topic.
         """
-        t = DialogueTopic(topic, priority)
+        t = DialogueTopic(priority, topic)
 
         if self.has_topic(topic):
             rospy.logdebug("Trying to add {} to the topics, but a topic with that label already exists! Skipping..".format(topic))
@@ -202,6 +202,7 @@ class DialogueManager:
 
 class DialogueTopic:
     def __init__(self, priority, label):
+        # type: (float, str) -> DialogueTopic
         self.label = label
         self.priority = priority
 
