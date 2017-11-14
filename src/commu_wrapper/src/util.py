@@ -92,8 +92,8 @@ def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_sc
     Draw text on the provided cv2 image at a specified position
     :param cv_image: The image to draw the text on.
     :param text: The text to draw
-    :param x: The x coordinate of the top-left corner of the text.
-    :param y: The y coordinate of the top-left corner of the text.
+    :param x: The x coordinate of the top-left corner of the text margin.
+    :param y: The y coordinate of the top-left corner of the text margin.
     :param font: The font to draw in.
     :param font_scale: The size of the font.
     :param color: The color of the text.
@@ -106,7 +106,7 @@ def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_sc
 
     text_width, text_height = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
 
-    text_bottom_left = np.array((x + text_margin, y + text_margin))
+    text_bottom_left = np.array((x + text_margin, y + text_height + text_margin))
     text_top_right = text_bottom_left + np.array((text_width, -text_height))
 
     if background:
