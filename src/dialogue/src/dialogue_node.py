@@ -17,7 +17,6 @@ def classification_result_callback(manager, data):
             priority = 1.0
 
         if not manager.has_topic(obj.label):
-            print "Adding topic to manager: ({}, {})".format(obj.label, str(priority))
             manager.add_topic(obj.label, priority)
 
 
