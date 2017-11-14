@@ -86,7 +86,7 @@ def draw_crosshair(cv_image, x, y, width=6, height=6, line_thickness=3):
 
 
 def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_scale=1, color=(0, 0, 0),
-              font_thickness=2, background=False, background_color=(1, 1, 1), text_margin=5):
+              font_thickness=1, background=False, background_color=(1, 1, 1), text_margin=5):
     # type: (np.array, str, int, int, int, int, (int, int, int), int, bool, (int, int, int), int) -> np.array
     """
     Draw text on the provided cv2 image at a specified position
