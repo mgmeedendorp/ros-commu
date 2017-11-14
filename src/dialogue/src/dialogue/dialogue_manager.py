@@ -69,6 +69,7 @@ class DialogueManager:
                 rospy.loginfo("DialogueManager seems to be done talking. Waiting for more topics to talk about...")
 
                 self.__add_topic_event.wait(timeout=None)
+                self.__add_topic_event.clear()
 
                 break
             else:
