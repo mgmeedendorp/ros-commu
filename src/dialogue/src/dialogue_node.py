@@ -7,14 +7,14 @@ from dialogue import *
 from util import get_srv_function
 
 def classification_result_callback(manager, data):
-    for object in data.objects:
+    for obj in data.objects:
         priority = 0.5
 
-        if object.label == "person":
+        if obj.label == "person":
             priority = 1.0
 
-        if not manager.has_topic(object.label):
-            manager.add_topic(object.label, priority)
+        if not manager.has_topic(obj.label):
+            manager.add_topic(obj.label, priority)
 
 
 def init_message_listeners(manager):
