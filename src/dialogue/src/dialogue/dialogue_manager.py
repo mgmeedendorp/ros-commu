@@ -170,7 +170,12 @@ class DialogueManager:
         Get the topic from self.topics with the highest priority.
         :return: The topic with the highest priority.
         """
-        return self.topics.sort(key=lambda t: t.priority, reverse=True)[0]
+        if len(self.topics) != 0:
+            self.topics.sort(key=lambda t: t.priority, reverse=True)
+
+            return self.topics[0]
+
+        return None
 
     def __delete_topics_with_label(self, topic_label):
         # type: (str) -> None
