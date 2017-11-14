@@ -6,12 +6,17 @@ from commu_wrapper.srv import CommUUtter
 from dialogue import *
 from util import get_srv_function
 
+
 def classification_result_callback(manager, data):
+    print "Received classification results with {} objects.".format(len(data.objects))
+
     for obj in data.objects:
         priority = 0.5
 
         if obj.label == "person":
             priority = 1.0
+
+        print obj
 
         if not manager.has_topic(obj.label):
             manager.add_topic(obj.label, priority)
