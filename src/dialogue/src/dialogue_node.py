@@ -57,4 +57,7 @@ if __name__ == '__main__':
 
     rospy.on_shutdown(manager.stop())
 
-    rospy.spin()
+    try:
+        rospy.spin()
+    except KeyboardInterrupt:
+        manager.stop()
