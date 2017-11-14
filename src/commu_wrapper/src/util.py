@@ -106,7 +106,7 @@ def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_sc
 
     text_width, text_height = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
 
-    text_bottom_left = (x, y) + np.array((text_margin, -text_margin))
+    text_bottom_left = np.array((x + text_margin, y - text_margin))
     text_top_right = text_bottom_left + np.array((text_width, -text_height))
 
     if background:
