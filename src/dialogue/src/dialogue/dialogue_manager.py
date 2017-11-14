@@ -19,7 +19,7 @@ class DialogueManager:
         self.dialogue_library = dialogue_library
         self.current_dialogue = None
         self.current_topic = None
-        self.topics = {}
+        self.topics = []
 
         self.running = False
         self.switching_topic = False
@@ -59,20 +59,20 @@ class DialogueManager:
                 rospy.loginfo("Selecting new topic to talk about..")
 
                 self.current_topic = self.__get_next_current_topic()
-                self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic)
+                self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic.label)
 
                 self.switching_topic = False
 
-                rospy.loginfo("New topic: {}".format(self.current_topic))
+                rospy.loginfo("New topic: {}".format(self.current_topic.label))
 
                 while self.current_dialogue.dialogue_remaining():
                     if self.switching_topic or self.should_interrupt:
-                        rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic))
+                        rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic.label))
                         self.current_dialogue.cancel_dialogue()
 
                     self.current_dialogue.proceed_dialogue(utter)
 
-                rospy.loginfo("Dialogue about {} finished.".format(self.current_topic))
+                rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
                 self.__delete_topic(self.current_topic)
 
@@ -98,7 +98,7 @@ class DialogueManager:
 
         if force:
             self.__cleanup()
-            self.topics = {}
+            self.topics = []
 
     def __cleanup(self):
         # type: () -> None
@@ -118,13 +118,19 @@ class DialogueManager:
         Add a topic with a priority to the DialogueManager. This can be called before or
         after starting the start method.
         :param topic: The topic to add.
-        :param priority: The priority to assign this topic.
+        :param priority: The priority of the topic.
         """
+        t = DialogueTopic(topic, priority)
+
+        if not self.has_topic(topic):
+            rospy.loginfo("Trying to add {} to the topics, but a topic with that label already exists! Skipping..".format(topic))
+            return
+
         rospy.loginfo("Adding {} to the topic list with priority {}..".format(topic, priority))
 
-        self.topics[priority] = topic
+        self.topics.append(t)
 
-        if self.running and self.__get_next_current_topic() == topic:
+        if self.running and self.__get_next_current_topic() == t:
             rospy.loginfo("{} is the highest priority ({}) topic. Requesting topic switch...".format(topic, priority))
             self.switching_topic = True
 
@@ -138,46 +144,61 @@ class DialogueManager:
         """
         rospy.loginfo("Removing {} from the topic list..".format(topic))
 
-        if self.running and self.current_topic == topic:
+        if self.running and self.current_topic.label == topic:
             rospy.loginfo("{} is the current topic while we are trying to remove it. Requesting change of topic before removal...".format(topic))
 
             self.switching_topic = True
         else:
-            self.__delete_topic(topic)
+            self.__delete_topics_with_label(topic)
 
     def has_topic(self, topic):
         # type: (str) -> bool
         """
         Whether this topic is already in the list of topics to be talked about.
         :param topic: The topic to check
-        :return: Whether _topic_ is in the list of topics for this DialogueManager
+        :return: Whether topic is in the list of topics for this DialogueManager
         """
-        for key, val in self.topics.iteritems():
-            if val == topic:
+        for t in self.topics:
+            if t.label == topic:
                 return True
 
         return False
 
     def __get_next_current_topic(self):
-        # type: () -> str
+        # type: () -> DialogueTopic
         """
         Get the topic from self.topics with the highest priority.
         :return: The topic with the highest priority.
         """
-        return self.topics[sorted(self.topics.iterkeys())[0]]
+        return self.topics.sort(key=lambda t: t.priority, reverse=True)[0]
 
-    def __delete_topic(self, topic):
+    def __delete_topics_with_label(self, topic_label):
         # type: (str) -> None
         """
-        Removes a topic from the self.topics dict.
+        Removes a topic from the self.topics list.
+        :param topic_label: The label of the topic to remove
+        """
+        rospy.loginfo("Deleting {} from the topic list.".format(topic_label))
+
+        for topic in self.topics:
+            if topic.label == topic_label:
+                self.topics.remove(topic)
+
+    def __delete_topic(self, topic):
+        # type: (DialogueTopic) -> None
+        """
+        Removes a topic from the self.topics list.
         :param topic: The topic to remove
         """
-        rospy.loginfo("Deleting {} from the topic list.".format(topic))
+        rospy.loginfo("Deleting {} from the topic list.".format(topic.label))
 
-        for key, val in self.topics.iteritems():
-            if val == topic:
-                del self.topics[key]
-                break
+        self.topics.remove(topic)
+
+
+class DialogueTopic:
+    def __init__(self, priority, label):
+        self.label = label
+        self.priority = priority
 
 
 class DialogueLibrary:

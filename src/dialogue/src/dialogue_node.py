@@ -14,10 +14,9 @@ def classification_result_callback(manager, data):
         priority = 0.5
 
         if obj.label == "person":
-            priority = 1.0
+            priority = 0.0
 
-        if not manager.has_topic(obj.label):
-            manager.add_topic(obj.label, priority)
+        manager.add_topic(obj.label, priority)
 
 
 def init_message_listeners(manager):
