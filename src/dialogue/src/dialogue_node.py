@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import rospy
 from ssd.msg import ClassifiedObjectArray
 from commu_wrapper.srv import CommUUtter
