@@ -1,5 +1,7 @@
 import threading
 
+import rospy
+
 from dialogue import Dialogue
 
 
@@ -23,42 +25,55 @@ class DialogueManager:
         self.switching_topic = False
         self.should_interrupt = False
 
-    def start(self, utter, threaded=False):
-        # type: (Callable[str, None], bool) -> None
+        self.__add_topic_event = threading.Event()
+
+    def start(self, utter, threaded=False, perpetual=True):
+        # type: (Callable[str, None], bool, bool) -> None
         """
         Start the DialogueManager. This uses the DialogueLibrary to go through every dialogue in the
         topics dict, based on their priority (high priority first). This can be run either synchronously or
         asynchronously (in a new thread).
         :param utter: The function that can be called to utter a sentence.
         :param threaded: Whether to run the DialogueManager in a different thread.
+        :param perpetual: Whether to stop running the DialogueManager after all dialogues are done.
         """
         self.running = True
 
         if threaded:
-            threading.Thread(target=self.__start_worker(utter))
+            threading.Thread(target=self.__start_worker(utter, perpetual))
         else:
-            self.__start_worker(utter)
+            self.__start_worker(utter, perpetual)
 
-    def __start_worker(self, utter):
-        # type: (Callable[str, None]) -> None
+    def __start_worker(self, utter, perpetual):
+        # type: (Callable[str, None], bool) -> None
         """
         The worker function for start(). This is a seperate function to ease threading.
         :param utter: The function that can be called to utter a sentence.
         """
-        while not self.should_interrupt and len(self.topics) != 0:
-            self.current_topic = self.__get_next_current_topic()
-            self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic)
+        while not self.should_interrupt:
+            while len(self.topics) != 0:
+                self.current_topic = self.__get_next_current_topic()
+                self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic)
 
-            while self.current_dialogue.dialogue_remaining():
-                if self.switching_topic or self.should_interrupt:
-                    self.current_dialogue.cancel_dialogue()
+                while self.current_dialogue.dialogue_remaining():
+                    if self.switching_topic or self.should_interrupt:
+                        self.current_dialogue.cancel_dialogue()
 
-                self.current_dialogue.proceed_dialogue(utter)
+                    self.current_dialogue.proceed_dialogue(utter)
 
-            self.switching_topic = False
-            self.__delete_topic(self.current_topic)
+                self.switching_topic = False
+                self.__delete_topic(self.current_topic)
 
-        self.__cleanup()
+            if perpetual and not self.should_interrupt:
+                rospy.loginfo("DialogueManager seems to be done talking. Waiting for more topics to talk about...")
+
+                self.__add_topic_event.wait(timeout=None)
+
+                break
+            else:
+                rospy.loginfo("DialogueManager is done talking. Stopping..")
+                self.__cleanup()
+                break
 
     def stop(self):
         # type: () -> None
@@ -92,6 +107,8 @@ class DialogueManager:
         if self.running and self.__get_next_current_topic() == topic:
             self.switching_topic = True
 
+        self.__add_topic_event.set()
+
     def remove_topic(self, topic):
         # type: (str) -> None
         """
@@ -102,6 +119,14 @@ class DialogueManager:
             self.switching_topic = True
         else:
             self.__delete_topic(topic)
+
+    def has_topic(self, topic):
+        # type: (str) -> bool
+        """
+        Whether this topic is already in the list of topics to be talked about.
+        :param topic: The
+        :return:
+        """
 
     def __get_next_current_topic(self):
         # type: () -> str
