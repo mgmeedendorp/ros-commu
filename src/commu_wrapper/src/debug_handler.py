@@ -57,6 +57,7 @@ class DebugHandler:
 
         string = "Saying: {}".format(utterance)
 
+        cv_image = util.draw_crosshair(cv_image, 100, 100)
         cv_image = util.draw_text(cv_image, string, 0, 0, background=True, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
 
         self.latest_utter_cv_image = cv_image
@@ -81,8 +82,8 @@ class DebugHandler:
         print merge_utter_image
         print merge_look_image
 
-        #if merge_classification_image:
-        #    self.display_image = util.draw_overlay_image(self.display_image, self.latest_classification_image)
+        if merge_classification_image:
+            self.display_image = util.draw_overlay_image(self.display_image, self.latest_classification_image)
 
         if merge_utter_image:
             print 'mergin utter image'
