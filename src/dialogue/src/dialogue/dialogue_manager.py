@@ -51,16 +51,25 @@ class DialogueManager:
         The worker function for start(). This is a seperate function to ease threading.
         :param utter: The function that can be called to utter a sentence.
         """
+        rospy.loginfo("Starting DialogueManager worker{}".format(" in perpetual mode.." if perpetual else ".."))
+
         while not self.should_interrupt:
-            while len(self.topics) != 0:
+            while len(self.topics) > 0:
+                rospy.loginfo("Selecting new topic to talk about..")
+
                 self.current_topic = self.__get_next_current_topic()
                 self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic)
 
+                rospy.loginfo("New topic: {}".format(self.current_topic))
+
                 while self.current_dialogue.dialogue_remaining():
                     if self.switching_topic or self.should_interrupt:
+                        rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic))
                         self.current_dialogue.cancel_dialogue()
 
                     self.current_dialogue.proceed_dialogue(utter)
+
+                rospy.loginfo("Dialogue about {} finished.".format(self.current_topic))
 
                 self.switching_topic = False
                 self.__delete_topic(self.current_topic)
@@ -71,11 +80,9 @@ class DialogueManager:
                 self.__add_topic_event.wait(timeout=None)
                 self.__add_topic_event.clear()
 
-                break
             else:
                 rospy.loginfo("DialogueManager is done talking. Stopping..")
                 self.__cleanup()
-                break
 
     def stop(self):
         # type: () -> None
@@ -83,6 +90,7 @@ class DialogueManager:
         Request the DialogueManager to stop. This will continue the dialogue until the next point where the dialogue can
         be cancelled.
         """
+        rospy.loginfo("DialogueManager received stop request.")
         self.should_interrupt = True
 
     def __cleanup(self):
@@ -90,6 +98,7 @@ class DialogueManager:
         """
         Clean up the class variables after stopping.
         """
+        rospy.loginfo("DialogueManager cleaning up..")
         self.current_dialogue = None
         self.switching_topic = False
         self.should_interrupt = False
@@ -104,9 +113,12 @@ class DialogueManager:
         :param topic: The topic to add.
         :param priority: The priority to assign this topic.
         """
+        rospy.loginfo("Adding {} to the topic list with priority {}..".format(topic, priority))
+
         self.topics[priority] = topic
 
         if self.running and self.__get_next_current_topic() == topic:
+            rospy.loginfo("{} is the highest priority ({}) topic. Requesting topic switch...".format(topic, priority))
             self.switching_topic = True
 
         self.__add_topic_event.set()
@@ -117,7 +129,11 @@ class DialogueManager:
         Remove a topic from the dialogue manager. This can be used before and after starting the dialogue manager.
         :param topic: The topic to remove.
         """
+        rospy.loginfo("Removing {} from the topic list..".format(topic))
+
         if self.running and self.current_topic == topic:
+            rospy.loginfo("{} is the current topic while we are trying to remove it. Requesting change of topic before removal...".format(topic))
+
             self.switching_topic = True
         else:
             self.__delete_topic(topic)
@@ -126,9 +142,14 @@ class DialogueManager:
         # type: (str) -> bool
         """
         Whether this topic is already in the list of topics to be talked about.
-        :param topic: The
-        :return:
+        :param topic: The topic to check
+        :return: Whether _topic_ is in the list of topics for this DialogueManager
         """
+        for key, val in self.topics.iteritems():
+            if val == topic:
+                return True
+
+        return False
 
     def __get_next_current_topic(self):
         # type: () -> str
@@ -144,6 +165,8 @@ class DialogueManager:
         Removes a topic from the self.topics dict.
         :param topic: The topic to remove
         """
+        rospy.loginfo("Deleting {} from the topic list.".format(topic))
+
         for key, val in self.topics.iteritems():
             if val == topic:
                 del self.topics[key]
