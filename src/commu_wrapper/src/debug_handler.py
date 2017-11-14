@@ -89,7 +89,6 @@ class DebugHandler:
             self.display_image = util.draw_overlay_image(self.display_image, self.latest_classification_image)
 
         if merge_utter_image:
-            print 'mergin utter image'
             self.display_image = util.draw_overlay_image(self.display_image, self.latest_utter_cv_image)
 
         if merge_look_image:

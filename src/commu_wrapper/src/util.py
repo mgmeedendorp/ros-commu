@@ -111,7 +111,7 @@ def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_sc
 
     if background:
         cv2.rectangle(cv_image, (text_bottom_left[0] - text_margin, text_bottom_left[1] + text_margin),
-                      (text_top_right[0] + text_margin * 2, text_top_right[1] - text_margin * 2),
+                      (text_top_right[0] + text_margin * 2, text_top_right[1] - text_margin),
                       background_color, thickness=cv2.FILLED)
 
     print "Drawing text {} at x {}, y {}".format(text, text_bottom_left[0], text_bottom_left[1])
