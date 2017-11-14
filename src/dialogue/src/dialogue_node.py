@@ -16,7 +16,7 @@ def classification_result_callback(manager, data):
         if obj.label == "person":
             priority = 1.0
 
-        print obj.label + " " + priority
+        print obj.label + " " + str(priority)
 
         if not manager.has_topic(obj.label):
             manager.add_topic(obj.label, priority)
