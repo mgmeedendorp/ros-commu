@@ -61,6 +61,8 @@ class DialogueManager:
                 self.current_topic = self.__get_next_current_topic()
                 self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic)
 
+                self.switching_topic = False
+
                 rospy.loginfo("New topic: {}".format(self.current_topic))
 
                 while self.current_dialogue.dialogue_remaining():
@@ -72,7 +74,6 @@ class DialogueManager:
 
                 rospy.loginfo("Dialogue about {} finished.".format(self.current_topic))
 
-                self.switching_topic = False
                 self.__delete_topic(self.current_topic)
 
             if perpetual and not self.should_interrupt:
