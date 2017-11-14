@@ -64,7 +64,7 @@ class DebugHandler:
         self.latest_utter_cv_image = cv_image
         self.latest_utter_until = time.time() + util.approximate_say_time(utterance)
 
-        print self.latest_utter_until + " " + time.time()
+        print str(self.latest_utter_until) + " " + str(time.time())
 
     def commu_look_received(self, look, resolution, translation, rotation):
         cv_image = np.zeros((resolution['x'], resolution['y'], 3), np.uint8)
