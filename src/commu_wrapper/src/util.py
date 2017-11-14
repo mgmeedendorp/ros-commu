@@ -107,14 +107,10 @@ def draw_text(cv_image, text, x, y, font=cv2.FONT_HERSHEY_COMPLEX_SMALL, font_sc
     text_width, text_height = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
 
     text_bottom_left = np.array((x + text_margin, y + text_height + text_margin))
-    text_top_right = text_bottom_left + np.array((text_width, -text_height))
 
     if background:
-        cv2.rectangle(cv_image, (x, y),
-                      (x + text_width + text_margin * 2, y + text_height + text_margin * 2),
+        cv2.rectangle(cv_image, (x, y), (x + text_width + text_margin * 2, y + text_height + text_margin * 3),
                       background_color, thickness=cv2.FILLED)
-
-    print "Drawing text {} at x {}, y {}".format(text, x, y)
 
     cv2.putText(cv_image, text, (text_bottom_left[0], text_bottom_left[1]), font, font_scale, color,
                 thickness=font_thickness)
