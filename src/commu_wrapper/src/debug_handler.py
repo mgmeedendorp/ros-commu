@@ -17,7 +17,7 @@ class DebugHandler:
         self.image_bridge = CvBridge()
         self.image_margin = 50
 
-        self.image_size = (100, 100, 3)
+        self.image_size = None
         self.latest_cv_image = None
         self.latest_utter_cv_image = None
         self.latest_utter_until = time.time()
@@ -51,6 +51,9 @@ class DebugHandler:
         self.latest_classification_image = util.draw_bounding_boxes(cv_image, data.objects, self.image_margin)
 
     def commu_utter_received(self, utterance, blocking, english):
+        if self.image_size is None:
+            return
+
         cv_image = np.zeros(self.image_size, np.uint8)
         cv_image = util.add_alpha_layer(cv_image, 0)
         cv_image = util.draw_image_margin(cv_image, self.image_margin)
@@ -64,6 +67,9 @@ class DebugHandler:
         self.latest_utter_until = time.time() + util.approximate_say_time(utterance)
 
     def commu_look_received(self, look, resolution, translation, rotation):
+        if self.image_size is None:
+            return
+
         cv_image = np.zeros((resolution['x'], resolution['y'], 3), np.uint8)
         cv_image = util.add_alpha_layer(cv_image, 0)
         cv_image = util.draw_image_margin(cv_image, self.image_margin)
@@ -78,9 +84,6 @@ class DebugHandler:
         merge_classification_image = self.latest_classification_image is not None
 
         self.display_image = util.draw_image_margin(self.latest_cv_image)
-
-        print merge_utter_image
-        print merge_look_image
 
         if merge_classification_image:
             self.display_image = util.draw_overlay_image(self.display_image, self.latest_classification_image)
