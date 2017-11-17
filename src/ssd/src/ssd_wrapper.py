@@ -8,7 +8,7 @@ from ssd.msg import ClassifiedObjectArray, ClassifiedObject, BoundingBox
 
 import caffe
 from caffe.proto import caffe_pb2
-from util import time_usage, block_print, enable_print
+from util import time_usage
 from std_msgs.msg import Header
 import rospy
 
@@ -26,7 +26,8 @@ class SSD:
         os.chdir(self.caffe_root)
         sys.path.insert(0, 'python')
 
-        block_print()
+        #Decrease log from caffe
+        os.environ['GLOG_minloglevel'] = '2'
 
         if (use_gpu):
             caffe.set_mode_gpu()
@@ -37,8 +38,6 @@ class SSD:
         self.load_label_map()
         self.create_network()
         self.create_transformer()
-
-        enable_print()
 
     def load_label_map(self):
         # load PASCAL VOC labels
@@ -84,8 +83,6 @@ class SSD:
 
     @time_usage
     def classify_image(self, cv_image, min_confidence=0.6):
-        block_print()
-
         transformed_image = self.transformer.preprocess('data', cv_image)
         self.net.blobs['data'].data[...] = transformed_image
 
@@ -127,8 +124,6 @@ class SSD:
             label_name = top_labels[i]
 
             results.append(ClassificationResult(score, label_name, xmin, ymin, xmax, ymax))
-
-        enable_print()
 
         return results
 

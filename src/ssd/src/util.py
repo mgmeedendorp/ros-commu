@@ -73,17 +73,3 @@ def save_opencv_image(cv_image, file_path):
 
 def random_color():
     return random.sample(xrange(0, 255), 3)
-
-# Disable
-def block_print():
-    """
-    This function redirects the print statement to /dev/null
-    """
-    sys.stdout = open(os.devnull, 'w')
-
-# Restore
-def enable_print():
-    """
-    This function redirects the print statement to stdout
-    """
-    sys.stdout = sys.__stdout__
