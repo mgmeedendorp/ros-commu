@@ -9,10 +9,10 @@
     <!-- Prevent caffe from printing massive amounts of useless info. -->
     <env name="GLOG_minloglevel" value="2"/>
 
-    <node name="cv_camera" pkg="cv_camera" type="cv_camera_node"  output="screen"/>
-    <node name="ssd_node" pkg="ssd" type="ssd_node.py" output="screen"/>
-    <node name="commu_wrapper_node" pkg="commu_wrapper" type="commu_wrapper_node.py" args="-i $(arg commu-ip) -p $(arg commu-port) -d $(arg debug)" output="screen"/>
+    <node name="cv_camera" pkg="cv_camera" type="cv_camera_node"/>
+    <node name="ssd_node" pkg="ssd" type="ssd_node.py"/>
+    <node name="commu_wrapper_node" pkg="commu_wrapper" type="commu_wrapper_node.py" args="-i $(arg commu-ip) -p $(arg commu-port) -d $(arg debug)"/>
     <node name="button_input_node" pkg="button_input" type="button_input_node.py" output="screen"/>
-    <node name="dialogue_node" pkg="dialogue" type="dialogue_node.py" output="screen"/>
+    <node name="dialogue_node" pkg="dialogue" type="dialogue_node.py"/>
 
 </launch>

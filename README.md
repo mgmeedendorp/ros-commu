@@ -18,3 +18,11 @@ git clone https://github.com/seremis/ros-commu.git $CATKIN_WS
 ```
 
 Then build the necessary files by running `catkin_make` in the `$CATKIN_WS` directory.
+
+### Run the dialogue package
+
+Run the dialogue.launch file in the dialogue package by typing:
+
+```shell
+roslaunch dialogue dialogue.launch
+```
