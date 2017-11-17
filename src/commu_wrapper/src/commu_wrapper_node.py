@@ -51,7 +51,7 @@ if __name__ == '__main__':
     parser.add_argument("-c", "--isclassificationtopic", default=True)
 
 
-    print rospy.myargv()
+    rospy.logerr(rospy.myargv())
     args = parser.parse_args(rospy.myargv())
 
     rospy.loginfo("Starting commu_wrapper_node..")
