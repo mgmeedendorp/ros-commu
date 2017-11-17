@@ -4,7 +4,7 @@
     <arg name="commu-port" default="6019" doc="The port of the CommUManager server on the CommU"/>
     <arg name="debug" default="False" doc="Whether to start the commu_wrapper node in debug mode."/>
 
-    <param name="device_path" value="$(arg camera-path)" />
+    <param name="cv_camera/device_path" value="$(arg camera-path)" />
 
     <!-- Prevent caffe from printing massive amounts of useless info. -->
     <env name="GLOG_minloglevel" value="2"/>
