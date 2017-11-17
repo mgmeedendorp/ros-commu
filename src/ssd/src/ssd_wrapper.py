@@ -8,7 +8,7 @@ from ssd.msg import ClassifiedObjectArray, ClassifiedObject, BoundingBox
 
 import caffe
 from caffe.proto import caffe_pb2
-from util import time_usage
+from util import time_usage, block_print, enable_print
 from std_msgs.msg import Header
 import rospy
 
@@ -26,6 +26,8 @@ class SSD:
         os.chdir(self.caffe_root)
         sys.path.insert(0, 'python')
 
+        block_print()
+
         if (use_gpu):
             caffe.set_mode_gpu()
             caffe.set_device(0)  # TODO: No multiple GPU cores?
@@ -35,6 +37,8 @@ class SSD:
         self.load_label_map()
         self.create_network()
         self.create_transformer()
+
+        enable_print()
 
     def load_label_map(self):
         # load PASCAL VOC labels
