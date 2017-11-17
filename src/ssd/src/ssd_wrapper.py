@@ -84,6 +84,8 @@ class SSD:
 
     @time_usage
     def classify_image(self, cv_image, min_confidence=0.6):
+        block_print()
+
         transformed_image = self.transformer.preprocess('data', cv_image)
         self.net.blobs['data'].data[...] = transformed_image
 
@@ -110,7 +112,7 @@ class SSD:
         top_ymax = det_ymax[top_indices]
 
         for i in range(0, len(top_indices)):
-            print('detection {}: <{:.2}: {}>'.format(i, top_conf[i], top_labels[i]))
+            rospy.loginfo('detection {}: <{:.2}: {}>'.format(i, top_conf[i], top_labels[i]))
 
         results = []
 
@@ -125,6 +127,8 @@ class SSD:
             label_name = top_labels[i]
 
             results.append(ClassificationResult(score, label_name, xmin, ymin, xmax, ymax))
+
+        enable_print()
 
         return results
 
