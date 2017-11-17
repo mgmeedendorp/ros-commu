@@ -6,6 +6,9 @@ import numpy as np
 from google.protobuf import text_format
 from ssd.msg import ClassifiedObjectArray, ClassifiedObject, BoundingBox
 
+# Decrease log from caffe
+os.environ['GLOG_minloglevel'] = '2'
+
 import caffe
 from caffe.proto import caffe_pb2
 from util import time_usage
@@ -25,9 +28,6 @@ class SSD:
     def __init__(self, use_gpu=True):
         os.chdir(self.caffe_root)
         sys.path.insert(0, 'python')
-
-        #Decrease log from caffe
-        os.environ['GLOG_minloglevel'] = '2'
 
         if (use_gpu):
             caffe.set_mode_gpu()
