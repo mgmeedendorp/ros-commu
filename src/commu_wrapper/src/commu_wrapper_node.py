@@ -3,6 +3,8 @@
 import argparse
 
 import rospy
+import sys
+
 from debug_handler import DebugHandler
 from wrapper import CommUWrapper
 from commu_wrapper.srv import CommUUtter, CommUUtterResponse, CommULook, CommULookResponse
@@ -51,8 +53,8 @@ if __name__ == '__main__':
     parser.add_argument("-c", "--isclassificationtopic", default=True)
 
 
-    rospy.logerr(rospy.myargv())
-    args = parser.parse_args(rospy.myargv())
+    rospy.logerr(rospy.myargv(sys.argv[1:]))
+    args = parser.parse_args(rospy.myargv(sys.argv[1:]))
 
     rospy.loginfo("Starting commu_wrapper_node..")
     rospy.loginfo("Arguments:")
