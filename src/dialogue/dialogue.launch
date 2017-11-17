@@ -4,12 +4,12 @@
     <arg name="commu-port" default="6019" doc="The port of the CommUManager server on the CommU"/>
     <arg name="debug" default="False" doc="Whether to start the commu_wrapper node in debug mode."/>
 
-    <param name="cv_camera/device_path" value="$(arg camera-path)" />
+    <param name="/cv_camera/device_path" value="$(arg camera-path)"/>
 
     <!-- Prevent caffe from printing massive amounts of useless info. -->
     <env name="GLOG_minloglevel" value="2"/>
 
-    <node name="cv_camera_node" pkg="cv_camera" type="cv_camera_node"  output="screen"/>
+    <node name="cv_camera" pkg="cv_camera" type="cv_camera_node"  output="screen"/>
     <node name="ssd_node" pkg="ssd" type="ssd_node.py" output="screen"/>
     <node name="commu_wrapper_node" pkg="commu_wrapper" type="commu_wrapper_node.py" args="-i $(arg commu-ip) -p $(arg commu-port) -d $(arg debug)" output="screen"/>
     <node name="button_input_node" pkg="button_input" type="button_input_node.py" output="screen"/>
