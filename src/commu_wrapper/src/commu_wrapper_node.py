@@ -51,9 +51,6 @@ if __name__ == '__main__':
     parser.add_argument("-d", "--debug", default="False")
     parser.add_argument("-m", "--image", default="/ssd_node/classification_result")
     parser.add_argument("-c", "--isclassificationtopic", default=True)
-
-
-    rospy.logerr(rospy.myargv(sys.argv[1:]))
     args = parser.parse_args(rospy.myargv(sys.argv[1:]))
 
     rospy.loginfo("Starting commu_wrapper_node..")

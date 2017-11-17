@@ -41,6 +41,8 @@ class DialogueManager:
         """
         self.running = True
 
+        rospy.on_shutdown(self.__add_topic_event.set)
+
         if threaded:
             thread = threading.Thread(target=self.__start_worker(utter, perpetual))
             thread.daemon = True
@@ -70,6 +72,9 @@ class DialogueManager:
                 self.topic_history.append(self.current_topic.label)
 
                 while self.current_dialogue.dialogue_remaining():
+                    if rospy.is_shutdown():
+                        return
+
                     if self.switching_topic or self.should_interrupt:
                         rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic.label))
                         self.current_dialogue.cancel_dialogue()
