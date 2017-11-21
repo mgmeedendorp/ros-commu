@@ -2,7 +2,6 @@
 
 import rospy
 from ssd.msg import ClassifiedObjectArray
-from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommUUtter
 from dialogue import *
 from util import get_srv_function
@@ -25,19 +24,11 @@ def classification_result_callback(manager, data):
             manager.add_topic(obj.label, priority)
 
 
-def person_classification_callback(manager, data):
-    rospy.loginfo("Person classification data: " + str(data))
-
-
 def init_message_listeners(manager):
     def classification_callback(data):
         classification_result_callback(manager, data)
 
-    def person_callback(data):
-        person_classification_callback(manager, data)
-
     rospy.Subscriber("/ssd_node/classification_result", ClassifiedObjectArray, classification_callback)
-    rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
 
 
 def init_message_publishers(manager):
