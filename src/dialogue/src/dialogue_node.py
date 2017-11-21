@@ -24,6 +24,7 @@ def classification_result_callback(manager, data):
         if priority > 0:
             manager.add_topic(obj.label, priority)
 
+
 def person_classification_callback(manager, data):
     rospy.loginfo("Person classification data: " + data)
 
@@ -36,7 +37,7 @@ def init_message_listeners(manager):
         person_classification_callback(manager, data)
 
     rospy.Subscriber("/ssd_node/classification_result", ClassifiedObjectArray, classification_callback)
-    rospy.Subscriber("/camera/person/classification_data", PersonDetection, person_callback)
+    rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
 
 
 def init_message_publishers(manager):
