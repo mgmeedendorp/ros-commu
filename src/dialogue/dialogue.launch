@@ -6,7 +6,7 @@
 
     <param name="/cv_camera/device_path" value="$(arg camera-path)"/>
 
-    <machine name="euclid" address="euclid70fd.local" env-loader="/opt/ros/kinetic/env.sh" default="never" user="euclid" password="euclid"/>
+    <machine name="euclid" address="euclid" env-loader="/home/euclid/catkin_ws/devel/env.sh" default="never" user="euclid" password="euclid"/>
 
     <!-- Prevent caffe from printing massive amounts of useless info. -->
     <env name="GLOG_minloglevel" value="2"/>
