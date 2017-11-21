@@ -1,6 +1,6 @@
 <launch>
     <arg name="camera-path" default="/dev/fisheye-camera" doc="The path of video device to use to capture images."/>
-    <arg name="commu-ip" default="127.0.0.1" doc="The IP address of the CommU robot"/>
+    <arg name="commu-ip" doc="The IP address of the CommU robot"/>
     <arg name="commu-port" default="6019" doc="The port of the CommUManager server on the CommU"/>
     <arg name="debug" default="False" doc="Whether to start the commu_wrapper node in debug mode."/>
 
@@ -15,6 +15,7 @@
     <node name="ssd_node" pkg="ssd" type="ssd_node.py"/>
     <node name="commu_wrapper_node" pkg="commu_wrapper" type="commu_wrapper_node.py" args="-i $(arg commu-ip) -p $(arg commu-port) -d $(arg debug)"/>
     <node name="button_input_node" pkg="button_input" type="button_input_node.py" output="screen"/>
-    <node name="dialogue_node" machine="euclid" pkg="dialogue" type="dialogue_node.py"/>
+    <node name="look_helper_node" pkg="look_helper" type="look_helper_node.py" machine="euclid"/>
+    <node name="dialogue_node" pkg="dialogue" type="dialogue_node.py"/>
 
 </launch>
