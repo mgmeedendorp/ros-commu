@@ -26,7 +26,7 @@ def classification_result_callback(manager, data):
 
 
 def person_classification_callback(manager, data):
-    rospy.loginfo("Person classification data: " + data)
+    rospy.loginfo("Person classification data: " + str(data))
 
 
 def init_message_listeners(manager):
