@@ -33,9 +33,19 @@ source devel/setup.bash
 
 Install caffe using the instructions at <https://github.com/weiliu89/caffe/blob/ssd/README.md>. 
 
-Use the `$CATKIN_WS/src/ssd/caffe/` directory as `$CAFFE_ROOT`.
+Set the `$CATKIN_WS/src/ssd/caffe/` directory as the `$CAFFE_ROOT` environment variable.
+
+```shell
+export CAFFE_ROOT=$CATKIN_WS/src/ssd/caffe/
+```
 
 Follow the instructions under 'Installation' and then either download the pre-trained model (as specified under step 1 of 'Train/Eval') or train your own model by following the steps under 'Preparation' and 'Train/Eval'
+
+Then append the `$CAFFE_ROOT/python` directory to `PYTHONPATH`:
+
+```shell
+export PYTHONPATH = $PYTHONPATH:$CAFFE_ROOT/python
+```
 
 ### Run the dialogue package
 
@@ -46,7 +56,7 @@ roslaunch dialogue dialogue.launch commu-ip:=192.168.1.1 commu-port:=6019 camera
 ```
 
 The launch file accepts 3 arguments:
-- `commu-ip` (default: 127.0.0.1):
+- `commu-ip` (required):
   * The IP address of the CommU robot.
 - `commu-port` (default: 6019): 
   * The port of the CommU manager program on the CommU.
