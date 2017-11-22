@@ -3,10 +3,11 @@
     <arg name="commu-ip" doc="The IP address of the CommU robot"/>
     <arg name="commu-port" default="6019" doc="The port of the CommUManager server on the CommU"/>
     <arg name="debug" default="False" doc="Whether to start the commu_wrapper node in debug mode."/>
+    <arg name="euclid" default="EUCLID_70FD" doc="The hostname of the euclid device."/>
 
     <param name="/cv_camera/device_path" value="$(arg camera-path)"/>
 
-    <machine name="euclid" address="EUCLID_70FD" env-loader="/home/euclid/catkin_ws/devel/env.sh" default="never" user="euclid" password="euclid"/>
+    <machine name="euclid" address="$(arg euclid)" env-loader="/home/euclid/catkin_ws/devel/env.sh" default="never" user="euclid" password="euclid"/>
 
     <!-- Prevent caffe from printing massive amounts of useless info. -->
     <env name="GLOG_minloglevel" value="2"/>

@@ -3,6 +3,9 @@ The catkin workspace folder for my commu dialogue project at Osaka University's 
 
 ## Installation
 
+### Requirements
+This system uses 2 devices connected to the same network. One of them is an Intel Euclid Development Kit, used as a ROS master, and the other is a beefy pc with a GPU to run the Single-Shot Multibox Detector neural network, which is used to classify images.
+
 ### Install ROS
 
 Install ROS kinetic, following the instructions on ROS wiki.
@@ -47,6 +50,11 @@ Then append the `$CAFFE_ROOT/python` directory to `PYTHONPATH`:
 export PYTHONPATH = $PYTHONPATH:$CAFFE_ROOT/python
 ```
 
+### Configure ROS on the euclid and the gpu-pc
+Follow the following guide on the ROS wiki to configure the network on both devices: <http://wiki.ros.org/ROS/Tutorials/MultipleMachines>.
+
+Either configure the hostname of the euclid to be `EUCLID_70FD` (not recommended) or pass the `euclid:=<euclid hostname>` argument to the launch file.
+
 ### Run the dialogue package
 
 Run the dialogue.launch file in the dialogue package by typing:
@@ -60,5 +68,7 @@ The launch file accepts 3 arguments:
   * The IP address of the CommU robot.
 - `commu-port` (default: 6019): 
   * The port of the CommU manager program on the CommU.
-- `camera-path` (default: /dev/fisheye-camera)
-  * The path to the video device to use as input.
+- `camera-path` (default: /dev/fisheye-camera):
+  * The path to the video device to use as input. The video device has to be connected to the GPU-pc. It is also possible to use another camera, by remapping the raw output topic of the camera to `/cv_camera/image_raw`.
+- `euclid` (default: EUCLID_70FD):  
+  * The hostname of the Intel Euclid Development Kit.
