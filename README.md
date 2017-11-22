@@ -24,9 +24,18 @@ Build the necessary files by running `catkin_make` in the `$CATKIN_WS` directory
 ```shell
 cd $CATKIN_WS
 source /opt/ros/kinetic/setup.bash
+rosdep install cv_camera
 catkin_make
 source devel/setup.bash
 ```
+
+### Install caffe
+
+Install caffe using the instructions at <https://github.com/weiliu89/caffe/blob/ssd/README.md>. 
+
+Use the `$CATKIN_WS/src/ssd/caffe/` directory as `$CAFFE_ROOT`.
+
+Follow the instructions under 'Installation' and then either download the pre-trained model (as specified under step 1 of 'Train/Eval') or train your own model by following the steps under 'Preparation' and 'Train/Eval'
 
 ### Run the dialogue package
 
