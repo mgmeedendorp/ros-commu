@@ -1,7 +1,7 @@
 <launch>
     <arg name="camera-path" default="/dev/fisheye-camera" doc="The path of video device to use to capture images."/>
     <arg name="commu-ip" doc="The IP address of the CommU robot"/>
-    <arg name="commu-port" default="6019" doc="The port of the CommUManager server on the CommU"/>
+    <arg name="commu-port" default="6001" doc="The port of the CommUManager server on the CommU"/>
     <arg name="debug" default="False" doc="Whether to start the commu_wrapper node in debug mode."/>
     <arg name="euclid" default="EUCLID_70FD" doc="The hostname of the euclid device."/>
 
