@@ -4,16 +4,18 @@ import rospy
 
 
 class CommUWrapper:
-    def __init__(self, commu_ip="127.0.0.1", commu_port=6019, debug_handler=None):
-        # type: (str, int, DebugHandler) -> CommUWrapper
+    def __init__(self, commu_ip="127.0.0.1", commu_port=6019, commu_volume=10, debug_handler=None):
+        # type: (str, int, int, DebugHandler) -> CommUWrapper
         """
         Instantiates a new CommUWrapper instance. This wraps all the functions of the CommU Helper python library,
         found under ./helper/.
         :param commu_ip: The ip address of the CommU to control.
         :param commu_port: The port of the CommUManager on the CommU.
+        :param commu_volume: The volume of the CommU. Possible values in range [0, 100].
         :param debug_handler: The DebugHandler to use
         """
         self.cumhelper = CUMHelper(commu_ip, commu_port)
+        self.cumhelper.chvolume(commu_volume)
         self.debug_handler = debug_handler
 
         rospy.loginfo("CommUWrapper instance created.")

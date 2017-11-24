@@ -51,6 +51,7 @@ if __name__ == '__main__':
     parser.add_argument("-d", "--debug", default="False")
     parser.add_argument("-m", "--image", default="/ssd_node/classification_result")
     parser.add_argument("-c", "--isclassificationtopic", default=True)
+    parser.add_argument("-v", "--volume", default=10)
     args = parser.parse_args(rospy.myargv(sys.argv[1:]))
 
     rospy.loginfo("Starting commu_wrapper_node..")
@@ -60,11 +61,12 @@ if __name__ == '__main__':
     rospy.loginfo("-d, --debug: \t%s", args.debug)
     rospy.loginfo("-m, --image: \t%s", args.image)
     rospy.loginfo("-c, --isclassificationtopic: \t%s", args.isclassificationtopic)
+    rospy.loginfo("-v, --volume: \t%s", args.volume)
 
     if bool(args.debug):
-        wrapper = CommUWrapper(args.ipaddress, int(args.port), DebugHandler(args.image, bool(args.isclassificationtopic)))
+        wrapper = CommUWrapper(args.ipaddress, int(args.port), int(args.volume), DebugHandler(args.image, bool(args.isclassificationtopic)))
     else:
-        wrapper = CommUWrapper(args.ipaddress, int(args.port))
+        wrapper = CommUWrapper(args.ipaddress, int(args.port), int(args.volume))
 
     init_message_listeners(wrapper)
 
