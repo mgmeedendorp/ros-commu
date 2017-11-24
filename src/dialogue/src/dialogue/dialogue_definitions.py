@@ -7,7 +7,6 @@ class CommUDialogueLibrary(DialogueLibrary):
     A DialogueLibrary that can be used when a CommU robot sees an object.
     """
 
-
     def get_dialogue_for_topic(self, topic):
         # type: (str) -> Dialogue
         """
@@ -19,9 +18,18 @@ class CommUDialogueLibrary(DialogueLibrary):
 
     dialogue_map = {
         'aeroplane': None,
-        'bicycle': None,
-        'bird': None,
-        'boat': None,
+        'bicycle':
+            DialogueLineNoResponse("Hey, a bike!", True,
+                DialogueLineNoResponse("I wonder where he's going.", True, None)
+            ),
+        'bird':
+            DialogueLineAnyResponse("Do you know what kind of bird that is?", False,
+                DialogueLineNoResponse("Huh, interesting.", True, None)
+            ),
+        'boat':
+            DialogueLineNoResponse("I didn't think I would see a boat around here.", True,
+                DialogueLineNoResponse("What a coincidence.", True, None)
+            ),
         'bottle':
             DialogueLineAnyResponse("What are you drinking?", False,
                 DialogueLineNoResponse("That sounds tasty", True,
@@ -31,8 +39,14 @@ class CommUDialogueLibrary(DialogueLibrary):
                     )
                 )
             ),
-        'bus': None,
-        'car': None,
+        'bus':
+            DialogueLineNoResponse("I wonder where that bus is going.", True,
+                DialogueLineAnyResponse("Do you know where it's going?", False,
+                    DialogueLineNoResponse("Cool, I'd like to go there too!", True, None)
+                )
+            ),
+        'car':
+            DialogueLineNoResponse("Nice car!", True, None),
         'cat':
             DialogueLineNoResponse("I see you have a cat", True,
                 DialogueLineNoResponse("I love cats!", True,
@@ -59,9 +73,15 @@ class CommUDialogueLibrary(DialogueLibrary):
                 next_line_yes = DialogueLineNoResponse("Yeah, me too!", True, None),
                 next_line_no = DialogueLineNoResponse("I think it seems somewhat inconvenient as well", True, None)
             ),
-        'dog': None,
+        'dog':
+            DialogueLineNoResponse("That's a nice dog!", True,
+                DialogueLineNoResponse("Can I pet it?", True, None)
+            ),
         'horse': None,
-        'motorbike': None,
+        'motorbike':
+            DialogueLineNoResponse("Motorbikes look so cool!", True,
+                DialogueLineNoResponse("They're way too scary for me though!", True, None)
+            ),
         'person':
             DialogueLineNoResponse("Hey there, nice to meet you!", True,
                 DialogueLineAnyResponse("Can I ask you a question?", False,
