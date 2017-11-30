@@ -74,7 +74,7 @@ class DebugHandler:
         cv_image = util.add_alpha_layer(cv_image, 0)
         cv_image = util.draw_image_margin(cv_image, self.image_margin)
 
-        cv_image = util.draw_crosshair(cv_image, x + self.image_margin, y + self.image_margin)
+        cv_image = util.draw_crosshair(cv_image, x + self.image_margin + self.image_size[0], y + self.image_margin + self.image_size[1])
 
         self.latest_look_cv_image = cv_image
 
