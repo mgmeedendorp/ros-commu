@@ -9,7 +9,9 @@ def person_classification_callback(manager, data):
 
 
 def init_message_listeners(manager):
+    # type: (LookManager) -> None
     def person_callback(data):
+        # type: (PersonDetection) -> None
         person_classification_callback(manager, data)
 
     rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
@@ -31,7 +33,4 @@ if __name__ == '__main__':
 
     #manager.start(utter, threaded=True, perpetual=True)
 
-    try:
-        rospy.spin()
-    except KeyboardInterrupt:
-        pass
+    rospy.spin()
