@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import rospy
 from look_manager import *
 from realsense_person.msg import PersonDetection
