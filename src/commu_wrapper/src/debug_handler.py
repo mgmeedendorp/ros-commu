@@ -66,15 +66,15 @@ class DebugHandler:
         self.latest_utter_cv_image = cv_image
         self.latest_utter_until = time.time() + util.approximate_say_time(utterance)
 
-    def commu_look_received(self, look, resolution, translation, rotation):
+    def commu_look_received(self, x, y, z):
         if self.image_size is None:
             return
 
-        cv_image = np.zeros((resolution['x'], resolution['y'], 3), np.uint8)
+        cv_image = np.zeros(self.image_size, np.uint8)
         cv_image = util.add_alpha_layer(cv_image, 0)
         cv_image = util.draw_image_margin(cv_image, self.image_margin)
 
-        cv_image = util.draw_crosshair(cv_image, look['x'] + self.image_margin, look['y'] + self.image_margin)
+        cv_image = util.draw_crosshair(cv_image, x + self.image_margin, y + self.image_margin)
 
         self.latest_look_cv_image = cv_image
 

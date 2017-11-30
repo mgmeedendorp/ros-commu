@@ -1,16 +1,14 @@
-# This service defines a look-at-position action for a CommU robot. This is done by providing an (`look_x`, `look_y`) position the
-# robot should look at, the camera resolution in `camera_info` and the pose of the camera in `camera_pose`
+# This service defines a look-at-position action for a CommU robot. This is done by providing an (`look_x`, `look_y`, `look_z`) position the
+# robot should look at.
 
-
-# The CameraInfo object for the camera used to capture the image
-sensor_msgs/CameraInfo camera_info
-
-# The offset of the camera position from the head of the robot.
-geometry_msgs/Transform camera_transform
-
-# The (look_x, look_y) coordinates, specifying where in the camera image the robot should look
+# The x-axis is horizontal, increases towards left from the robot and is 0 between its eyes. In millimeters.
 int8 look_x
+
+# The y-axis is vertical, increases towards the head of the robot and is 0 at the bottom of its body. In millimeters.
 int8 look_y
+
+# The z-axis is horizontal, increases in front of the robot with 0 being at the center of rotation of the head yaw. In millimeters.
+int8 look_z
 
 ---
 

@@ -3,7 +3,7 @@ from look_manager import *
 from realsense_person.msg import PersonDetection
 
 def person_classification_callback(manager, data):
-    rospy.loginfo("Person classification data: " + str(data))
+    manager.person_classification_data(data)
 
 
 def init_message_listeners(manager):

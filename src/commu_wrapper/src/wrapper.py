@@ -41,23 +41,22 @@ class CommUWrapper:
         else:
             return self.cumhelper.say(utterance, blocking)
 
-    def look(self, look, resolution, translation, rotation):
-        # type: (dict, dict, dict, dict) -> bool
+    def look(self, x, y, z):
+        # type: (int, int, int) -> bool
         """
         Makes the CommU look at the specified pixel location on the camera. The camera translation and rotation relative
         to the base of the head of the CommU should be provided.
-        :param look: A dict containing the x ([0, resolution.x>) and y ([0, resolution.y>) coordinates specifying where
-            the CommU should look.
-        :param resolution: The resolution of the camera image. A dict containing x and y.
-        :param translation: The translation of the camera relative to the base of the head of the robot (for now).
-        :param rotation: The rotation of the camera relative to the base of the head of the robot (for now).
+        :param x: The x coordinate of the position to look at in millimeter.
+            The x-axis is horizontal, increases towards left from the robot and is 0 between its eyes.
+        :param y: The y coordinate of the position to look at in millimeter.
+            The y-axis is vertical, increases towards the head of the robot and is 0 at the bottom of its body.
+        :param z: The z coordinate of the position to look at in millimeter.
+            The z-axis is horizontal, increases in front of the robot with 0 being at the center of rotation of the head yaw.
         :return: Whether the operation was received by the CommU successfully.
         """
+        rospy.loginfo("Looking at position (%d, %d, %d)", x, y, z)
 
         if self.debug_handler is not None:
-            self.debug_handler.commu_look_received(look, resolution, translation, rotation)
+            self.debug_handler.commu_look_received(x, y, z)
 
-        # TODO: figure out how this works on the CommU
-        rospy.loginfo("Look is not implemented on the CommU yet!. Please note that this will not affect the robot!")
-
-        return True
+        return self.cumhelper.look_manual(x, y, z)
