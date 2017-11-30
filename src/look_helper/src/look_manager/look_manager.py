@@ -1,6 +1,6 @@
 from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommULook
-from ..util import get_srv_function
+from util import get_srv_function
 
 class LookManager:
     commu_look_function = get_srv_function('CommULook', CommULook)
