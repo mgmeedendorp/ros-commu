@@ -1,7 +1,9 @@
 from realsense_person.msg import PersonDetection
+from commu_wrapper.srv import CommULook
+from ..util import get_srv_function
 
 class LookManager:
-
+    commu_look_function = get_srv_function('CommULook', CommULook)
 
     def person_classification_data(self, data):
         # type: (PersonDetection) -> None
@@ -14,3 +16,6 @@ class LookManager:
         y = center_of_mass.y * 1000 #m to mm
         z = center_of_mass.z * 1000 #m to mm
 
+        result = LookManager.commu_look_function(x, y, z)
+
+        print result #TODO remove this
