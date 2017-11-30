@@ -1,3 +1,4 @@
+import rospy
 from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommULook
 from util import get_srv_function
@@ -18,4 +19,4 @@ class LookManager:
 
         result = LookManager.commu_look_function(x, y, z)
 
-        print result #TODO remove this
+        rospy.loginfo("looking at (%d, %d, %d), result: " + result, x, y, z) #TODO remove this
