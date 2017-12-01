@@ -18,8 +18,6 @@ class LookManager:
 
         commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
 
-        rospy.logerr(commu_look_function)
-
         result = commu_look_function(x, y, z)
 
         rospy.loginfo("looking at (%d, %d, %d), result: " + result, x, y, z) #TODO remove this

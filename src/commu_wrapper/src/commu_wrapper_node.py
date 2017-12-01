@@ -27,6 +27,7 @@ def look_callback(wrapper):
 
         return CommULookResponse(success)
 
+    return look
 
 def init_message_listeners(wrapper):
     rospy.loginfo("Initializing CommU wrapper node message listener.")
