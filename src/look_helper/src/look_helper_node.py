@@ -7,7 +7,6 @@ from realsense_person.msg import PersonDetection
 
 def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None
-    print "Person classification received stdout"
     rospy.loginfo("Person classification received.")
 
     manager.person_classification_data(data)
