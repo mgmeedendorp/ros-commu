@@ -2,13 +2,13 @@
 # robot should look at.
 
 # The x-axis is horizontal, increases towards left from the robot and is 0 between its eyes. In millimeters.
-int8 look_x
+int32 look_x
 
 # The y-axis is vertical, increases towards the head of the robot and is 0 at the bottom of its body. In millimeters.
-int8 look_y
+int32 look_y
 
 # The z-axis is horizontal, increases in front of the robot with 0 being at the center of rotation of the head yaw. In millimeters.
-int8 look_z
+int32 look_z
 
 ---
 
