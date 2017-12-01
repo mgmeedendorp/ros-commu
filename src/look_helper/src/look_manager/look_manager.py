@@ -12,12 +12,13 @@ class LookManager:
 
         center_of_mass_world = person.center_of_mass.world
 
-
         x = int(center_of_mass_world.x * 1000) #m to mm
         y = int(center_of_mass_world.y * 1000) #m to mm
         z = int(center_of_mass_world.z * 1000) #m to mm
 
         commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
+
+        rospy.logerr(commu_look_function)
 
         result = commu_look_function(x, y, z)
 
