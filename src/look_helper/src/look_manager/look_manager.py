@@ -24,4 +24,4 @@ class LookManager:
 
         result = commu_look_function(x, y, z)
 
-        rospy.loginfo("looking at (%d, %d, %d), result: " + result.success, x, y, z) #TODO remove this
+        rospy.loginfo("looking at (%d, %d, %d), result: " + str(result.success), x, y, z) #TODO remove this
