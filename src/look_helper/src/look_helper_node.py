@@ -3,13 +3,21 @@
 import rospy
 from look_manager import *
 from realsense_person.msg import PersonDetection
+import time
+
+
+last_classification_time = 0
 
 
 def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None
+    global last_classification_time
+
     rospy.loginfo("Person classification received.")
 
-    manager.person_classification_data(data)
+    if(time.time() - last_classification_time >= 1):
+        manager.person_classification_data(data)
+        last_classification_time = time.time()
 
 
 def init_message_listeners(manager):
