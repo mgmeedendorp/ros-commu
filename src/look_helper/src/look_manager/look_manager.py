@@ -16,6 +16,8 @@ class LookManager:
         y = int(center_of_mass_world.y * 1000) #m to mm
         z = int(center_of_mass_world.z * 1000) #m to mm
 
+        y += 200 #Camera is not on ground
+
         commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
 
         result = commu_look_function(x, y, z)
