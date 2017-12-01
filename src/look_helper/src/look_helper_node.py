@@ -38,7 +38,7 @@ if __name__ == '__main__':
     rospy.loginfo("Starting look_helper node..")
 
     rospy.loginfo("Creating LookManager..")
-    manager = LookManager(0, 0, 30, 45, 0, 0)
+    manager = LookManager(0, 0, 30, 0, 45, 0)
 
     init_message_listeners(manager)
     init_message_publishers(manager)
