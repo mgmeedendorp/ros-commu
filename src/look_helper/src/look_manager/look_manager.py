@@ -4,7 +4,7 @@ from commu_wrapper.srv import CommULook
 from util import get_srv_function
 
 class LookManager:
-    commu_look_function = get_srv_function('CommULook', CommULook)
+    commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
 
     def person_classification_data(self, data):
         # type: (PersonDetection) -> None
