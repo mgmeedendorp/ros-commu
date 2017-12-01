@@ -8,20 +8,21 @@ class LookManager:
     def person_classification_data(self, data):
         # type: (PersonDetection) -> None
 
-        person = data.persons[0]
+        if(len(data.persons) > 0):
+            person = data.persons[0]
 
-        center_of_mass_world = person.center_of_mass.world
+            center_of_mass_world = person.center_of_mass.world
 
-        x = int(center_of_mass_world.x * 1000) #m to mm
-        y = int(center_of_mass_world.y * 1000) #m to mm
-        z = int(center_of_mass_world.z * 1000) #m to mm
+            x = int(center_of_mass_world.x * 1000) #m to mm
+            y = int(center_of_mass_world.y * 1000) #m to mm
+            z = int(center_of_mass_world.z * 1000) #m to mm
 
-        x = -x # Invert x axis
+            x = -x # Invert x axis
 
-        y += 200 #Camera is not on ground
+            y += 200 #Camera is not on ground
 
-        commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
+            commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
 
-        result = commu_look_function(x, y, z)
+            result = commu_look_function(x, y, z)
 
-        rospy.loginfo("looking at (%d, %d, %d), result: " + str(result.success), x, y, z) #TODO remove this
+            rospy.loginfo("looking at (%d, %d, %d), result: " + str(result.success), x, y, z) #TODO remove this
