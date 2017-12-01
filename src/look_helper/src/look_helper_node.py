@@ -4,7 +4,12 @@ import rospy
 from look_manager import *
 from realsense_person.msg import PersonDetection
 
+
 def person_classification_callback(manager, data):
+    # type: (LookManager, PersonDetection) -> None
+    print "Person classification received stdout"
+    rospy.loginfo("Person classification received.")
+
     manager.person_classification_data(data)
 
 
@@ -13,8 +18,6 @@ def init_message_listeners(manager):
     def person_callback(data):
         # type: (PersonDetection) -> None
         person_classification_callback(manager, data)
-        print "Person classification received stdout"
-        rospy.loginfo("Person classification received.")
 
     rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
 
