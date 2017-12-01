@@ -14,9 +14,9 @@ class LookManager:
         center_of_mass_world = person.center_of_mass.world
 
 
-        x = center_of_mass_world.x * 1000 #m to mm
-        y = center_of_mass_world.y * 1000 #m to mm
-        z = center_of_mass_world.z * 1000 #m to mm
+        x = int(center_of_mass_world.x * 1000) #m to mm
+        y = int(center_of_mass_world.y * 1000) #m to mm
+        z = int(center_of_mass_world.z * 1000) #m to mm
 
         result = LookManager.commu_look_function(x, y, z)
 
