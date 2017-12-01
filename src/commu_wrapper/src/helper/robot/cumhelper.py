@@ -7,6 +7,9 @@ Created on 2015/10/03
 from time import sleep
 import sys,os
 import argparse
+
+import rospy
+
 sys.path.append(os.path.abspath("../../"))
 from helper.connection.I2CProtocol import I2CProtocol
 from helper.logging.logginghelper import get_filelogger
@@ -104,7 +107,7 @@ class CUMHelper():
         ret = self.tcpip.recv_message()
         ret_s1 = ret.split(":")
 
-        rospy.info(ret_s1)
+        rospy.loginfo(ret_s1)
 
         if ret_s1[0] == "FAIL":
             self.__logger.error(command)
