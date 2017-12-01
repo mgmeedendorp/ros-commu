@@ -103,6 +103,9 @@ class CUMHelper():
         self.tcpip.send_message(command)
         ret = self.tcpip.recv_message()
         ret_s1 = ret.split(":")
+
+        rospy.info(ret_s1)
+
         if ret_s1[0] == "FAIL":
             self.__logger.error(command)
             return False
