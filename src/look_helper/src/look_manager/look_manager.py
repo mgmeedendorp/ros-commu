@@ -66,16 +66,16 @@ class LookManager:
         cos_z = math.cos(self.r_z)
         sin_z = math.sin(self.r_z)
 
-        # Rotation around x
-        y = y * cos_x - z * sin_x
-        z = y * sin_x + z * cos_x
+        # Rotation around z
+        x = x * cos_z - y * sin_z
+        y = x * sin_z + y * cos_z
 
         # Rotation around y
         x = x * cos_y + z * sin_y
         z = -x * sin_y + z * cos_y
 
-        # Rotation around z
-        x = x * cos_z - y * sin_z
-        y = x * sin_z + y * cos_z
+        # Rotation around x
+        y = y * cos_x - z * sin_x
+        z = y * sin_x + z * cos_x
 
         return x, y, z
