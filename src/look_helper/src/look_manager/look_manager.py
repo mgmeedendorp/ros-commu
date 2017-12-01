@@ -42,7 +42,7 @@ class LookManager:
             y *= 1000  # m to mm
             z *= 1000  # m to mm
 
-            x, y, z = self.rotate(x, y, z)
+            #x, y, z = self.rotate(x, y, z)
 
             x += self.t_x
             y += self.t_y
