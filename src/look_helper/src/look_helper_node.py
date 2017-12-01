@@ -13,6 +13,7 @@ def init_message_listeners(manager):
     def person_callback(data):
         # type: (PersonDetection) -> None
         person_classification_callback(manager, data)
+        print "Person classification received stdout"
         rospy.loginfo("Person classification received.")
 
     rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
