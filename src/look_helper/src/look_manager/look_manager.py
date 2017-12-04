@@ -35,8 +35,8 @@ class LookManager:
             y = center_of_mass_world.y
             z = center_of_mass_world.z
 
-           # x = -x  # Invert x axis
-           # y = -y  # Invert y axis
+            x = -x  # Invert x axis
+            y = -y  # Invert y axis
 
             x *= 1000  # m to mm
             y *= 1000  # m to mm
