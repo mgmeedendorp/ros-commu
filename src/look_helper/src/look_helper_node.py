@@ -38,11 +38,18 @@ if __name__ == '__main__':
     rospy.loginfo("Starting look_helper node..")
 
     rospy.loginfo("Creating LookManager..")
-    manager = LookManager(0, 0, 30, 0, 0, 0)
+
+    t_x = rospy.get_param('tx', 0)
+    t_y = rospy.get_param('ty', 0)
+    t_z = rospy.get_param('tz', 0)
+
+    r_x = rospy.get_param('rx', 0)
+    r_y = rospy.get_param('ry', 0)
+    r_z = rospy.get_param('rz', 0)
+
+    manager = LookManager(t_x, t_y, t_z, r_x, r_y, r_z)
 
     init_message_listeners(manager)
     init_message_publishers(manager)
-
-    #manager.start(utter, threaded=True, perpetual=True)
 
     rospy.spin()
