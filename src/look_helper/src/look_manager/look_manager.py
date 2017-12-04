@@ -48,6 +48,8 @@ class LookManager:
             y += self.t_y
             z += self.t_z
 
+            rospy.loginfo("(%.2f, %.2f, %.2f)", x, y, z)
+
             x = int(x)
             y = int(y)
             z = int(z)
