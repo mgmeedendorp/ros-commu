@@ -48,8 +48,6 @@ class LookManager:
             y += self.t_y
             z += self.t_z
 
-            rospy.loginfo("(%.2f, %.2f, %.2f)", x, y, z)
-
             x = int(x)
             y = int(y)
             z = int(z)
@@ -57,8 +55,6 @@ class LookManager:
             commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
 
             result = commu_look_function(x, y, z)
-
-            rospy.loginfo("looking at (%d, %d, %d), result: " + str(result.success), x, y, z)  # TODO remove this
 
     def rotate(self, x, y, z):
         cos_x = math.cos(self.r_x)
