@@ -13,7 +13,7 @@ def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None
     global last_classification_time
 
-    if(time.time() - last_classification_time >= 1):
+    if(time.time() - last_classification_time >= .5):
         manager.person_classification_data(data)
         last_classification_time = time.time()
 
