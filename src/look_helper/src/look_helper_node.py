@@ -47,6 +47,8 @@ if __name__ == '__main__':
     r_y = rospy.get_param('ry', 0)
     r_z = rospy.get_param('rz', 0)
 
+    rospy.loginfo("LookManager initializing with: {tx: %f, ty: %f, tz: %f, rx: %f, ry: %f, rx: %f}", t_x, t_y, t_z, r_x, r_y, r_z)
+
     manager = LookManager(t_x, t_y, t_z, r_x, r_y, r_z)
 
     init_message_listeners(manager)
