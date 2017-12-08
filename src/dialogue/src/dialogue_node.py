@@ -4,6 +4,7 @@ import rospy
 from ssd.msg import ClassifiedObjectArray
 from commu_wrapper.srv import CommUUtter
 from dialogue import *
+from pocketsphinxhelper import *
 from util import get_srv_function
 
 
@@ -46,10 +47,18 @@ def utter(utterance):
 
     return success
 
+def speech_callback(utterance):
+    rospy.loginfo("Received words from pocketsphinx! " + utterance)
+
 
 if __name__ == '__main__':
     rospy.init_node("dialogue")
     rospy.loginfo("Starting dialogue node..")
+
+    rospy.loginfo("Creating PocketSphinxThread..")
+    sphinx_thread = PocketSphinxThread(speech_callback)
+
+    sphinx_thread.start()
 
     rospy.loginfo("Creating DialogueManager..")
     manager = DialogueManager(CommUDialogueLibrary())

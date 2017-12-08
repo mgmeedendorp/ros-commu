@@ -1,0 +1,1 @@
+from pocketsphinx_thread import PocketSphinxThread
