@@ -7,13 +7,13 @@ import time
 
 
 last_classification_time = 0
-
+max_looks_per_second = 4
 
 def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None
     global last_classification_time
 
-    if(time.time() - last_classification_time >= .5):
+    if(time.time() - last_classification_time >= 1/max_looks_per_second):
         manager.person_classification_data(data)
         last_classification_time = time.time()
 

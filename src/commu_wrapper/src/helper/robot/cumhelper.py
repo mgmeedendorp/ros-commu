@@ -8,8 +8,6 @@ from time import sleep
 import sys,os
 import argparse
 
-import rospy
-
 sys.path.append(os.path.abspath("../../"))
 from helper.connection.I2CProtocol import I2CProtocol
 from helper.logging.logginghelper import get_filelogger
@@ -106,8 +104,6 @@ class CUMHelper():
         self.tcpip.send_message(command)
         ret = self.tcpip.recv_message()
         ret_s1 = ret.split(":")
-
-        rospy.loginfo(ret_s1)
 
         if ret_s1[0] == "FAIL":
             self.__logger.error(command)
@@ -240,4 +236,6 @@ if __name__ =='__main__':
 #10.0 t""")
     #print manager.gesture('test_gesture')
 
-    print manager.look_manual(00, 200, 100)
+    #print manager.look_manual(00, 200, 100)
+
+    print manager.say_eng("Hello")
