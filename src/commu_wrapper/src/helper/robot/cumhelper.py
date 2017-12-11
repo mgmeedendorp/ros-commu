@@ -236,6 +236,6 @@ if __name__ =='__main__':
 #10.0 t""")
     #print manager.gesture('test_gesture')
 
-    #print manager.look_manual(00, 200, 100)
+    print manager.look_manual(00, 200, 100)
 
     print manager.say_eng("Hello")
