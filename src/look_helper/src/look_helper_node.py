@@ -7,7 +7,7 @@ import time
 
 
 last_classification_time = 0
-max_looks_per_second = 2.0
+max_looks_per_second = 4.0
 
 def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None
