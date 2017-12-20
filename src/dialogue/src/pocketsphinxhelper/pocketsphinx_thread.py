@@ -1,5 +1,6 @@
-from pocketsphinx import LiveSpeech
+from pocketsphinx import LiveSpeech, Decoder
 import threading
+from time import sleep
 #https://github.com/bambocher/pocketsphinx-python
 
 
@@ -8,25 +9,26 @@ class PocketSphinxThread(threading.Thread):
     A worker thread that takes runs Pocketsphinx to recognize words.
     """
 
-    def __init__(self, callback):
+    def __init__(self, callback, **pocketsphinx_options):
         # type (Callable) -> PocketSphinxThread
         super(PocketSphinxThread, self).__init__()
-        self.listening = threading.Event()
+        self.live_speech = LiveSpeech(**pocketsphinx_options)
+        self.pause_listening = threading.Event()
         self.stop_requested = threading.Event()
         self.listening_callback = callback
 
     def run(self):
         while not self.stop_requested.isSet():
-            if self.listening.isSet():
-                for phrase in LiveSpeech():
+            if self.pause_listening.isSet():
+                for phrase in self.live_speech:
                     self.listening_callback(phrase)
                     break
 
     def start_listening(self):
-        self.listening.clear()
+        self.pause_listening.clear()
 
     def stop_listening(self):
-        self.listening.set()
+        self.pause_listening.set()
 
     def stop_thread(self):
         self.stop_requested.set()
@@ -34,5 +36,18 @@ class PocketSphinxThread(threading.Thread):
 
 
 if __name__ == "__main__":
+    def callback(utterance):
+        print utterance
 
-    for phrase in LiveSpeech(): print(phrase)
+        thread.stop_listening()
+
+        sleep(10)
+
+        thread.start_listening()
+
+    thread = PocketSphinxThread(callback, audio_device="alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono")
+    thread.start()
+
+    sleep(30)
+
+    thread.stop_thread()
