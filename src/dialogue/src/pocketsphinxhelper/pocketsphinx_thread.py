@@ -23,7 +23,7 @@ class PocketSphinxThread(threading.Thread):
             print "1"
             for phrase in self.live_speech:
                 print "2"
-                if self.pause_listening.isSet():
+                if not self.pause_listening.isSet():
                     print "3"
                     self.listening_callback(phrase)
                     break
