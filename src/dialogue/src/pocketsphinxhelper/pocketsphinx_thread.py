@@ -44,10 +44,12 @@ if __name__ == "__main__":
         print utterance
 
         thread.stop_listening()
+        print "stop"
 
         sleep(10)
 
         thread.start_listening()
+        print "start"
 
     thread = PocketSphinxThread(callback, audio_device="alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono")
     thread.start()
@@ -55,3 +57,4 @@ if __name__ == "__main__":
     sleep(30)
 
     thread.stop_thread()
+    print "done"
