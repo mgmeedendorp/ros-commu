@@ -167,6 +167,8 @@ class CUMHelper():
             self.__logger.info(command)
             return True
 
+    def close_connection(self):
+        self.tcpip.close_connection()
 
 class CUMHelperDummy(CUMHelper):
     # noinspection PyMissingConstructor
@@ -219,6 +221,8 @@ if __name__ =='__main__':
     parser.add_argument("-l","--look", default="center")
     args = parser.parse_args()
 
+    #args.ipaddress = "127.0.0.1"
+
     manager=CUMHelper(args.ipaddress,int(args.port))
 
     gesture_nr = 1
@@ -236,6 +240,12 @@ if __name__ =='__main__':
 #10.0 t""")
     #print manager.gesture('test_gesture')
 
-    print manager.look_manual(00, 200, 100)
 
-    print manager.say_eng("Hello")
+    try:
+        for x in range(-500, 500):
+            print x
+            print manager.look_manual(x, 200, 200)
+    except:
+        manager.close_connection()
+
+    #print manager.tcpip.recv_message()

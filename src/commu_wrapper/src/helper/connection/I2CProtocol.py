@@ -18,7 +18,7 @@ class I2CProtocol(object):
         '''
         Constructor
         '''
-        SIZEOF_CINT = 4
+        self.SIZEOF_CINT = 4
         
     def init_connection(self,host,port):
         self.clientsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,20 +35,34 @@ class I2CProtocol(object):
     def send_message(self,message):
         try:
             message = message + "\0"
+            print "Sending message.."
             self.clientsock.send(struct.pack("i",len(message)))
-            self.clientsock.send(message)
+            sent = self.clientsock.send(message)
+            if sent == 0:
+                print "broken"
+                raise RuntimeError("socket connection broken")
+
+            print "Sent length: " + repr(sent)
+            print "Sent message: " + repr(message)
+            print "Message length: " + str(len(message))
         except:
             print ("Fail to send().")
         
     def recv_message(self):
+        print "trying to receive message"
         try:
-            recv_message1=self.clientsock.recv(4)
+            recv_message1=self.clientsock.recv(self.SIZEOF_CINT)
             length = struct.unpack("i",recv_message1)
         except:
             print ("Fail to recv().")
             return "Fail to recv"
         else:   
-            return self.clientsock.recv(int(length[0]))
+            response = self.clientsock.recv(int(length[0]))
+
+            print "Received message: "+ repr(response)
+            print "Received length: " + str(len(response))
+            print "other "+ str(length)
+            return response
 
 '''    
 if __name__ == '__main__':
