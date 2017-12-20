@@ -18,9 +18,13 @@ class PocketSphinxThread(threading.Thread):
         self.listening_callback = callback
 
     def run(self):
+        print "0"
         while not self.stop_requested.isSet():
-            if self.pause_listening.isSet():
-                for phrase in self.live_speech:
+            print "1"
+            for phrase in self.live_speech:
+                print "2"
+                if self.pause_listening.isSet():
+                    print "3"
                     self.listening_callback(phrase)
                     break
 
