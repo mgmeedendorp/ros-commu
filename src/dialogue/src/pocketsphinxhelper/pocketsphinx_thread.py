@@ -23,7 +23,7 @@ class PocketSphinxThread(threading.Thread):
             print "1"
             for phrase in self.live_speech:
                 print "2"
-                if not self.pause_listening.isSet():
+                if not self.pause_listening.isSet() and not self.stop_requested.isSet():
                     print "3"
                     self.listening_callback(phrase)
                     break
@@ -43,13 +43,13 @@ if __name__ == "__main__":
     def callback(utterance):
         print utterance
 
-        thread.stop_listening()
-        print "stop"
+        #thread.stop_listening()
+        #print "stop"
 
-        sleep(10)
+        #sleep(10)
 
-        thread.start_listening()
-        print "start"
+        #thread.start_listening()
+        #print "start"
 
     thread = PocketSphinxThread(callback, audio_device="alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono")
     thread.start()
