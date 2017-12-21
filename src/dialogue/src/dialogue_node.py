@@ -26,14 +26,20 @@ def classification_result_callback(manager, data):
 
 
 def init_message_listeners(manager):
+    rospy.loginfo("Initializing message listeners...")
+
     def classification_callback(data):
         classification_result_callback(manager, data)
 
     rospy.Subscriber("/ssd_node/classification_result", ClassifiedObjectArray, classification_callback)
 
+    rospy.loginfo("Initializing message listeners done.")
+
 
 def init_message_publishers(manager):
-    pass
+    rospy.loginfo("Initializing message publishers...")
+
+    rospy.loginfo("Initializing message publishers done.")
 
 
 def utter(utterance):
@@ -47,28 +53,22 @@ def utter(utterance):
 
     return success
 
-def speech_callback(utterance):
-    rospy.loginfo("Received words from pocketsphinx! " + utterance)
-
 
 if __name__ == '__main__':
     rospy.init_node("dialogue")
     rospy.loginfo("Starting dialogue node..")
 
-    rospy.loginfo("Creating PocketSphinxThread..")
-    sphinx_thread = PocketSphinxThread(speech_callback)
-
-    sphinx_thread.start()
-
     rospy.loginfo("Creating DialogueManager..")
     manager = DialogueManager(CommUDialogueLibrary())
+    rospy.loginfo("DialogueManager created.")
 
     init_message_listeners(manager)
     init_message_publishers(manager)
 
     manager.start(utter, threaded=True, perpetual=True)
 
+    rospy.loginfo("Dialogue node started." )
     try:
         rospy.spin()
-    except KeyboardInterrupt:
+    except:
         manager.stop(force=True)

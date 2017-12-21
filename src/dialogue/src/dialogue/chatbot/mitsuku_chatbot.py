@@ -11,6 +11,7 @@ This code was copied from https://github.com/Reinaesaya/OUIRL-ChatBot/blob/maste
 
 MITSUKU_BOT_ID = "87437a824e345a0d"
 
+
 class Mitsuku:
     def __init__(self):
         self.refresh()
@@ -28,6 +29,7 @@ class Mitsuku:
         self.last_response = None
 
     def getResponse(self, message):
+        # type: (str) -> str
         self.last_message = message
         self.all_messages.append(self.last_message)
         self.br.select_form(name='f')

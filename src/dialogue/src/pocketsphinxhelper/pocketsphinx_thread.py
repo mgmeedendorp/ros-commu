@@ -13,6 +13,7 @@ class PocketSphinxThread(threading.Thread):
         # type (Callable) -> PocketSphinxThread
         super(PocketSphinxThread, self).__init__()
         self.live_speech = LiveSpeech(**pocketsphinx_options)
+
         self.pause_listening = threading.Event()
         self.stop_requested = threading.Event()
         self.listening_callback = callback

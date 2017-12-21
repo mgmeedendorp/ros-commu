@@ -1,4 +1,5 @@
 import threading
+from typing import Callable
 
 import rospy
 
@@ -10,11 +11,13 @@ class DialogueManager:
     A DialogueManager is used to manage Dialogues.
     """
 
-    def __init__(self, dialogue_library):
-        # type: (DialogueLibrary) -> DialogueManager
+    def __init__(self, dialogue_library, fallback_dialogue):
+        # type: (DialogueLibrary, Dialogue) -> self
         """
         DialogueManager constructor.
         :param dialogue_library: The DialogueLibrary to use to convert topics into Dialogues.
+        :param fallback_dialogue: The Dialogue to use when there are no topics left. Usually a chatbot dialogue
+            If None, dialogue will stop after running out of topics.
         """
         self.dialogue_library = dialogue_library
         self.current_dialogue = None
@@ -25,38 +28,39 @@ class DialogueManager:
         self.switching_topic = False
         self.should_interrupt = False
 
+        self.fallback_dialogue = fallback_dialogue
+
         self.topic_history = []
 
         self.__add_topic_event = threading.Event()
 
-    def start(self, utter, threaded=False, perpetual=True):
-        # type: (Callable[str, None], bool, bool) -> None
+    def start(self, utter, threaded=False):
+        # type: (Callable[[str], None], bool) -> None
         """
         Start the DialogueManager. This uses the DialogueLibrary to go through every dialogue in the
         topics dict, based on their priority (high priority first). This can be run either synchronously or
         asynchronously (in a new thread).
         :param utter: The function that can be called to utter a sentence.
         :param threaded: Whether to run the DialogueManager in a different thread.
-        :param perpetual: Whether to stop running the DialogueManager after all dialogues are done.
         """
         self.running = True
 
         rospy.on_shutdown(self.__add_topic_event.set)
 
         if threaded:
-            thread = threading.Thread(target=self.__start_worker(utter, perpetual))
+            thread = threading.Thread(target=self.__start_worker(utter))
             thread.daemon = True
             thread.start()
         else:
-            self.__start_worker(utter, perpetual)
+            self.__start_worker(utter)
 
-    def __start_worker(self, utter, perpetual):
-        # type: (Callable[str, None], bool) -> None
+    def __start_worker(self, utter):
+        # type: (Callable[str, None]) -> None
         """
         The worker function for start(). This is a seperate function to ease threading.
         :param utter: The function that can be called to utter a sentence.
         """
-        rospy.loginfo("Starting DialogueManager worker{}".format(" in perpetual mode.." if perpetual else ".."))
+        rospy.loginfo("Starting DialogueManager worker...")
 
         while not self.should_interrupt:
             while len(self.topics) > 0:
@@ -77,7 +81,7 @@ class DialogueManager:
 
                     if self.switching_topic or self.should_interrupt:
                         rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic.label))
-                        self.current_dialogue.cancel_dialogue()
+                        self.current_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
                     self.current_dialogue.proceed_dialogue(utter)
 
@@ -85,11 +89,10 @@ class DialogueManager:
 
                 self.__delete_topic(self.current_topic)
 
-            if perpetual and not self.should_interrupt:
-                rospy.loginfo("DialogueManager seems to be done talking. Waiting for more topics to talk about...")
+            if self.fallback_dialogue is not None and not self.should_interrupt:
+                rospy.loginfo("DialogueManager seems to be done talking. Starting Chatbot conversation...")
 
-                self.__add_topic_event.wait(timeout=None)
-                self.__add_topic_event.clear()
+                self.fallback_dialogue.
 
             else:
                 rospy.loginfo("DialogueManager is done talking. Stopping..")
@@ -106,6 +109,7 @@ class DialogueManager:
         self.should_interrupt = True
 
         if force:
+            rospy.loginfo("DialogueManager forcing stop.")
             self.__cleanup()
             self.topics = []
 
@@ -209,7 +213,7 @@ class DialogueManager:
         self.topics.remove(topic)
 
     def get_topic_history(self):
-        # type: () -> List[str]
+        # type: () -> list[str]
         """
         Get the topic history for this dialogue manager. This contains all topics have been, or are, talked about.
         :return: All topics talked about in the past and the current topic.
@@ -219,7 +223,7 @@ class DialogueManager:
 
 class DialogueTopic:
     def __init__(self, priority, label):
-        # type: (float, str) -> DialogueTopic
+        # type: (float, str) -> self
         self.label = label
         self.priority = priority
 

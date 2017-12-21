@@ -1,24 +1,31 @@
 import rospy
-from response import *
 from typing import Callable
+from dialogue import Dialogue
+from chatbot import *
+from pocketsphinx import LiveSpeech
 from dialogue_manager import DialogueTopic
 
-
-class Dialogue:
+class MitsukuDialogue(Dialogue):
     """
+    This is a special case of Dialogue, adapted for Mitsuku chatbot interaction.
     A Dialogue represents a conversation between CommU and a human as seen from CommU. The conversation structure is
     defined by an AbstractDialogueLine.
     """
 
-    def __init__(self, dialogue_root):
-        # type: (AbstractDialogueLine) -> None
+    def __init__(self, audio_device):
+        # type: (str) -> None
         """
-        :param dialogue_root: The first line of the conversation.
+        :param audio_device: The name of the audio device to use for input.
         """
-        self.dialogue_root = dialogue_root
-        self.current_line = dialogue_root
+
+        self.mitsuku = Mitsuku()
+        self.livespeech = LiveSpeech(audio_device=audio_device, full_utt=True)
+
         self.should_cancel = False
         self.is_canceled = False
+        self.next_topic = None # type: DialogueTopic
+
+        self.previous_user_input = "Hi there!"
 
     def proceed_dialogue(self, utter):
         # type: (Callable[[str], None]) -> bool
@@ -31,15 +38,21 @@ class Dialogue:
         if not self.dialogue_remaining():
             return False
 
-        utter(self.current_line.get_utterance())
+        if self.should_cancel:
+            if self.next_topic is not None:
+                rospy.loginfo("Mitsuku dialogue cancelled. Switching to: " + self.next_topic.label)
+                self.previous_user_input = "I want to talk about " + self.next_topic.label
+            else:
+                rospy.loginfo("Mitsuku dialogue cancelled. Switching to undefined next topic.")
+                self.previous_user_input = "I want to talk about something else."
 
-        response = self.current_line.request_response().get_response()
-
-        if self.should_cancel and self.current_line.can_cancel():
-            rospy.loginfo("Dialogue cancelled.")
             self.is_canceled = True
 
-        self.current_line = self.current_line.get_next_line(response)
+        utter(self.mitsuku.getResponse(self.previous_user_input))
+
+        user_input = self.livespeech.__iter__().next()
+
+        self.previous_user_input = user_input
 
         return True
 
@@ -49,16 +62,18 @@ class Dialogue:
         Checks whether the dialogue is finished.
         :return: Whether there is a next line in the dialogue.
         """
-        return self.current_line is not None and not self.is_canceled
+        return not self.is_canceled
 
     def reset_dialogue(self):
         # type: () -> None
         """
         Restarts the dialogue from the start.
         """
-        self.current_line = self.dialogue_root
         self.should_cancel = False
         self.is_canceled = False
+        self.next_topic = None
+
+        self.mitsuku.refresh()
 
     def cancel_dialogue(self, next_topic):
         # type: (DialogueTopic) -> None
@@ -69,3 +84,4 @@ class Dialogue:
         rospy.loginfo("Dialogue cancel requested.")
 
         self.should_cancel = True
+        self.next_topic = next_topic
