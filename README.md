@@ -102,7 +102,7 @@ There are also 6 other parameters which can't be passed via the launch file. The
 
 A rotation of 0 on all axes indicates that the camera is facing in the positive z direction.
 
-For more info about the CommU coordinate system, see: [CommU.md#Coordinate-system](CommU.md#Coordinate-system)
+For more info about the CommU coordinate system, see: [CommU.md#coordinate-system](CommU.md#coordinate-system)
 
   
 ### Exploring this repository
