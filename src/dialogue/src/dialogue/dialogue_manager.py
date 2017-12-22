@@ -1,5 +1,5 @@
 import threading
-from typing import Callable
+from typing import Callable, List
 
 import rospy
 
@@ -19,10 +19,10 @@ class DialogueManager:
         :param fallback_dialogue: The Dialogue to use when there are no topics left. Usually a chatbot dialogue
             If None, dialogue will stop after running out of topics.
         """
-        self.dialogue_library = dialogue_library
-        self.current_dialogue = None
-        self.current_topic = None
-        self.topics = []
+        self.dialogue_library = dialogue_library  # type: DialogueLibrary
+        self.current_dialogue = None  # type: Dialogue
+        self.current_topic = None  # type: DialogueTopic
+        self.topics = []  # type: List[DialogueTopic]
 
         self.running = False
         self.switching_topic = False
@@ -30,7 +30,7 @@ class DialogueManager:
 
         self.fallback_dialogue = fallback_dialogue
 
-        self.topic_history = []
+        self.topic_history = []  # type: List[DialogueTopic]
 
         self.__add_topic_event = threading.Event()
 
@@ -83,6 +83,8 @@ class DialogueManager:
                         rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic.label))
                         self.current_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
+                    self.decrease_current_topic_priority()
+
                     self.current_dialogue.proceed_dialogue(utter)
 
                 rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
@@ -92,8 +94,15 @@ class DialogueManager:
             if self.fallback_dialogue is not None and not self.should_interrupt:
                 rospy.loginfo("DialogueManager seems to be done talking. Starting Chatbot conversation...")
 
-                self.fallback_dialogue.
+                while self.fallback_dialogue.dialogue_remaining():
+                    if rospy.is_shutdown():
+                        return
 
+                    if self.switching_topic or self.should_interrupt:
+                        rospy.loginfo("Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
+                        self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
+
+                    self.fallback_dialogue.proceed_dialogue(utter)
             else:
                 rospy.loginfo("DialogueManager is done talking. Stopping..")
                 self.__cleanup()
@@ -148,6 +157,26 @@ class DialogueManager:
             self.switching_topic = True
 
         self.__add_topic_event.set()
+
+    def decrease_current_topic_priority(self):
+        """
+        Decreases the current_topic's priority. We want the conversation to interrupt for more recent topics, so
+        we decrease the priority of the current topic the longer we talk about it.
+        """
+        if self.current_topic is not None:
+            priority = self.current_topic.priority
+
+            priority -= 0.1
+
+            if priority < 0:
+                priority = 0
+
+            self.current_topic.priority = priority
+            self.topics[self.topics.index(self.current_topic)].priority = priority
+
+            if self.running and self.__get_next_current_topic() != self.current_topic:
+                rospy.loginfo("{} is not the highest priority ({}) topic anymore. Requesting topic switch...".format(self.current_topic, priority))
+                self.switching_topic = True
 
     def remove_topic(self, topic):
         # type: (str) -> None

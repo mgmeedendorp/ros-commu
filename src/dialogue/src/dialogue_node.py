@@ -4,7 +4,6 @@ import rospy
 from ssd.msg import ClassifiedObjectArray
 from commu_wrapper.srv import CommUUtter
 from dialogue import *
-from pocketsphinxhelper import *
 from util import get_srv_function
 
 
@@ -12,17 +11,12 @@ def classification_result_callback(manager, data):
     rospy.logdebug("Received classification results with {} objects.".format(len(data.objects)))
 
     for obj in data.objects:
-        priority = 0.5
-
         short_term_history = manager.get_topic_history()[-10:]
 
         count = short_term_history.count(obj.label)
 
-        if count > 0:
-            priority -= 0.3 * count
-
-        if priority > 0:
-            manager.add_topic(obj.label, priority)
+        if count <= 0:
+            manager.add_topic(obj.label, 1)
 
 
 def init_message_listeners(manager):
@@ -59,13 +53,22 @@ if __name__ == '__main__':
     rospy.loginfo("Starting dialogue node..")
 
     rospy.loginfo("Creating DialogueManager..")
-    manager = DialogueManager(CommUDialogueLibrary())
+
+    audio_input_device = rospy.get_param(
+        'dialogue/audio_input_device',
+        "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"
+    )
+
+    manager = DialogueManager(
+        CommUDialogueLibrary(),
+        MitsukuDialogue(audio_input_device)
+    )
     rospy.loginfo("DialogueManager created.")
 
     init_message_listeners(manager)
     init_message_publishers(manager)
 
-    manager.start(utter, threaded=True, perpetual=True)
+    manager.start(utter, True)
 
     rospy.loginfo("Dialogue node started." )
     try:

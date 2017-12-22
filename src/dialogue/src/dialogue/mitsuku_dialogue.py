@@ -5,6 +5,7 @@ from chatbot import *
 from pocketsphinx import LiveSpeech
 from dialogue_manager import DialogueTopic
 
+
 class MitsukuDialogue(Dialogue):
     """
     This is a special case of Dialogue, adapted for Mitsuku chatbot interaction.
@@ -12,14 +13,14 @@ class MitsukuDialogue(Dialogue):
     defined by an AbstractDialogueLine.
     """
 
-    def __init__(self, audio_device):
+    def __init__(self, audio_input_device):
         # type: (str) -> None
         """
-        :param audio_device: The name of the audio device to use for input.
+        :param audio_input_device: The name of the audio device to use for input.
         """
 
         self.mitsuku = Mitsuku()
-        self.livespeech = LiveSpeech(audio_device=audio_device, full_utt=True)
+        self.livespeech = LiveSpeech(audio_device=audio_input_device, full_utt=True)
 
         self.should_cancel = False
         self.is_canceled = False
@@ -39,14 +40,8 @@ class MitsukuDialogue(Dialogue):
             return False
 
         if self.should_cancel:
-            if self.next_topic is not None:
-                rospy.loginfo("Mitsuku dialogue cancelled. Switching to: " + self.next_topic.label)
-                self.previous_user_input = "I want to talk about " + self.next_topic.label
-            else:
-                rospy.loginfo("Mitsuku dialogue cancelled. Switching to undefined next topic.")
-                self.previous_user_input = "I want to talk about something else."
-
             self.is_canceled = True
+            return False
 
         utter(self.mitsuku.getResponse(self.previous_user_input))
 

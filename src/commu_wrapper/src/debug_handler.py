@@ -11,7 +11,7 @@ import rospy
 
 class DebugHandler:
 
-    def __init__(self, topic, topic_is_classification, window_name="Debug window"):
+    def __init__(self, classification_topic, window_name="Debug window"):
         rospy.loginfo("Initializing DebugHandler..")
         self.window_name = window_name
         self.image_bridge = CvBridge()
@@ -28,17 +28,10 @@ class DebugHandler:
 
         self.thread = None
 
-        if topic_is_classification:
-            rospy.loginfo("Subscribing to '%s' topic for classification results..", topic)
-            rospy.Subscriber(topic, ClassifiedObjectArray, self.classification_received)
-        else:
-            rospy.loginfo("Subscribing to '%s' topic for images..", topic)
-            rospy.Subscriber(topic, Image, self.image_received)
+        rospy.loginfo("Subscribing to '%s' topic for classification results..", classification_topic)
+        rospy.Subscriber(classification_topic, ClassifiedObjectArray, self.classification_received)
 
         self.spin_image_window()
-
-    def image_received(self, data):
-        self.latest_cv_image = util.image_to_opencv(data)
 
     def classification_received(self, data):
         self.latest_cv_image = util.image_to_opencv(data.image)

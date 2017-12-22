@@ -63,12 +63,48 @@ Run the dialogue.launch file in the dialogue package by typing:
 roslaunch dialogue dialogue.launch commu-ip:=192.168.1.1 commu-port:=6019 camera-path:=/dev/video0
 ```
 
-The launch file accepts 3 arguments:
+The launch file accepts 8 arguments:
 - `commu-ip` (required):
   * The IP address of the CommU robot.
 - `commu-port` (default: 6001): 
   * The port of the CommU manager program on the CommU.
+- `commu-volume` (default: 10):
+  * The volume of the speech on the CommU (from 0 to 100).
+- `debug-mode` (default: true):
+  * Whether to run the commu_wrapper package in debug mode. Debug mode opens a window with the live camera footage from 
+  the `camera-path` parameter and illustrates what objects are recognized on the image. It also displays what the CommU
+  is currently saying.
+- `classification-topic` (default: "/ssd_node/classification_result") 
+  * This argument can be used to specify an alternate object classification topic. For this the default covers almost 
+  all possible use cases.  
 - `camera-path` (default: /dev/fisheye-camera):
   * The path to the video device to use as input. The video device has to be connected to the GPU-pc. It is also possible to use another camera, by remapping the raw output topic of the camera to `/cv_camera/image_raw`.
 - `euclid` (default: EUCLID_70FD):  
-  * The hostname of the Intel Euclid Development Kit.
+  * The hostname of the Intel Euclid Development Kit device.
+-  `audio-input-device` (default: alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono)
+  * The name of the audio input device (microphone) to use as input for the speech recognition.
+  
+### Setting camera position parameters
+There are also 6 other parameters which can't be passed via the launch file. These are the Euclid camera position parameters of the `look_helper` package. The Euclid is used for person detection and the coordinates are required when the Euclid is not facing the same direction as CommU. These parameters are:
+
+- `look_helper/tx` (default: 0):
+  * The x position of the camera on the CommU coordinate system in millimeters.
+- `look_helper/ty` (default: 0):
+  * The y position of the camera on the CommU coordinate system in millimeters.
+- `look_helper/tz` (default: 0):
+  * The z position of the camera on the CommU coordinate system in millimeters.
+- `look_helper/rx` (default: 0):
+  * The rotation around the x-axis of the camera on the CommU coordinate system in degrees.
+- `look_helper/ry` (default: 0):
+  * The rotation around the y-axis of the camera on the CommU coordinate system in degrees.
+- `look_helper/rz` (default: 0):
+  * The rotation around the z-axis of the camera on the CommU coordinate system in degrees.
+
+A rotation of 0 on all axes indicates that the camera is facing in the positive z direction.
+
+For more info about the CommU coordinate system, see: [CommU.md#Coordinate-system](CommU.md#Coordinate-system)
+
+  
+### Exploring this repository
+
+This repository might, to someone unfamilliar with ROS, seem quite messy. My main advice is to work through the ROS tutorials on the project structure and start exploring this project by looking at the `src/dialogue/dialogue.launch` file.

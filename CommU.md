@@ -6,9 +6,19 @@ This is a concise (and very probably incomplete) guide to using the CommU and So
 
 The two robots used at the Intelligent Robotics Laboratory are Sota and CommU. 
 
-They both run the same controller software and use the same API. The Sota's skin is white with blue accents and is made to look more like a robot, while CommU looks more humanoid with a white-and-beige color. Of the two, Sota is the simpler one. CommU has more degrees of freedom, moving eyes and built in object recognition (**unconfirmed**). This guide is based on the `rev39` version of the codebase in the subversion repository and all information in here was reverse-engineered from the code found on a Sota robot with a Raspberry Pi model 2B as controller. There is also a model of Sota with an Intel Edison, so the details might differ between robots. As for the CommU robot, I have no clue about the internal hardware.
+They both run the same controller software and use the same API. The Sota's skin is white with blue accents and is made to look more like a robot, while CommU looks more humanoid with a white-and-beige color. Of the two, Sota is the simpler one. CommU has more degrees of freedom, moving eyes and built in object recognition (last item **unconfirmed**). This guide is based on the `rev39` version of the codebase in the subversion repository and all information in here was reverse-engineered from the code found on a Sota robot with a Raspberry Pi model 2B as controller. There is also a model of Sota with an Intel Edison, so the details might differ between robots. As for the CommU robot, I have no clue about the internal hardware.
 
 **Note:** I will refer to **both** Sota and CommU robots as **CommU** in the rest of this guide, except for when a distinction between the two is necessary. This is the way it is done in the codebase and will hopefully prevent confusion.
+
+## Coordinate system
+
+The CommU uses a Cartesian coordinate system with 3 dimensions: x, y and z. Coordinates are usually (not always) specified in millimeters (mm) in the source code. 
+
+The **x-axis** is in the horizontal plane, increases towards left from the robot's point of view and is 0 between it's eyes.
+
+The **y-axis** is in the vertical plane, is 0 at the base of the robot and increases upwards.
+
+The **z-axis** is in the horizontal plane, increases in front of the robot and 0 lies at the center-of-rotation in the head yaw.
 
 ## Overview
 

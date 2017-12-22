@@ -1,22 +1,47 @@
+<!--
+This launch file is used to start all the ROS packages necessary for this project in a centralized and clear manner.
+Run this in the following manner:
+
+roslaunch dialogue/dialogue.launch camera-path:=/dev/fisheye-camera commu-ip:=192.168.0.210 commu-port:=6009 ...
+
+There is only one required parameter, `commu-ip`. The others have default values. The `look_helper` package has it's own
+parameters on the ros parameter server, look_helper/tx, look_helper/ty, ../tz, ../rx, ../ry, ../rz. These should be used
+to specify the offset of the camera relative to the robot. For more information see the README or the file at
+`catkin_ws/src/look_helper/look_helper_node.py`.
+-->
+
 <launch>
+
+    <!-- Specify arguments that can be used with this launch file -->
     <arg name="camera-path" default="/dev/fisheye-camera" doc="The path of video device to use to capture images."/>
     <arg name="commu-ip" doc="The IP address of the CommU robot"/>
-    <arg name="commu-port" default="6001" doc="The port of the CommUManager server on the CommU"/>
-    <arg name="commu-volume" default="10" doc="The volume of the CommU speech."/>
-    <arg name="debug" default="False" doc="Whether to start the commu_wrapper node in debug mode."/>
+    <arg name="commu-port" default="6009" doc="The port of the CommUManager server on the CommU"/>
+    <arg name="commu-volume" default="10" doc="The volume of the CommU (from 0 to 100)"/>
+    <arg name="debug-mode" default="True" doc="Whether to start the commu_wrapper node in debug mode."/>
+    <arg name="classification-topic" default="/ssd_node/classification_result" doc="The topic name of image classification data (only used in debug mode)."/>
     <arg name="euclid" default="EUCLID_70FD" doc="The hostname of the euclid device."/>
+    <arg name="audio-input-device" default="alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono" doc="The microphone device name for speech recognition."/>
 
+    <!-- Set parameters for all packages -->
     <param name="/cv_camera/device_path" value="$(arg camera-path)"/>
+
+    <param name="/dialogue/audio_input_device" value="$(arg audio-input-device)"/>
+
+    <param name="/commu_wrapper/commu_ip" value="$(arg commu-ip)"/>
+    <param name="/commu_wrapper/commu_port" value="$(arg commu-port)"/>
+    <param name="/commu_wrapper/commu_volume" value="$(arg commu-volume)"/>
+    <param name="/commu_wrapper/debug_mode" value="$(arg debug-mode)"/>
+    <param name="/commu_wrapper/classification_topic" value="$(arg classification-topic)"/>
 
     <machine name="euclid" address="$(arg euclid)" env-loader="/home/euclid/catkin_ws/devel/env.sh" default="never" user="euclid" password="euclid"/>
 
     <!-- Prevent caffe from printing massive amounts of useless info. -->
     <env name="GLOG_minloglevel" value="2"/>
 
+    <!-- Start each node. Order is irrelevant -->
     <node name="cv_camera" pkg="cv_camera" type="cv_camera_node"/>
     <node name="ssd_node" pkg="ssd" type="ssd_node.py"/>
-    <node name="commu_wrapper_node" pkg="commu_wrapper" type="commu_wrapper_node.py" args="-i $(arg commu-ip) -p $(arg commu-port) -d $(arg debug) -v $(arg commu-volume)"/>
-    <node name="button_input_node" pkg="button_input" type="button_input_node.py" output="screen"/>
+    <node name="commu_wrapper_node" pkg="commu_wrapper" type="commu_wrapper_node.py"/>
     <node name="look_helper_node" pkg="look_helper" type="look_helper_node.py" machine="euclid"/>
     <node name="dialogue_node" pkg="dialogue" type="dialogue_node.py"/>
 

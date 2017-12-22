@@ -39,28 +39,28 @@ def init_message_listeners(wrapper):
 if __name__ == '__main__':
     rospy.init_node("commu_wrapper")
 
-    parser = argparse.ArgumentParser(description="utility for CommUManager")
-    parser.add_argument("-i", "--ipaddress", default="127.0.0.1")
-    parser.add_argument("-p", "--port", default="6019")
-    parser.add_argument("-d", "--debug", default="False")
-    parser.add_argument("-m", "--image", default="/ssd_node/classification_result")
-    parser.add_argument("-c", "--isclassificationtopic", default=True)
-    parser.add_argument("-v", "--volume", default=10)
-    args = parser.parse_args(rospy.myargv(sys.argv[1:]))
+    commu_ip = rospy.get_param("commu_wrapper/commu_ip", "127.0.0.1")
+    commu_port = rospy.get_param("commu_wrapper/commu_port", "6009")
+    commu_volume = rospy.get_param("commu_wrapper/commu_volume", 10)
+    debug_mode = rospy.get_param("commu_wrapper/debug_mode", True)
+    classification_topic = rospy.get_param("commu_wrapper/classification_topic", "/ssd_node/classification_result")
 
     rospy.loginfo("Starting commu_wrapper_node..")
-    rospy.loginfo("Arguments:")
-    rospy.loginfo("-i, --ipaddress: \t%s", args.ipaddress)
-    rospy.loginfo("-p, --port: \t%s", args.port)
-    rospy.loginfo("-d, --debug: \t%s", args.debug)
-    rospy.loginfo("-m, --image: \t%s", args.image)
-    rospy.loginfo("-c, --isclassificationtopic: \t%s", args.isclassificationtopic)
-    rospy.loginfo("-v, --volume: \t%s", args.volume)
+    rospy.loginfo(
+        """commu_wrapper initializing with: {
+            commu_ip: %s,
+            commu_port: %d,
+            commu_volume: %f,
+            debug_mode: %d,
+            classification_topic: %s    
+        }""", commu_ip, commu_port, commu_volume, debug_mode, classification_topic
+    )
 
-    if bool(args.debug):
-        wrapper = CommUWrapper(args.ipaddress, int(args.port), int(args.volume), DebugHandler(args.image, bool(args.isclassificationtopic)))
+
+    if bool(debug_mode):
+        wrapper = CommUWrapper(commu_ip, commu_port, commu_volume, DebugHandler(classification_topic))
     else:
-        wrapper = CommUWrapper(args.ipaddress, int(args.port), int(args.volume))
+        wrapper = CommUWrapper(commu_ip, commu_port, commu_volume)
 
     init_message_listeners(wrapper)
 
