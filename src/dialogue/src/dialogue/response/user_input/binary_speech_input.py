@@ -1,22 +1,36 @@
 from abstract_user_input import AbstractUserInput
-from util import get_srv_function
-from button_input.srv import BinaryButtonInput
-
+from pocketsphinx import *
+import rospy
 
 class BinarySpeechInput(AbstractUserInput):
     """
     BinarySpeechInput is a response which the conversation partner gives by saying either yes or no.
-     Currently implemented by the binary_button_input ros package, which handles this via the cli.
-     #TODO: Make this voice-compatible
+
+    This could be improved by not just recognizing yes or no but performing positive/negative sentiment recognition.
     """
+
+    def __init__(self):
+        audio_input_device = rospy.get_param(
+            'dialogue/audio_input_device',
+            "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"
+        )
+
+        self.livespeech = LiveSpeech(audio_device=audio_input_device, full_utt=True)
 
     BINARY_NO = "no"
     BINARY_YES = "yes"
+    NOT_RECOGNIZED = "undefined"
 
     def get_response(self):
         # type: () -> str
         print("Waiting for user input...")
 
-        get_button_response = get_srv_function('binary_button_input', BinaryButtonInput)
+        input = self.livespeech.__iter__().next()  # type: str
 
-        return self.BINARY_YES if bool(get_button_response().response) else self.BINARY_NO
+        if 'yes' in input:
+            return self.BINARY_YES
+
+        if 'no' in input:
+            return self.BINARY_NO
+
+        return self.NOT_RECOGNIZED

@@ -26,7 +26,7 @@ class MitsukuDialogue(Dialogue):
         self.is_canceled = False
         self.next_topic = None # type: DialogueTopic
 
-        self.previous_user_input = "Hi there!"
+        self.previous_user_input = "Hi there!"  # type: str
 
     def proceed_dialogue(self, utter):
         # type: (Callable[[str], None]) -> bool
@@ -45,7 +45,7 @@ class MitsukuDialogue(Dialogue):
 
         utter(self.mitsuku.getResponse(self.previous_user_input))
 
-        user_input = self.livespeech.__iter__().next()
+        user_input = self.livespeech.__iter__().next()  # type: str
 
         self.previous_user_input = user_input
 

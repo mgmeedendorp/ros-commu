@@ -1,5 +1,5 @@
 from user_input import *
-from abstract_dialogue_line import AbstractDialogueLine
+from dialogue_line_no_response import DialogueLineNoResponse
 
 
 class DialogueLineAnyResponse(DialogueLineNoResponse):

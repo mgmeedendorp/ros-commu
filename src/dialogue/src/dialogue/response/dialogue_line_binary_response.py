@@ -1,5 +1,6 @@
 from user_input import *
 from abstract_dialogue_line import AbstractDialogueLine
+from dialogue_line_repeat_please import DialogueLineRepeatPlease
 
 
 class DialogueLineBinaryResponse(AbstractDialogueLine):
@@ -17,6 +18,11 @@ class DialogueLineBinaryResponse(AbstractDialogueLine):
 
     def get_next_line(self, response):
         # type: (str) -> AbstractDialogueLine
+
+        # Didn't hear yes or no, ask again..
+        if response == BinarySpeechInput.NOT_RECOGNIZED:
+            return DialogueLineRepeatPlease(self)
+
         if response == BinarySpeechInput.BINARY_YES:
             return self.next_line_yes
         return self.next_line_no
