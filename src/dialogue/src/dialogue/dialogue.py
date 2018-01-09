@@ -1,7 +1,6 @@
 import rospy
 from response import *
 from typing import Callable
-from dialogue_manager import DialogueTopic
 
 
 class Dialogue:

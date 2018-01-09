@@ -1,6 +1,8 @@
 # ros-commu
 The catkin workspace folder for my commu dialogue project at Osaka University's Intelligent Robotics Laboratory
 
+More information about the SoTa / CommU robot used can be found at [CommU.md](CommU.md).
+
 ## Installation
 
 ### Requirements
@@ -60,7 +62,7 @@ Either configure the hostname of the euclid to be `EUCLID_70FD` (not recommended
 Run the dialogue.launch file in the dialogue package by typing:
 
 ```shell
-roslaunch dialogue dialogue.launch commu-ip:=192.168.1.1 commu-port:=6019 camera-path:=/dev/video0
+roslaunch dialogue dialogue.launch commu-ip:=192.168.1.1 commu-port:=6001 camera-path:=/dev/video0
 ```
 
 The launch file accepts 8 arguments:
@@ -107,4 +109,4 @@ For more info about the CommU coordinate system, see: [CommU.md#coordinate-syste
   
 ### Exploring this repository
 
-This repository might, to someone unfamilliar with ROS, seem quite messy. My main advice is to work through the ROS tutorials on the project structure and start exploring this project by looking at the `src/dialogue/dialogue.launch` file.
+This repository might seem quite messy to someone unfamilliar with ROS. My main advice is to work through the ROS tutorials on the project structure and start exploring this project by looking at the `src/dialogue/dialogue.launch` file.

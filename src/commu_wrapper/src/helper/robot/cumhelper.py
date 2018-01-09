@@ -221,7 +221,7 @@ if __name__ =='__main__':
     parser.add_argument("-l","--look", default="center")
     args = parser.parse_args()
 
-    #args.ipaddress = "127.0.0.1"
+    #args.ipaddress = "192.168.1.210"
 
     manager=CUMHelper(args.ipaddress,int(args.port))
 
