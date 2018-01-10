@@ -90,8 +90,8 @@ if __name__ == '__main__':
     rospy.init_node("transform_broadcast_tester")
 
     publish_static_transform_euclidean(
+        "base_link",
         "commu_link",
-        "camera_link",
         tx, ty, tz,
         rx, ry, rz
     )
