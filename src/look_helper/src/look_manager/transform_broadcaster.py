@@ -91,8 +91,8 @@ if __name__ == '__main__':
 
     while not rospy.is_shutdown():
         publish_static_transform_euclidean(
-            "base_link",
             "commu_link",
+            "base_link",
             tx, ty, tz,
             rx, ry, rz
         )
