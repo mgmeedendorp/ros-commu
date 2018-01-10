@@ -15,7 +15,7 @@ from rospy import Time
 
 def publish_person_transform(tx, ty, tz):
     publish_dynamic_transform_euclidean(
-        "camera_depth_frame",
+        "camera_depth_optical_frame",
         "person",
         tx, ty, tz,
         0, 0, 0
@@ -116,6 +116,8 @@ def publish_dynamic_transform_euclidean(parent, child, tx, ty, tz, rx, ry, rz):
         child,
         parent
     )
+
+    rospy.loginfo("Dynamic transform from '" + parent + "' to '" + child + "' published.")
 
 
 if __name__ == '__main__':
