@@ -7,6 +7,8 @@ import sys
 # Because of transformations
 import tf
 import tf2_ros
+import geometry_msgs
+
 
 def broadcast_euclid_transform(tx, ty, tz, rx, ry, rz):
     pass
@@ -23,15 +25,23 @@ if __name__ == '__main__':
     rospy.init_node("transform_broadcast_tester")
     rotation = tf.transformations.quaternion_from_euler(rx, ry, rz)
 
-
     br = tf2_ros.StaticTransformBroadcaster()
+
+    t = geometry_msgs.msg.TransformStamped()
+    t.header.frame_id = "camera_link"  # from `camera_link` (provided by euclid)
+    t.header.stamp = rospy.Time.now(),
+    t.child_frame_id = "commu_link",  # Publish a transform to `commu_link` (the origin of the commu coordinate system)
+    t.transform.translation.x = tx
+    t.transform.translation.y = ty
+    t.transform.translation.z = tz
+
+    t.transform.rotation.x = rotation[0]
+    t.transform.rotation.y = rotation[1]
+    t.transform.rotation.z = rotation[2]
+    t.transform.rotation.w = rotation[3]
+
+
     # noinspection PyArgumentList
-    br.sendTransform(
-        (tx, ty, tz),
-        rotation,
-        rospy.Time.now(),
-        "commu_link",  # Publish a transform to `commu_link` (the origin of the commu coordinate system)
-        "camera_link"  # to `camera_link` (provided by euclid)
-    )
+    br.sendTransform(t)
 
     rospy.spin()
