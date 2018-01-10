@@ -18,6 +18,8 @@ if __name__ == '__main__':
     ry = float(sys.argv[5])
     rz = float(sys.argv[6])
 
+    rospy.init_node("transform_broadcast_tester")
+
     br = tf.TransformBroadcaster()
     br.sendTransform(
         (tx, ty, tz),
