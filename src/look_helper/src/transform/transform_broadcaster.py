@@ -20,11 +20,15 @@ if __name__ == '__main__':
 
     rospy.init_node("transform_broadcast_tester")
 
+    rotation = tf.transformations.quaternion_from_euler(rx, ry, rz)
+
+    print str(rotation)
+
     br = tf.TransformBroadcaster()
     br.sendTransform(
         (tx, ty, tz),
-        tf.transformations.quaternion_from_euler(rx, ry, rz),
+        rotation,
         rospy.Time.now(),
-        "camera_link",  # Publish a transform from `camera_link` (provided by euclid)
-        "commu_link"    # to `commu_link` (the origin of the commu coordinate system)
+        "commu_link",  # Publish a transform from `camera_link` (provided by euclid)
+        "camera_link"    # to `commu_link` (the origin of the commu coordinate system)
     )
