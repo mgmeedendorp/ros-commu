@@ -14,7 +14,7 @@ from rospy import Time
 
 
 def publish_person_transform(tx, ty, tz):
-    publish_static_transform_euclidean(
+    publish_dynamic_transform_euclidean(
         "camera_depth_frame",
         "person",
         tx, ty, tz,
@@ -38,6 +38,7 @@ def publish_commu_head_yaw_transform():
         0, 0, .2,
         0, 0, 0
     )
+
 
 def publish_static_transform_euclidean(parent, child, tx, ty, tz, rx, ry, rz):
     # type: (str, str, float, float, float, float, float, float) -> None
@@ -101,6 +102,21 @@ def publish_static_transform_quaternion(time, parent, child, tx, ty, tz, rx, ry,
     br.sendTransform(t)
 
     rospy.loginfo("Static transform from '" + parent + "' to '" + child + "' published.")
+
+
+def publish_dynamic_transform_euclidean(parent, child, tx, ty, tz, rx, ry, rz):
+    br = tf.TransformBroadcaster()
+
+    rotation = tf.transformations.quaternion_from_euler(rx, ry, rz)
+
+    br.sendTransform(
+        (tx, ty, tz),
+        rotation,
+        rospy.Time.now(),
+        child,
+        parent
+    )
+
 
 if __name__ == '__main__':
     tx = float(sys.argv[1])  # this is ROS coordinates, so in meters and radians
