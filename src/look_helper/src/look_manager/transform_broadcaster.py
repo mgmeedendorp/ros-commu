@@ -5,6 +5,7 @@ import rospy
 import sys
 
 # Because of transformations
+import std_msgs
 import tf
 import tf2_ros
 import geometry_msgs
@@ -28,6 +29,7 @@ if __name__ == '__main__':
     br = tf2_ros.StaticTransformBroadcaster()
 
     t = geometry_msgs.msg.TransformStamped()
+    t.header = std_msgs.msg.Header()
     t.header.frame_id = "camera_link"  # from `camera_link` (provided by euclid)
     t.header.stamp = rospy.Time.now(),
     t.child_frame_id = "commu_link",  # Publish a transform to `commu_link` (the origin of the commu coordinate system)
