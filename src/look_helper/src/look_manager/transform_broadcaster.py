@@ -31,8 +31,8 @@ if __name__ == '__main__':
     t = geometry_msgs.msg.TransformStamped()
     t.header = std_msgs.msg.Header()
     t.header.frame_id = "camera_link"  # from `camera_link` (provided by euclid)
-    t.header.stamp = rospy.Time.now(),
-    t.child_frame_id = "commu_link",  # Publish a transform to `commu_link` (the origin of the commu coordinate system)
+    t.header.stamp = rospy.Time.now()
+    t.child_frame_id = "commu_link"  # Publish a transform to `commu_link` (the origin of the commu coordinate system)
     t.transform.translation.x = tx
     t.transform.translation.y = ty
     t.transform.translation.z = tz
