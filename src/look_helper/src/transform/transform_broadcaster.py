@@ -22,13 +22,15 @@ if __name__ == '__main__':
 
     rotation = tf.transformations.quaternion_from_euler(rx, ry, rz)
 
-    print str(rotation)
-
-    br = tf.TransformBroadcaster()
-    br.sendTransform(
-        (tx, ty, tz),
-        rotation,
-        rospy.Time.now(),
-        "commu_link",  # Publish a transform from `camera_link` (provided by euclid)
-        "camera_link"    # to `commu_link` (the origin of the commu coordinate system)
-    )
+    while True:
+        try:
+            br = tf.TransformBroadcaster()
+            br.sendTransform(
+                (tx, ty, tz),
+                rotation,
+                rospy.Time.now(),
+                "commu_link",  # Publish a transform to `commu_link` (the origin of the commu coordinate system)
+                "camera_link"  # to `camera_link` (provided by euclid)
+            )
+        except:
+            break
