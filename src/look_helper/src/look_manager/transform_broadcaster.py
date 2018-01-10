@@ -137,14 +137,18 @@ if __name__ == '__main__':
 
         publish_commu_head_yaw_transform()
 
-        time = rospy.Time.now()
-        listener.waitForTransform("commu_head_yaw", "person", time, rospy.Duration(1))
-        (trans, rot) = listener.lookupTransform("commu_head_yaw", "person", time)
+        try:
+            time = rospy.Time.now()
+            listener.waitForTransform("commu_head_yaw", "person", time, rospy.Duration(1))
+            (trans, rot) = listener.lookupTransform("commu_head_yaw", "person", time)
 
-        rospy.loginfo("person transform yay")
-        rospy.loginfo(trans)
-        rospy.loginfo('rot')
-        rospy.loginfo(rot)
+            rospy.loginfo("person transform yay")
+            rospy.loginfo(trans)
+            rospy.loginfo('rot')
+            rospy.loginfo(rot)
+        except:
+            rospy.loginfo("no transform found")
+
 
 
 
