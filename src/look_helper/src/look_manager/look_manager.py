@@ -2,7 +2,7 @@ import rospy
 from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommULook
 from util import get_srv_function
-from transform_broadcaster import broadcast_euclid_transform
+from transform_broadcaster import publish_euclid_transform, publish_commu_head_yaw_transform
 import math
 
 
@@ -10,12 +10,12 @@ class LookManager:
     def __init__(self, t_x, t_y, t_z, r_x, r_y, r_z):
         """
         Instantiates LookManager
-        :param t_x: Translation of the camera relative to neck rotation point of CommU head on x-axis in millimeters.
-        :param t_y: Translation of the camera relative to neck rotation point of CommU head on y-axis in millimeters.
-        :param t_z: Translation of the camera relative to neck rotation point of CommU head on z-axis in millimeters.
-        :param r_x: Rotation of the camera relative to the CommU's body on the x-axis in degrees.
-        :param r_y: Rotation of the camera relative to the CommU's body on the y-axis in degrees.
-        :param r_z: Rotation of the camera relative to the CommU's body on the z-axis in degrees.
+        :param t_x: Translation of the camera relative to base of CommU head on x-axis in meters on the ROS coordinate system.
+        :param t_y: Translation of the camera relative to base of CommU head on y-axis in meters on the ROS coordinate system.
+        :param t_z: Translation of the camera relative to base of CommU head on z-axis in meters on the ROS coordinate system.
+        :param r_x: Rotation of the camera relative to the CommU on the x-axis in degrees on the ROS coordinate system.
+        :param r_y: Rotation of the camera relative to the CommU on the y-axis in degrees on the ROS coordinate system.
+        :param r_z: Rotation of the camera relative to the CommU on the z-axis in degrees on the ROS coordinate system.
         """
         self.t_x = t_x
         self.t_y = t_y
@@ -27,7 +27,7 @@ class LookManager:
     def person_classification_data(self, data):
         # type: (PersonDetection) -> None
 
-        if (len(data.persons) > 0):
+        if len(data.persons) > 0:
             person = data.persons[0]
 
             center_of_mass_world = person.center_of_mass.world
@@ -57,24 +57,8 @@ class LookManager:
 
             result = commu_look_function(x, y, z)
 
-    def rotate(self, x, y, z):
-        cos_x = math.cos(self.r_x)
-        sin_x = math.sin(self.r_x)
-        cos_y = math.cos(self.r_y)
-        sin_y = math.sin(self.r_y)
-        cos_z = math.cos(self.r_z)
-        sin_z = math.sin(self.r_z)
+    def publish_transforms(self):
+        publish_commu_head_yaw_transform()
+        publish_euclid_transform(self.t_x, self.t_y, self.t_z, self.r_x, self.r_y, self.r_z)
 
-        # Rotation around z
-        x = x * cos_z - y * sin_z
-        y = x * sin_z + y * cos_z
 
-        # Rotation around y
-        x = x * cos_y + z * sin_y
-        z = -x * sin_y + z * cos_y
-
-        # Rotation around x
-        y = y * cos_x - z * sin_x
-        z = y * sin_x + z * cos_x
-
-        return x, y, z

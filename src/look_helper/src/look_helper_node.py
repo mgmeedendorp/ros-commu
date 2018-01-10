@@ -26,7 +26,6 @@ def init_message_listeners(manager):
 
     rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
 
-
 def init_message_publishers(manager):
     pass
 
@@ -52,4 +51,5 @@ if __name__ == '__main__':
     init_message_listeners(manager)
     init_message_publishers(manager)
 
-    rospy.spin()
+    while not rospy.is_shutdown():
+        manager.publish_transforms()

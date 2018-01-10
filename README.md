@@ -87,25 +87,25 @@ The launch file accepts 8 arguments:
   * The name of the audio input device (microphone) to use as input for the speech recognition.
   
 ### Setting camera position parameters
-There are also 6 other parameters which can't be passed via the launch file. These are the Euclid camera position parameters of the `look_helper` package. The Euclid is used for person detection and the coordinates are required when the Euclid is not facing the same direction as CommU. These parameters are:
+There are also 6 other parameters which can't be passed via the launch file. These are the Euclid camera position parameters of the `look_helper` package. The Euclid is used for person detection and the coordinates are required when the Euclid is offset from the robot. These parameters are:
 
 - `look_helper/tx` (default: 0):
-  * The x position of the camera on the CommU coordinate system in millimeters.
+  * The x position of the camera on the ROS coordinate system in meters.
 - `look_helper/ty` (default: 0):
-  * The y position of the camera on the CommU coordinate system in millimeters.
+  * The y position of the camera on the ROS coordinate system in meters.
 - `look_helper/tz` (default: 0):
-  * The z position of the camera on the CommU coordinate system in millimeters.
+  * The z position of the camera on the ROS coordinate system in meters.
 - `look_helper/rx` (default: 0):
-  * The rotation around the x-axis of the camera on the CommU coordinate system in degrees.
+  * The rotation around the x-axis of the camera on the ROS coordinate system in degrees.
 - `look_helper/ry` (default: 0):
-  * The rotation around the y-axis of the camera on the CommU coordinate system in degrees.
+  * The rotation around the y-axis of the camera on the ROS coordinate system in degrees.
 - `look_helper/rz` (default: 0):
-  * The rotation around the z-axis of the camera on the CommU coordinate system in degrees.
+  * The rotation around the z-axis of the camera on the ROS coordinate system in degrees.
 
-A rotation of 0 on all axes indicates that the camera is facing in the positive z direction.
+A rotation of 0 on all axes indicates that the camera is facing in the same direction as the CommU.
 
 For more info about the CommU coordinate system, see: [CommU.md#coordinate-system](CommU.md#coordinate-system)
-
+For more info about the ROS coordinate system, see: [REP 103](http://www.ros.org/reps/rep-0103.html) on the ROS wiki.
   
 ### Exploring this repository
 

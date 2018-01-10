@@ -8,13 +8,36 @@ import sys
 import std_msgs
 import tf
 import tf2_ros
+from realsense_person.msg import PersonDetection
 import geometry_msgs
 from rospy import Time
 
 
-def broadcast_euclid_transform(tx, ty, tz, rx, ry, rz):
-    pass
+def publish_person_transform(tx, ty, tz):
+    publish_static_transform_euclidean(
+        "camera_depth_frame",
+        "person",
+        tx, ty, tz,
+        0, 0, 0
+    )
 
+
+def publish_euclid_transform(tx, ty, tz, rx, ry, rz):
+    publish_static_transform_euclidean(
+        "commu_link",
+        "camera_link",
+        tx, ty, tz,
+        rx, ry, rz
+    )
+
+
+def publish_commu_head_yaw_transform():
+    publish_static_transform_euclidean(
+        "commu_link",
+        "commu_head_yaw",
+        0, 0, .2,
+        0, 0, 0
+    )
 
 def publish_static_transform_euclidean(parent, child, tx, ty, tz, rx, ry, rz):
     # type: (str, str, float, float, float, float, float, float) -> None
@@ -89,17 +112,39 @@ if __name__ == '__main__':
 
     rospy.init_node("transform_broadcast_tester")
 
+    def person_callback(data):
+        if len(data.persons) > 0:
+            person = data.persons[0]
+
+            center_of_mass_world = person.center_of_mass.world
+
+            x = center_of_mass_world.x
+            y = center_of_mass_world.y
+            z = center_of_mass_world.z
+
+            publish_person_transform(x, y, z)
+
+    rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
+
+    listener = tf.TransformListener()
+
+
     while not rospy.is_shutdown():
-        publish_static_transform_euclidean(
-            "commu_link",
-            "base_link",
+        publish_euclid_transform(
             tx, ty, tz,
             rx, ry, rz
         )
 
-        publish_static_transform_euclidean(
-            "commu_link",
-            "commu_head_yaw",
-            0, 0, .2,
-            0, 0, 0
-        )
+        publish_commu_head_yaw_transform()
+
+        time = rospy.Time.now()
+        listener.waitForTransform("commu_head_yaw", "person", time, rospy.Duration(1))
+        (trans, rot) = listener.lookupTransform("commu_head_yaw", "person", time)
+
+        rospy.loginfo("person transform yay")
+        rospy.loginfo(trans)
+        rospy.loginfo('rot')
+        rospy.loginfo(rot)
+
+
+
