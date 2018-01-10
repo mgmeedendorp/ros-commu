@@ -89,19 +89,17 @@ if __name__ == '__main__':
 
     rospy.init_node("transform_broadcast_tester")
 
-    publish_static_transform_euclidean(
-        "base_link",
-        "commu_link",
-        tx, ty, tz,
-        rx, ry, rz
-    )
+    while not rospy.is_shutdown():
+        publish_static_transform_euclidean(
+            "base_link",
+            "commu_link",
+            tx, ty, tz,
+            rx, ry, rz
+        )
 
-
-    publish_static_transform_euclidean(
-        "commu_link",
-        "commu_head_yaw",
-        0, 0, .2,
-        0, 0, 0
-    )
-
-    rospy.spin()
+        publish_static_transform_euclidean(
+            "commu_link",
+            "commu_head_yaw",
+            0, 0, .2,
+            0, 0, 0
+        )
