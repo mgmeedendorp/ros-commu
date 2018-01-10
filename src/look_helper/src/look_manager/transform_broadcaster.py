@@ -40,8 +40,10 @@ if __name__ == '__main__':
     t.transform.rotation.z = rotation[2]
     t.transform.rotation.w = rotation[3]
 
+    rospy.loginfo(t)
 
-    # noinspection PyArgumentList
     br.sendTransform(t)
+
+    rospy.loginfo("Euclid static tranform published.")
 
     rospy.spin()
