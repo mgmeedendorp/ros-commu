@@ -48,14 +48,13 @@ class LookManager:
 
     def request_commu_look(self):
         try:
-            transform = self.tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time())  # type: geometry_msgs.msg.TransformStamped
+            transform = self.tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time(), rospy.Duration(1))  # type: geometry_msgs.msg.TransformStamped
 
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             rospy.loginfo("No transform found between commu_head_yaw and person. This can happen occasionally.")
             return
 
         rospy.loginfo("person transform yay")
-        rospy.loginfo(transform)
 
         tx = transform.transform.translation.x
         ty = transform.transform.translation.y
@@ -65,8 +64,6 @@ class LookManager:
 
         commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
         result = commu_look_function(x, y, z)
-
-        rospy.logdebug("Transform between CommU and person: [x: %f, y: %f, z: %f]", x, y, z)
 
         if not result:
             rospy.logerr("Call to /commu_wrapper/look failed!")
