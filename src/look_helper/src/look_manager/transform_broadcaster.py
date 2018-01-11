@@ -155,19 +155,16 @@ if __name__ == '__main__':
 
         publish_commu_head_yaw_transform()
 
-        try:
-            if listener.frameExists("commu_head_yaw") and listener.frameExists("person"):
-                t = listener.getLatestCommonTime("commu_head_yaw", "person")
-                (trans, rot) = listener.lookupTransform("commu_head_yaw", "person", t)
-                rospy.loginfo("person transform yay")
-                rospy.loginfo(trans)
-                rospy.loginfo('rot')
-                rospy.loginfo(rot)
-            else:
-                rospy.loginfo("commu_head_yaw exists? " + listener.frameExists("commu_head_yaw"))
-                rospy.loginfo("person exists? " + listener.frameExists("person"))
-        except:
-            rospy.loginfo("no transform found")
+        if listener.frameExists("commu_head_yaw") and listener.frameExists("person"):
+            t = listener.getLatestCommonTime("commu_head_yaw", "person")
+            (trans, rot) = listener.lookupTransform("commu_head_yaw", "person", t)
+            rospy.loginfo("person transform yay")
+            rospy.loginfo(trans)
+            rospy.loginfo('rot')
+            rospy.loginfo(rot)
+        else:
+            rospy.loginfo("commu_head_yaw exists? " + listener.frameExists("commu_head_yaw"))
+            rospy.loginfo("person exists? " + listener.frameExists("person"))
 
 
 
