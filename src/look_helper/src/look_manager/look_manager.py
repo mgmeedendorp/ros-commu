@@ -70,12 +70,10 @@ class LookManager:
             rospy.logerr("Call to /commu_wrapper/look failed!")
 
 
-    def convert_ros_to_commu_coords(self, x, y, z):
-        x = -x  # Invert x axis
-        y = -y  # Invert y axis
+    def convert_ros_to_commu_coords(self, xRos, yRos, zRos):
+        # Swap axes and convert to millimeters.
+        xCommU = yRos * 1000
+        yCommU = zRos * 1000
+        zCommU = xRos * 1000
 
-        x *= 1000  # m to mm
-        y *= 1000  # m to mm
-        z *= 1000  # m to mm
-
-        return x, y, z
+        return xCommU, yCommU, zCommU
