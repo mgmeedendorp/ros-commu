@@ -64,8 +64,6 @@ def publish_static_transform_euclidean(parent, child, tx, ty, tz, rx, ry, rz):
         qx, qy, qz, qw
     )
 
-    pass
-
 
 def publish_static_transform_quaternion(time, parent, child, tx, ty, tz, rx, ry, rz, rw):
     # type: (Time, str, str, float, float, float, float, float, float, float) -> None
@@ -144,8 +142,10 @@ if __name__ == '__main__':
 
     rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
 
-    listener = tf.TransformListener()
+    tfBuffer = tf2_ros.Buffer()
+    listener = tf2_ros.TransformListener(tfBuffer)
 
+    rate = rospy.Rate(1)
 
     while not rospy.is_shutdown():
         publish_euclid_transform(
@@ -155,16 +155,17 @@ if __name__ == '__main__':
 
         publish_commu_head_yaw_transform()
 
-        if listener.frameExists("commu_head_yaw") and listener.frameExists("person"):
-            t = listener.getLatestCommonTime("commu_head_yaw", "person")
-            (trans, rot) = listener.lookupTransform("commu_head_yaw", "person", t)
+        try:
+            trans, rot = tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time())
+
             rospy.loginfo("person transform yay")
             rospy.loginfo(trans)
             rospy.loginfo('rot')
             rospy.loginfo(rot)
-        else:
-            rospy.loginfo("commu_head_yaw exists? " + str(listener.frameExists("commu_head_yaw")))
-            rospy.loginfo("person exists? " + str(listener.frameExists("person")))
+
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+            rate.sleep()
+            continue
 
 
 
