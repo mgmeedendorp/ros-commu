@@ -163,6 +163,9 @@ if __name__ == '__main__':
                 rospy.loginfo(trans)
                 rospy.loginfo('rot')
                 rospy.loginfo(rot)
+            else:
+                rospy.loginfo("commu_head_yaw exists? " + listener.frameExists("commu_head_yaw"))
+                rospy.loginfo("person exists? " + listener.frameExists("person"))
         except:
             rospy.loginfo("no transform found")
 
