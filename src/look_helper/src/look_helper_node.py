@@ -5,17 +5,9 @@ from look_manager import *
 from realsense_person.msg import PersonDetection
 import time
 
-
-last_classification_time = 0
-max_looks_per_second = 10.0
-
 def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None
-    global last_classification_time
-
-    if time.time() - last_classification_time >= 1.0/max_looks_per_second:
-        manager.person_classification_data(data)
-        last_classification_time = time.time()
+    manager.person_classification_data(data)
 
 
 def init_message_listeners(manager):
@@ -51,5 +43,10 @@ if __name__ == '__main__':
     init_message_listeners(manager)
     init_message_publishers(manager)
 
+    rate = rospy.Rate(10)
+
     while not rospy.is_shutdown():
-        manager.publish_transforms()
+        manager.request_commu_look()
+        manager.publish_static_transforms()
+
+        rate.sleep()

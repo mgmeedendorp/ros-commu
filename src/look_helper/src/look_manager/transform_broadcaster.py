@@ -156,14 +156,14 @@ if __name__ == '__main__':
         publish_commu_head_yaw_transform()
 
         try:
-            transform = tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time()) # type: geometry_msgs.msg.TransformStamped
-
-            rospy.loginfo("person transform yay")
-            rospy.loginfo(transform)
+            transform = tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time())  # type: geometry_msgs.msg.TransformStamped
 
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             rate.sleep()
             continue
+
+        rospy.loginfo("person transform yay")
+        rospy.loginfo(transform)
 
 
 

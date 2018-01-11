@@ -1,8 +1,9 @@
 import rospy
+import tf2_ros
 from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommULook
 from util import get_srv_function
-from transform_broadcaster import publish_euclid_transform, publish_commu_head_yaw_transform
+import transform_broadcaster
 import math
 
 
@@ -24,6 +25,9 @@ class LookManager:
         self.r_y = math.radians(r_y)
         self.r_z = math.radians(r_z)
 
+        self.tfBuffer = tf2_ros.Buffer()
+        self.tfListener = tf2_ros.TransformListener(self.tfBuffer)
+
     def person_classification_data(self, data):
         # type: (PersonDetection) -> None
 
@@ -36,29 +40,42 @@ class LookManager:
             y = center_of_mass_world.y
             z = center_of_mass_world.z
 
-            x = -x  # Invert x axis
-            y = -y  # Invert y axis
+            transform_broadcaster.publish_person_transform(x, y, z)
 
-            x *= 1000  # m to mm
-            y *= 1000  # m to mm
-            z *= 1000  # m to mm
+    def publish_static_transforms(self):
+        transform_broadcaster.publish_commu_head_yaw_transform()
+        transform_broadcaster.publish_euclid_transform(self.t_x, self.t_y, self.t_z, self.r_x, self.r_y, self.r_z)
 
-            x, y, z = self.rotate(x, y, z)
+    def request_commu_look(self):
+        try:
+            transform = self.tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time())  # type: geometry_msgs.msg.TransformStamped
 
-            x += self.t_x
-            y += self.t_y
-            z += self.t_z
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+            rospy.loginfo("No transform found between commu_head_yaw and person. This can happen occasionally.")
+            return
 
-            x = int(x)
-            y = int(y)
-            z = int(z)
+        rospy.loginfo("person transform yay")
+        rospy.loginfo(transform)
 
-            commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
+        tx = transform.transform.translation.x
+        ty = transform.transform.translation.y
+        tz = transform.transform.translation.z
 
-            result = commu_look_function(x, y, z)
+        x, y, z = self.convert_ros_to_commu_coords(tx, ty, tz)
 
-    def publish_transforms(self):
-        publish_commu_head_yaw_transform()
-        publish_euclid_transform(self.t_x, self.t_y, self.t_z, self.r_x, self.r_y, self.r_z)
+        commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
+        result = commu_look_function(x, y, z)
+
+        if not result:
+            rospy.logerr("Call to /commu_wrapper/look failed!")
 
 
+    def convert_ros_to_commu_coords(self, x, y, z):
+        x = -x  # Invert x axis
+        y = -y  # Invert y axis
+
+        x *= 1000  # m to mm
+        y *= 1000  # m to mm
+        z *= 1000  # m to mm
+
+        return x, y, z
