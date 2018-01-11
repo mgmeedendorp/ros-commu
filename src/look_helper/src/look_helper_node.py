@@ -46,7 +46,7 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
-        manager.request_commu_look()
         manager.publish_static_transforms()
+        manager.request_commu_look()
 
         rate.sleep()
