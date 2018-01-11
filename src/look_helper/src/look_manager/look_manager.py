@@ -66,6 +66,8 @@ class LookManager:
         commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
         result = commu_look_function(x, y, z)
 
+        rospy.logdebug("Transform between CommU and person: [x: %f, y: %f, z: %f]", x, y, z)
+
         if not result:
             rospy.logerr("Call to /commu_wrapper/look failed!")
 
