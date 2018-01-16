@@ -258,7 +258,7 @@ class DialogueManager:
         """
         return self.topic_history
 
-    def __dummy_callback(self):
+    def __dummy_callback(self, data):
         pass
 
 
