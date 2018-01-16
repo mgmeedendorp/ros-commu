@@ -16,15 +16,12 @@ class CUMHelper():
     def __init__(self,host,port,volume=None,logfile="cumhelper.log"):
         self.__logger = get_filelogger("CUMHELPER-"+str(port),logfile)
 
-        try:
-            self.tcpip = I2CProtocol()
-            self.tcpip.init_connection(host,port)
-        except:
-            self.__logger.error("Fail to initialize tcpip connection")
-            exit()
+        self.tcpip = I2CProtocol()
+        self.tcpip.init_connection(host,port)
+
         if volume != None:
             self.chvolume(volume)
-        self.__logger.info("stanby")
+        self.__logger.info("standby")
         
     def chvolume(self,volume):
         command = "/aitalk-volume " + str(volume)
