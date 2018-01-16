@@ -32,7 +32,7 @@ class Dialogue:
 
         utter(self.current_line.get_utterance())
 
-        response = self.current_line.request_response().get_response()
+        response = self.current_line.request_user_response().get_response()
 
         if self.should_cancel and self.current_line.can_cancel():
             rospy.loginfo("Dialogue cancelled.")
