@@ -62,7 +62,7 @@ if __name__ == '__main__':
     manager = DialogueManager(
         audio_input_device,
         CommUDialogueLibrary(),
-        MitsukuDialogue(audio_input_device)
+        MitsukuDialogue()
     )
     rospy.loginfo("DialogueManager created.")
 
