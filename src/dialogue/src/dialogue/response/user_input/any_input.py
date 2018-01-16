@@ -16,7 +16,7 @@ class AnyInput(AbstractUserInput):
             "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"
         )
 
-        self.livespeech = LiveSpeech(audio_device=audio_input_device, full_utt=True)
+        self.livespeech = LiveSpeech(audio_device=audio_input_device)
 
     def get_response(self):
         # type: () -> str

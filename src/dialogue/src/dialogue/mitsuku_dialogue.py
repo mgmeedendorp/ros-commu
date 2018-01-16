@@ -20,7 +20,7 @@ class MitsukuDialogue(Dialogue):
         """
 
         self.mitsuku = Mitsuku()
-        self.livespeech = LiveSpeech(audio_device=audio_input_device, full_utt=True)
+        self.livespeech = LiveSpeech(audio_device=audio_input_device)
 
         self.should_cancel = False
         self.is_canceled = False

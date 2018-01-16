@@ -101,7 +101,7 @@ There are also 6 other parameters which can't be passed via the launch file. The
   * The rotation around the y-axis of the camera on the ROS coordinate system in degrees.
 - `look_helper/rz` (default: 0):
   * The rotation around the z-axis of the camera on the ROS coordinate system in degrees.
-
+  
 A rotation of 0 on all axes indicates that the camera is facing in the same direction as the CommU.
 
 For more info about the CommU coordinate system, see: [CommU.md#coordinate-system](CommU.md#coordinate-system)

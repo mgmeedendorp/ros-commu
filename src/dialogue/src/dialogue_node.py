@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     manager.start(utter, True)
 
-    rospy.loginfo("Dialogue node started." )
+    rospy.loginfo("Dialogue node started.")
     try:
         rospy.spin()
     except:
