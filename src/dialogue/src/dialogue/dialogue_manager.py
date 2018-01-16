@@ -93,7 +93,7 @@ class DialogueManager:
 
                     self.decrease_current_topic_priority()
 
-                    self.current_dialogue.proceed_dialogue(utter, self.livespeech)
+                    self.current_dialogue.progit ceed_dialogue(utter, self.livespeech)
 
                 rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
