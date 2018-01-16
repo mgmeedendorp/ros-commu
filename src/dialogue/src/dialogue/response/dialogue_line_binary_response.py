@@ -21,8 +21,6 @@ class DialogueLineBinaryResponse(AbstractDialogueLine):
     def get_next_line(self, response):
         # type: (str) -> AbstractDialogueLine
 
-        rospy.loginfo("[DialogueLineBinaryResponse] Heard user input '{}' from speech input.".format(response))
-
         # Didn't hear yes or no, ask again..
         if response == BinarySpeechInput.NOT_RECOGNIZED:
             rospy.loginfo("No 'yes' or 'no' detected. Repeating question.")
