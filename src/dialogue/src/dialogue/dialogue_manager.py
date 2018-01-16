@@ -36,7 +36,7 @@ class DialogueManager:
 
         self.__add_topic_event = threading.Event()
 
-        self.sphinx_thread = PocketSphinxThread(None, audio_device=audio_input_device)
+        self.sphinx_thread = PocketSphinxThread(self.__dummy_callback, audio_device=audio_input_device)
 
         self.sphinx_thread.start()
 
@@ -257,6 +257,9 @@ class DialogueManager:
         :return: All topics talked about in the past and the current topic.
         """
         return self.topic_history
+
+    def __dummy_callback(self):
+        pass
 
 
 class DialogueTopic:
