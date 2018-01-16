@@ -1,5 +1,5 @@
 from abstract_user_input import AbstractUserInput
-
+import rospy
 
 class NoInput(AbstractUserInput):
     """
