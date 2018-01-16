@@ -45,6 +45,8 @@ class DialogueManager:
         """
         self.running = True
 
+        rospy.loginfo("Starting Dialogue Manager in {} mode.".format("threaded" if threaded else "non-threaded"))
+
         rospy.on_shutdown(self.__add_topic_event.set)
 
         if threaded:
