@@ -38,7 +38,6 @@ class DialogueManager:
 
         self.sphinx_thread = PocketSphinxThread(None, audio_device=audio_input_device)
 
-        self.sphinx_thread.pause_listening()
         self.sphinx_thread.start()
 
 
