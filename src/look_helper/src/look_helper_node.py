@@ -50,3 +50,5 @@ if __name__ == '__main__':
         manager.request_commu_look()
 
         rate.sleep()
+
+    rospy.loginfo("Shutting down look_helper node..")
