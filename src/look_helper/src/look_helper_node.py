@@ -18,6 +18,7 @@ def init_message_listeners(manager):
 
     rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
 
+
 def init_message_publishers(manager):
     pass
 
@@ -46,6 +47,7 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
+        rospy.loginfo("look_helper rate tick")
         manager.publish_static_transforms()
         manager.request_commu_look()
 

@@ -63,9 +63,9 @@ class LookManager:
         x, y, z = self.convert_ros_to_commu_coords(tx, ty, tz)
 
         commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
-        result = commu_look_function(x, y, z)
+        success = commu_look_function(x, y, z)
 
-        if not result:
+        if not success:
             rospy.logerr("Call to /commu_wrapper/look failed!")
 
 
