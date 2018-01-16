@@ -20,7 +20,7 @@ class BinarySpeechInput(AbstractUserInput):
 
         str_in = spinx_thread.get_one_utterance()  # type: str
 
-        #rospy.loginfo("[BinarySpeechInput] Heard user input '{}' from speech input.".format(str_in))
+        rospy.loginfo("[BinarySpeechInput] Heard user input '{}' from speech input.".format(str_in))
 
         rospy.loginfo("String representation of variable: " + str(str_in))
 

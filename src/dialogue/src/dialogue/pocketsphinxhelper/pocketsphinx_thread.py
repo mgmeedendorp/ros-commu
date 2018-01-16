@@ -70,7 +70,7 @@ class PocketSphinxThread(threading.Thread):
         return utterance
 
     def __get_one_utterance_callback(self, utterance):
-        self.__get_one_utterance_result = utterance
+        self.__get_one_utterance_result = str(utterance)
         self.__get_one_utterance_done.set()
 
 

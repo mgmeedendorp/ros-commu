@@ -184,7 +184,7 @@ class DialogueManager:
             self.topics[self.topics.index(self.current_topic)].priority = priority
 
             if self.running and self.__get_next_current_topic() != self.current_topic:
-                rospy.loginfo("{} is not the highest priority ({}) topic anymore. Requesting topic switch...".format(self.current_topic, priority))
+                rospy.loginfo("{} is not the highest priority ({}) topic anymore. Requesting topic switch...".format(self.current_topic.label, priority))
                 self.switching_topic = True
 
     def remove_topic(self, topic):
