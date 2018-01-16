@@ -22,7 +22,7 @@ class BinarySpeechInput(AbstractUserInput):
 
         rospy.loginfo("[BinarySpeechInput] Heard user input '{}' from speech input.".format(str_in))
 
-        rospy.loginfo("Type of variable: " + str(type(str_in)))
+        rospy.loginfo("String representation of variable: " + str(str_in))
 
         if 'yes' in str_in:
             return self.BINARY_YES
