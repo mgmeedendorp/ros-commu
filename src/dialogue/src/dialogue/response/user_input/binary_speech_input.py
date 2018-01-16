@@ -26,12 +26,12 @@ class BinarySpeechInput(AbstractUserInput):
         rospy.loginfo("Waiting for user speech input...")
         rospy.loginfo("Say either 'yes' or 'no'.")
 
-        input = self.livespeech.__iter__().next()  # type: str
+        str_in = self.livespeech.__iter__().next()  # type: str
 
-        if 'yes' in input:
+        if 'yes' in str_in:
             return self.BINARY_YES
 
-        if 'no' in input:
+        if 'no' in str_in:
             return self.BINARY_NO
 
         return self.NOT_RECOGNIZED

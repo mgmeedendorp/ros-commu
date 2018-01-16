@@ -1,3 +1,5 @@
+import rospy
+
 from user_input import *
 from abstract_dialogue_line import AbstractDialogueLine
 from dialogue_line_repeat_please import DialogueLineRepeatPlease
@@ -19,12 +21,18 @@ class DialogueLineBinaryResponse(AbstractDialogueLine):
     def get_next_line(self, response):
         # type: (str) -> AbstractDialogueLine
 
+        rospy.loginfo("[DialogueLineBinaryResponse] Heard user input '{}' from speech input.".format(response))
+
         # Didn't hear yes or no, ask again..
         if response == BinarySpeechInput.NOT_RECOGNIZED:
+            rospy.loginfo("No 'yes' or 'no' detected. Repeating question.")
             return DialogueLineRepeatPlease(self)
 
         if response == BinarySpeechInput.BINARY_YES:
+            rospy.loginfo("'yes' detected! Continuing conversation...")
             return self.next_line_yes
+
+        rospy.loginfo("'no' detected! Continuing conversation...")
         return self.next_line_no
 
     def get_utterance(self):
