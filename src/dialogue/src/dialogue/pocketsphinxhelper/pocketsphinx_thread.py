@@ -1,4 +1,4 @@
-from pocketsphinx import LiveSpeech, Decoder
+from pocketsphinx import LiveSpeech
 import threading
 from time import sleep
 #https://github.com/bambocher/pocketsphinx-python
