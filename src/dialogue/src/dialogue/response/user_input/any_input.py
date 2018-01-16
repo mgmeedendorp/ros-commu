@@ -10,19 +10,11 @@ class AnyInput(AbstractUserInput):
     parse the answer of the conversation partner, we simply wait for silence.
     """
 
-    def __init__(self):
-        audio_input_device = rospy.get_param(
-            'dialogue/audio_input_device',
-            "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"
-        )
-
-        self.livespeech = LiveSpeech(audio_device=audio_input_device)
-
-    def get_response(self):
-        # type: () -> str
+    def get_response(self, livespeech):
+        # type: (LiveSpeech) -> str
 
         rospy.loginfo("Waiting for user speech input...")
 
-        self.livespeech.__iter__().next()
+        livespeech.__iter__().next()
 
         return ""

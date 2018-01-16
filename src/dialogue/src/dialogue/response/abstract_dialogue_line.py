@@ -17,7 +17,6 @@ class AbstractDialogueLine:
         raise NotImplementedError
 
     def request_user_response(self):
-        # type: () -> AbstractUserInput
         raise NotImplementedError
 
     def can_cancel(self):

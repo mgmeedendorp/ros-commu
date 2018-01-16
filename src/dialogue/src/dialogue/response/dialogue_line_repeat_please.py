@@ -1,6 +1,6 @@
 from user_input import *
 from abstract_dialogue_line import AbstractDialogueLine
-from typing import ClassVar
+
 
 class DialogueLineRepeatPlease(AbstractDialogueLine):
     """

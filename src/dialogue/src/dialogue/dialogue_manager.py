@@ -1,5 +1,7 @@
 import threading
 from typing import Callable, List
+from pocketsphinx import LiveSpeech
+
 
 import rospy
 
@@ -11,10 +13,11 @@ class DialogueManager:
     A DialogueManager is used to manage Dialogues.
     """
 
-    def __init__(self, dialogue_library, fallback_dialogue):
-        # type: (DialogueLibrary, Dialogue) -> self
+    def __init__(self, audio_input_device, dialogue_library, fallback_dialogue):
+        # type: (str, DialogueLibrary, Dialogue) -> self
         """
         DialogueManager constructor.
+        :param audio_input_device: The device path of the microphone to use for speech input.
         :param dialogue_library: The DialogueLibrary to use to convert topics into Dialogues.
         :param fallback_dialogue: The Dialogue to use when there are no topics left. Usually a chatbot dialogue
             If None, dialogue will stop after running out of topics.
@@ -33,6 +36,9 @@ class DialogueManager:
         self.topic_history = []  # type: List[DialogueTopic]
 
         self.__add_topic_event = threading.Event()
+
+        self.livespeech = LiveSpeech(audio_device=audio_input_device)
+
 
     def start(self, utter, threaded=False):
         # type: (Callable[[str], None], bool) -> None
@@ -87,7 +93,7 @@ class DialogueManager:
 
                     self.decrease_current_topic_priority()
 
-                    self.current_dialogue.proceed_dialogue(utter)
+                    self.current_dialogue.proceed_dialogue(utter, self.livespeech)
 
                 rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
@@ -104,7 +110,7 @@ class DialogueManager:
                         rospy.loginfo("Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
                         self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
-                    self.fallback_dialogue.proceed_dialogue(utter)
+                    self.fallback_dialogue.proceed_dialogue(utter, self.livespeech)
             else:
                 rospy.loginfo("DialogueManager is done talking. Stopping..")
                 self.__cleanup()

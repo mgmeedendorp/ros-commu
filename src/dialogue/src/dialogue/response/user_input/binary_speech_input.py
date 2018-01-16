@@ -9,24 +9,18 @@ class BinarySpeechInput(AbstractUserInput):
     This could be improved by not just recognizing yes or no but performing positive/negative sentiment recognition.
     """
 
-    def __init__(self):
-        audio_input_device = rospy.get_param(
-            'dialogue/audio_input_device',
-            "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"
-        )
-
-        self.livespeech = LiveSpeech(audio_device=audio_input_device)
-
     BINARY_NO = "no"
     BINARY_YES = "yes"
     NOT_RECOGNIZED = "undefined"
 
-    def get_response(self):
-        # type: () -> str
+    def get_response(self, livespeech):
+        # type: (LiveSpeech) -> str
         rospy.loginfo("Waiting for user speech input...")
         rospy.loginfo("Say either 'yes' or 'no'.")
 
-        str_in = self.livespeech.__iter__().next()  # type: str
+        str_in = livespeech.__iter__().next()  # type: str
+
+        rospy.loginfo("[BinarySpeechInput] Heard user input '{}' from speech input.".format(str_in))
 
         if 'yes' in str_in:
             return self.BINARY_YES
