@@ -19,13 +19,9 @@ class PocketSphinxThread(threading.Thread):
         self.listening_callback = callback
 
     def run(self):
-        print "0"
         while not self.stop_requested.isSet():
-            print "1"
             for phrase in self.live_speech:
-                print "2"
                 if not self.pause_listening.isSet() and not self.stop_requested.isSet():
-                    print "3"
                     self.listening_callback(phrase)
                     break
 
@@ -38,6 +34,32 @@ class PocketSphinxThread(threading.Thread):
     def stop_thread(self):
         self.stop_requested.set()
 
+    def is_listening(self):
+        # type: () -> bool
+        return not self.pause_listening.isSet() and not self.stop_requested.isSet()
+
+    def get_one_utterance(self):
+        # type: () -> str
+        """
+        A blocking function to wait for one utterance.
+        :return: The utterance detected by PocketSphinx.
+        """
+
+        was_listening = self.is_listening()
+
+        if was_listening:
+            self.stop_listening()
+
+        utterance = ""
+
+        for phrase in self.live_speech:
+            utterance = phrase
+            break
+
+        if was_listening:
+            self.start_listening()
+
+        return utterance
 
 
 if __name__ == "__main__":

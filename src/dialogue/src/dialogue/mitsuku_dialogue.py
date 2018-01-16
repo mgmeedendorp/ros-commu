@@ -27,13 +27,13 @@ class MitsukuDialogue(Dialogue):
 
         self.previous_user_input = "Hi there!"  # type: str
 
-    def proceed_dialogue(self, utter, live_speech):
-        # type: (Callable[[str], None], LiveSpeech) -> bool
+    def proceed_dialogue(self, utter, sphinx_thread):
+        # type: (Callable[[str], None], PocketSphinxThread) -> bool
         """
         Proceed the dialogue to the next line by saying the next line, waiting for response and moving the pointer to
         current_line depending on the response.
         :param utter: a function that takes a string utterance as argument and makes CommU pronounce it.
-        :param live_speech: a LiveSpeech instance to be used for speech recognition.
+        :param sphinx_thread: a PocketSphinxThread instance to be used for speech recognition.
         :return: Whether the dialogue was proceeded.
         """
         if not self.dialogue_remaining():
@@ -45,7 +45,7 @@ class MitsukuDialogue(Dialogue):
 
         utter(self.mitsuku.getResponse(self.previous_user_input))
 
-        user_input = live_speech.__iter__().next()  # type: str
+        user_input = sphinx_thread.get_one_utterance()  # type: str
 
         self.previous_user_input = user_input
 

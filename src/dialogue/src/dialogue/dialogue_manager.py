@@ -1,7 +1,6 @@
 import threading
 from typing import Callable, List
-from pocketsphinx import LiveSpeech
-
+from pocketsphinxhelper import PocketSphinxThread
 
 import rospy
 
@@ -37,7 +36,10 @@ class DialogueManager:
 
         self.__add_topic_event = threading.Event()
 
-        self.livespeech = LiveSpeech(audio_device=audio_input_device)
+        self.sphinx_thread = PocketSphinxThread(None, audio_device=audio_input_device)
+
+        self.sphinx_thread.pause_listening()
+        self.sphinx_thread.start()
 
 
     def start(self, utter, threaded=False):
@@ -93,7 +95,7 @@ class DialogueManager:
 
                     self.decrease_current_topic_priority()
 
-                    self.current_dialogue.proceed_dialogue(utter, self.livespeech)
+                    self.current_dialogue.proceed_dialogue(utter, self.sphinx_thread)
 
                 rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
@@ -110,7 +112,7 @@ class DialogueManager:
                         rospy.loginfo("Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
                         self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
-                    self.fallback_dialogue.proceed_dialogue(utter, self.livespeech)
+                    self.fallback_dialogue.proceed_dialogue(utter, self.sphinx_thread)
             else:
                 rospy.loginfo("DialogueManager is done talking. Stopping..")
                 self.__cleanup()

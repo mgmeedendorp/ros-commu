@@ -13,12 +13,12 @@ class BinarySpeechInput(AbstractUserInput):
     BINARY_YES = "yes"
     NOT_RECOGNIZED = "undefined"
 
-    def get_response(self, livespeech):
-        # type: (LiveSpeech) -> str
+    def get_response(self, spinx_thread):
+        # type: (PocketSphinxThread) -> str
         rospy.loginfo("Waiting for user speech input...")
         rospy.loginfo("Say either 'yes' or 'no'.")
 
-        str_in = livespeech.__iter__().next()  # type: str
+        str_in = spinx_thread.get_one_utterance()  # type: str
 
         rospy.loginfo("[BinarySpeechInput] Heard user input '{}' from speech input.".format(str_in))
 
