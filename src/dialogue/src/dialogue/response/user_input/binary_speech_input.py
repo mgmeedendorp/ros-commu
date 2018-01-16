@@ -23,7 +23,8 @@ class BinarySpeechInput(AbstractUserInput):
 
     def get_response(self):
         # type: () -> str
-        print("Waiting for user input...")
+        rospy.loginfo("Waiting for user speech input...")
+        rospy.loginfo("Say either 'yes' or 'no'.")
 
         input = self.livespeech.__iter__().next()  # type: str
 

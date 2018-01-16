@@ -7,4 +7,7 @@ class NoInput(AbstractUserInput):
     """
     def get_response(self):
         # type: () -> str
+
+        rospy.loginfo("Continuing conversation, no user input required.")
+
         return ""

@@ -21,6 +21,8 @@ class AnyInput(AbstractUserInput):
     def get_response(self):
         # type: () -> str
 
+        rospy.loginfo("Waiting for user speech input...")
+
         self.livespeech.__iter__().next()
 
         return ""
