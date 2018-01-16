@@ -18,6 +18,9 @@ class PocketSphinxThread(threading.Thread):
         self.stop_requested = threading.Event()
         self.listening_callback = callback
 
+        self.__get_one_utterance_done = threading.Event()
+        self.__get_one_utterance_result = ""
+
     def run(self):
         while not self.stop_requested.isSet():
             for phrase in self.live_speech:
@@ -46,20 +49,29 @@ class PocketSphinxThread(threading.Thread):
         """
 
         was_listening = self.is_listening()
+        previous_listening_callback = self.listening_callback
 
-        if was_listening:
-            self.stop_listening()
+        self.listening_callback = self.__get_one_utterance_callback
 
-        utterance = ""
-
-        for phrase in self.live_speech:
-            utterance = phrase
-            break
-
-        if was_listening:
+        if not was_listening:
             self.start_listening()
 
+        self.__get_one_utterance_done.wait()
+
+        self.listening_callback = previous_listening_callback
+
+        if not was_listening:
+            self.stop_listening()
+
+        self.__get_one_utterance_done.clear()
+
+        utterance = self.__get_one_utterance_result
+
         return utterance
+
+    def __get_one_utterance_callback(self, utterance):
+        self.__get_one_utterance_result = utterance
+        self.__get_one_utterance_done.set()
 
 
 if __name__ == "__main__":
