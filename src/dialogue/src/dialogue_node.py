@@ -39,13 +39,15 @@ def init_message_publishers(manager):
 def utter(utterance):
     utter_srv = get_srv_function('/commu_wrapper/utter', CommUUtter)
 
-    rospy.loginfo("Uttering: " + utterance)
+    rospy.loginfo("Uttering: " + str(utterance))
 
-    success = utter_srv(utterance, True, True)
+    if utterance is not None:
+        success = utter_srv(utterance, True, True)
 
-    rospy.loginfo("Uttering " + ("succeeded" if success else "failed!"))
+        rospy.loginfo("Uttering " + ("succeeded" if success else "failed!"))
 
-    return success
+        return success
+    return True
 
 
 if __name__ == '__main__':
