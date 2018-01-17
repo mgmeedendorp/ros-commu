@@ -1,3 +1,4 @@
+import rospy
 from pocketsphinx import LiveSpeech
 import threading
 from time import sleep
@@ -59,7 +60,11 @@ class PocketSphinxThread(threading.Thread):
         if not was_listening:
             self.start_listening()
 
+        rospy.loginfo("Listening...")
+
         self.__get_one_utterance_done.wait()
+
+        rospy.loginfo("Listening done.")
 
         self.listening_callback = previous_listening_callback
 
@@ -69,6 +74,8 @@ class PocketSphinxThread(threading.Thread):
         self.__get_one_utterance_done.clear()
 
         utterance = self.__get_one_utterance_result
+
+        rospy.loginfo("Utterance: \"{}\"".format(utterance))
 
         return utterance
 
