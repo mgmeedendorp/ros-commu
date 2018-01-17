@@ -21,7 +21,7 @@ class CUMHelper():
 
         if volume != None:
             self.chvolume(volume)
-        self.__logger.info("standby")
+        self.__logger.info("stanby")
         
     def chvolume(self,volume):
         command = "/aitalk-volume " + str(volume)
@@ -47,7 +47,7 @@ class CUMHelper():
             self.__logger.info(command)
 
             if blocking:
-                sleep(len(text) * (1.0/6.5)/3.0 )
+                sleep(len(text) * (1.0/6.5)/3.0 + 1.5)
 
             return True
 
