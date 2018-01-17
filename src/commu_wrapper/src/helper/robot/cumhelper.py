@@ -47,7 +47,7 @@ class CUMHelper():
             self.__logger.info(command)
 
             if blocking:
-                sleep(len(text) * (1.0/6.5)/3.0 + 1.5)
+                sleep(len(text) * (1.0/6.5)/3.0 )
 
             return True
 
