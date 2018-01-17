@@ -103,6 +103,9 @@ class DialogueManager:
             if self.fallback_dialogue is not None and not self.should_interrupt:
                 rospy.loginfo("DialogueManager seems to be done talking. Starting Chatbot conversation...")
 
+                self.fallback_dialogue.is_canceled = False
+                self.fallback_dialogue.should_cancel = False
+
                 while self.fallback_dialogue.dialogue_remaining():
                     if rospy.is_shutdown():
                         return
@@ -112,6 +115,9 @@ class DialogueManager:
                         self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
                     self.fallback_dialogue.proceed_dialogue(utter, self.sphinx_thread)
+
+                rospy.loginfo("The fallback dialogue has run out!") # maybe do something here? it shouldn't happen with mitsuku, but ..
+
             else:
                 rospy.loginfo("DialogueManager is done talking. Stopping..")
                 self.__cleanup()
