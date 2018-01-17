@@ -16,7 +16,10 @@ def classification_result_callback(manager, data):
         count = short_term_history.count(obj.label)
 
         if count <= 0:
-            manager.add_topic(obj.label, 1)
+            if obj.label == "person":
+                manager.add_topic(obj.label, 1)
+            else:
+                manager.add_topic(obj.label, .9)
 
 
 def init_message_listeners(manager):
