@@ -3,7 +3,7 @@ from typing import Callable, List
 from pocketsphinxhelper import PocketSphinxThread
 
 import rospy
-
+import time
 from dialogue import Dialogue
 
 
@@ -70,6 +70,10 @@ class DialogueManager:
         :param utter: The function that can be called to utter a sentence.
         """
         rospy.loginfo("Starting DialogueManager worker...")
+
+        rospy.loginfo("Sleeping DialogueManager worker for 5 seconds...")
+
+        time.sleep(5)
 
         while not self.should_interrupt:
             while len(self.topics) > 0:
