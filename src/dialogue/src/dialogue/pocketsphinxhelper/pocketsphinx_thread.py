@@ -22,11 +22,14 @@ class PocketSphinxThread(threading.Thread):
         self.__get_one_utterance_result = ""
 
     def run(self):
-        while not self.stop_requested.isSet():
-            for phrase in self.live_speech:
-                if not self.pause_listening.isSet() and not self.stop_requested.isSet():
-                    self.listening_callback(phrase)
-                    break
+        for phrase in self.live_speech:
+            if self.stop_requested.isSet():
+                break
+
+            if self.pause_listening.isSet():
+                continue
+
+            self.listening_callback(phrase)
 
     def start_listening(self):
         self.pause_listening.clear()
