@@ -79,5 +79,5 @@ if __name__ == '__main__':
     rospy.loginfo("Dialogue node started.")
     try:
         rospy.spin()
-    except:
+    finally:
         manager.stop(force=True)
