@@ -29,17 +29,35 @@ if __name__ == '__main__':
 
     rospy.loginfo("Creating LookManager..")
 
-    t_x = rospy.get_param('look_helper/tx', 0)
-    t_y = rospy.get_param('look_helper/ty', 0)
-    t_z = rospy.get_param('look_helper/tz', 0)
+    euclid_t_x = rospy.get_param('look_helper/euclid_tx', 0)
+    euclid_t_y = rospy.get_param('look_helper/euclid_ty', 0)
+    euclid_t_z = rospy.get_param('look_helper/euclid_tz', 0)
 
-    r_x = rospy.get_param('look_helper/rx', 0)
-    r_y = rospy.get_param('look_helper/ry', 0)
-    r_z = rospy.get_param('look_helper/rz', 0)
+    euclid_r_x = rospy.get_param('look_helper/euclid_rx', 0)
+    euclid_r_y = rospy.get_param('look_helper/euclid_ry', 0)
+    euclid_r_z = rospy.get_param('look_helper/euclid_rz', 0)
+    
+    webcam_t_x = rospy.get_param('look_helper/webcam_tx', 0)
+    webcam_t_y = rospy.get_param('look_helper/webcam_ty', 0)
+    webcam_t_z = rospy.get_param('look_helper/webcam_tz', 0)
 
-    rospy.loginfo("LookManager initializing with: {tx: %f, ty: %f, tz: %f, rx: %f, ry: %f, rx: %f}", t_x, t_y, t_z, r_x, r_y, r_z)
+    webcam_r_x = rospy.get_param('look_helper/webcam_rx', 0)
+    webcam_r_y = rospy.get_param('look_helper/webcam_ry', 0)
+    webcam_r_z = rospy.get_param('look_helper/webcam_rz', 0)
 
-    manager = LookManager(t_x, t_y, t_z, r_x, r_y, r_z)
+    rospy.loginfo("""LookManager initializing with: {
+    euclid_tx: %f, euclid_ty: %f, euclid_tz: %f, \n 
+    euclid_rx: %f, euclid_ry: %f, euclid_rx: %f, \n
+    webcam_tx: %f, webcam_ty: %f, webcam_tz: %f, \n
+    webcam_rx: %f, webcam_ry: %f, webcam_rx: %f, \n
+    }""", 
+    euclid_t_x, euclid_t_y, euclid_t_z, euclid_r_x, euclid_r_y, euclid_r_z,
+    webcam_t_x, webcam_t_y, webcam_t_z, webcam_r_x, webcam_r_y, webcam_r_z)
+
+    manager = LookManager(
+        euclid_t_x, euclid_t_y, euclid_t_z, euclid_r_x, euclid_r_y, euclid_r_z,
+        webcam_t_x, webcam_t_y, webcam_t_z, webcam_r_x, webcam_r_y, webcam_r_z
+    )
 
     init_message_listeners(manager)
     init_message_publishers(manager)
@@ -47,7 +65,6 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
-        rospy.loginfo("look_helper rate tick")
         manager.publish_static_transforms()
         manager.request_commu_look()
 

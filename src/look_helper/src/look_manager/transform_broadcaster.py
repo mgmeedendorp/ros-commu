@@ -30,6 +30,13 @@ def publish_euclid_transform(tx, ty, tz, rx, ry, rz):
         rx, ry, rz
     )
 
+def publish_webcam_transform(tx, ty, tz, rx, ry, rz):
+    publish_static_transform_euclidean(
+        "commu_link",
+        "webcam",
+        tx, ty, tz,
+        rx, ry, rz
+    )
 
 def publish_commu_head_yaw_transform():
     publish_static_transform_euclidean(
