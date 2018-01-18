@@ -35,7 +35,7 @@ def publish_commu_head_yaw_transform():
     publish_static_transform_euclidean(
         "commu_link",
         "commu_head_yaw",
-        0, 0, .3,
+        0, 0, .2,
         0, 0, 0
     )
 
