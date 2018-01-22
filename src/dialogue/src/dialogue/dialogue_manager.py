@@ -1,6 +1,5 @@
 import threading
 from typing import Callable, List
-from pocketsphinxhelper import PocketSphinxThread
 
 import rospy
 import time
@@ -12,11 +11,10 @@ class DialogueManager:
     A DialogueManager is used to manage Dialogues.
     """
 
-    def __init__(self, audio_input_device, dialogue_library, fallback_dialogue):
-        # type: (str, DialogueLibrary, Dialogue) -> self
+    def __init__(self, dialogue_library, fallback_dialogue=None):
+        # type: (DialogueLibrary, Dialogue) -> self
         """
         DialogueManager constructor.
-        :param audio_input_device: The device path of the microphone to use for speech input.
         :param dialogue_library: The DialogueLibrary to use to convert topics into Dialogues.
         :param fallback_dialogue: The Dialogue to use when there are no topics left. Usually a chatbot dialogue
             If None, dialogue will stop after running out of topics.
@@ -35,10 +33,6 @@ class DialogueManager:
         self.topic_history = []  # type: List[DialogueTopic]
 
         self.__add_topic_event = threading.Event()
-
-        self.sphinx_thread = PocketSphinxThread(self.__dummy_callback, audio_device=audio_input_device)
-
-        self.sphinx_thread.start()
 
 
     def start(self, utter, threaded=False):
@@ -86,7 +80,7 @@ class DialogueManager:
 
                 rospy.loginfo("New topic: {}".format(self.current_topic.label))
 
-                self.topic_history.append(self.current_topic.label)
+                self.topic_history.append(self.current_topic)
 
                 while self.current_dialogue.dialogue_remaining():
                     if rospy.is_shutdown():
@@ -98,7 +92,7 @@ class DialogueManager:
 
                     self.decrease_current_topic_priority()
 
-                    self.current_dialogue.proceed_dialogue(utter, self.sphinx_thread)
+                    self.current_dialogue.proceed_dialogue(utter)
 
                 rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
@@ -118,7 +112,7 @@ class DialogueManager:
                         rospy.loginfo("Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
                         self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
-                    self.fallback_dialogue.proceed_dialogue(utter, self.sphinx_thread)
+                    self.fallback_dialogue.proceed_dialogue(utter)
 
                 rospy.loginfo("The fallback dialogue has run out!") # maybe do something here? it shouldn't happen with mitsuku, but ..
 
@@ -266,7 +260,14 @@ class DialogueManager:
         Get the topic history for this dialogue manager. This contains all topics have been, or are, talked about.
         :return: All topics talked about in the past and the current topic.
         """
-        return self.topic_history
+
+        topic_history_labels = []
+
+        for topic in self.topic_history:
+            topic_history_labels.append(topic.label)
+
+
+        return topic_history_labels
 
     def __dummy_callback(self, data):
         pass

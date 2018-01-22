@@ -59,16 +59,8 @@ if __name__ == '__main__':
 
     rospy.loginfo("Creating DialogueManager..")
 
-    audio_input_device = rospy.get_param(
-        'dialogue/audio_input_device',
-        "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"
-    )
+    manager = DialogueManager(CommUDialogueLibrary())
 
-    manager = DialogueManager(
-        audio_input_device,
-        CommUDialogueLibrary(),
-        MitsukuDialogue()
-    )
     rospy.loginfo("DialogueManager created.")
 
     init_message_listeners(manager)

@@ -28,7 +28,7 @@ bridge = CvBridge()
 publisher = None
 
 
-def publisher():
+def init_publisher():
     global publisher
     publisher = rospy.Publisher('ssd_node/classification_result', ClassifiedObjectArray, queue_size=5)
 
@@ -37,11 +37,11 @@ def callback(data):
     latest_image_data = data
 
 
-def listener():
+def init_listener():
     rospy.Subscriber("/cv_camera/image_raw", Image, callback)
 
     while not rospy.is_shutdown():
-        if (latest_image_data != None):
+        if latest_image_data is not None:
             cv_image = bridge.imgmsg_to_cv2(latest_image_data, "bgr8")
 
             objects = ssd.classify_image(cv_image)
@@ -68,5 +68,5 @@ def listener():
 
 if __name__ == '__main__':
     rospy.init_node('ssd_classifier')
-    publisher()
-    listener()
+    init_publisher()
+    init_listener()

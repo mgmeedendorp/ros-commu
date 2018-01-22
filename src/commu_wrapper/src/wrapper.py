@@ -5,7 +5,7 @@ import rospy
 
 class CommUWrapper:
     def __init__(self, commu_ip="127.0.0.1", commu_port=6019, commu_volume=10, debug_handler=None):
-        # type: (str, int, int, DebugHandler) -> CommUWrapper
+        # type: (str, int, int, DebugHandler) -> None
         """
         Instantiates a new CommUWrapper instance. This wraps all the functions of the CommU Helper python library,
         found under ./helper/.

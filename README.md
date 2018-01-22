@@ -87,9 +87,8 @@ The launch file accepts 8 arguments:
   * The path to the video device to use as input. The video device has to be connected to the GPU-pc. It is also possible to use another camera, by remapping the raw output topic of the camera to `/cv_camera/image_raw`.
 - `euclid` (default: EUCLID_70FD):  
   * The hostname of the Intel Euclid Development Kit device.
--  `audio-input-device` (default: alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono)
-  * The name of the audio input device (microphone) to use as input for the speech recognition.
-  
+
+
 ### Setting camera position parameters
 There are also 12 other parameters which can't be passed via the launch file. These are the Euclid and webcam camera position parameters of the `look_helper` package. The Euclid is used for person detection and the webcam for object classification. The coordinates are required to provide their offsets and rotations from the robot. These parameters are:
 

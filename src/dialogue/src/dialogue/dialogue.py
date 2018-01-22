@@ -1,8 +1,6 @@
 import rospy
 from response import *
 from typing import Callable
-from pocketsphinx import LiveSpeech
-
 
 class Dialogue:
     """
@@ -20,13 +18,12 @@ class Dialogue:
         self.should_cancel = False
         self.is_canceled = False
 
-    def proceed_dialogue(self, utter, sphinx_thread):
-        # type: (Callable[[str], None], PocketSphinxThread) -> bool
+    def proceed_dialogue(self, utter):
+        # type: (Callable[[str], None]) -> bool
         """
         Proceed the dialogue to the next line by saying the next line, waiting for response and moving the pointer to
         current_line depending on the response.
         :param utter: a function that takes a string utterance as argument and makes CommU pronounce it.
-        :param sphinx_thread: a PocketSphinxThread instance to be used for speech recognition.
         :return: Whether the dialogue was proceeded.
         """
         if not self.dialogue_remaining():
@@ -34,7 +31,7 @@ class Dialogue:
 
         utter(self.current_line.get_utterance())
 
-        response = self.current_line.request_user_response().get_response(sphinx_thread)
+        response = self.current_line.request_user_response().get_response()
 
         if self.should_cancel and self.current_line.can_cancel():
             rospy.loginfo("Dialogue cancelled.")

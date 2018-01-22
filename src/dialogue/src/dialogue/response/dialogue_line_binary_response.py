@@ -21,12 +21,7 @@ class DialogueLineBinaryResponse(AbstractDialogueLine):
     def get_next_line(self, response):
         # type: (str) -> AbstractDialogueLine
 
-        # Didn't hear yes or no, ask again..
-        if response == BinarySpeechInput.NOT_RECOGNIZED:
-            rospy.loginfo("No 'yes' or 'no' detected. Repeating question.")
-            return DialogueLineRepeatPlease(self)
-
-        if response == BinarySpeechInput.BINARY_YES:
+        if response == BinaryButtonInput.BINARY_YES:
             rospy.loginfo("'yes' detected! Continuing conversation...")
             return self.next_line_yes
 
@@ -39,7 +34,7 @@ class DialogueLineBinaryResponse(AbstractDialogueLine):
 
     def request_user_response(self):
         # type: () -> AbstractUserInput
-        return BinarySpeechInput()
+        return BinaryButtonInput()
 
     def can_cancel(self):
         return self.cancelable

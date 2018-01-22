@@ -1,4 +1,4 @@
 from abstract_user_input import AbstractUserInput
 from any_input import AnyInput
-from binary_speech_input import BinarySpeechInput
+from binary_button_input import BinaryButtonInput
 from no_input import NoInput

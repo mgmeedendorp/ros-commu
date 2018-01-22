@@ -5,15 +5,13 @@ from pocketsphinx import *
 
 class AnyInput(AbstractUserInput):
     """
-    AnySpeechInput indicates that we want the conversation partner to answer, but since there is no way to
-    parse the answer of the conversation partner, we simply wait for silence.
+    AnySpeechInput indicates that we want the conversation partner to answer, but since there is no voice input, we
+    simply wait for 2 seconds.
     """
 
-    def get_response(self, sphinx_thread):
-        # type: (PocketSphinxThread) -> str
+    def get_response(self):
+        # type: () -> str
 
-        rospy.loginfo("Waiting for user speech input...")
-
-        sphinx_thread.get_one_utterance()
+        sleep(2)
 
         return ""

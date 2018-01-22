@@ -19,7 +19,7 @@ class CUMHelper():
         self.tcpip = I2CProtocol()
         self.tcpip.init_connection(host,port)
 
-        if volume != None:
+        if volume is not None:
             self.chvolume(volume)
         self.__logger.info("stanby")
         

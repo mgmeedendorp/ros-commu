@@ -61,7 +61,7 @@ class SSD:
         #self.transformer.set_channel_swap('data', (2, 1, 0))  # the reference model has channels in BGR order instead of RGB
 
     def get_label_name(self, labels):
-        if (self.labelmap == None):
+        if self.labelmap is None:
             self.load_label_map()
 
         num_labels = len(self.labelmap.item)
