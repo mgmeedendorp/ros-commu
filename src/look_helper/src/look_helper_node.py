@@ -26,6 +26,7 @@ def init_message_listeners(manager):
     def object_callback(data):
         # type: (ClassifiedObjectArray) -> None
         classified_object_callback(manager, data)
+        rospy.logdebug("Received classification results with {} objects.".format(len(data.objects)))
 
     rospy.Subscriber("/ssd_node/classification_result", ClassifiedObjectArray, object_callback)
 
