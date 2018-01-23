@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import math
 import rospy
 
 # to get commandline arguments
@@ -8,9 +9,13 @@ import sys
 import std_msgs
 import tf
 import tf2_ros
+from geometry_msgs.msg import TransformStamped
+from image_geometry import PinholeCameraModel
 from realsense_person.msg import PersonDetection
 import geometry_msgs
 from rospy import Time
+from sensor_msgs.msg import CameraInfo
+from ssd.msg import ClassifiedObject
 
 
 def publish_person_transform(tx, ty, tz):
@@ -33,10 +38,58 @@ def publish_euclid_transform(tx, ty, tz, rx, ry, rz):
 def publish_webcam_transform(tx, ty, tz, rx, ry, rz):
     publish_static_transform_euclidean(
         "commu_link",
-        "webcam",
+        "webcam_frame",
         tx, ty, tz,
         rx, ry, rz
     )
+
+    publish_static_transform_euclidean(
+        "webcam_frame",
+        "webcam_frame_optical",
+        0, 0, 0,
+        math.radians(-90), 0, math.radians(-90)
+    )
+
+
+def publish_object_transform(camera_info, objects, distance_from_camera=0.5):
+    # type: (CameraInfo, list[ClassifiedObject], float, float, float) -> None
+    """
+    This function publishes the 3d transform of a list of ClassifiedObjects by projecting them on a plane that is
+    `distance_from_camera` meters in front of the camera.
+    :param camera_info: The CameraInfo object for the camera used to classify objects.
+    :param objects: The list of ClassifiedObjects for which to publish a transform.
+    :param distance_from_camera: The distance of the plane to project the objects on from the camera.
+    """
+
+    camera = PinholeCameraModel()
+    camera.fromCameraInfo(camera_info)
+
+    index = 0
+
+    for object in objects:
+        obj_center_x = (object.bbox.x_min + object.bbox.x_size / 2.0)
+        obj_center_y = (object.bbox.y_min + object.bbox.y_size / 2.0)
+
+        obj_center_rectified = camera.rectifyPoint((obj_center_x, obj_center_y))
+
+        ray = camera.projectPixelTo3dRay(obj_center_rectified)
+
+        coordinate = ray * distance_from_camera
+
+        publish_dynamic_transform_euclidean(
+            "webcam_frame_optical",
+            "classified_object_{}_{}".format(index, object.label),
+            coordinate[0], coordinate[1], coordinate[2],
+            0, 0, 0
+        )
+
+        index += 1
+
+
+
+
+
+
 
 def publish_commu_head_yaw_transform():
     publish_static_transform_euclidean(
@@ -163,7 +216,7 @@ if __name__ == '__main__':
         publish_commu_head_yaw_transform()
 
         try:
-            transform = tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time(), rospy.Duration(1))  # type: geometry_msgs.msg.TransformStamped
+            transform = tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time(), rospy.Duration(1))  # type: TransformStamped
 
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             rate.sleep()

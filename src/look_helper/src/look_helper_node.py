@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import rospy
+from ssd.msg import ClassifiedObjectArray
+
 from look_manager import *
 from realsense_person.msg import PersonDetection
 import time
@@ -9,6 +11,9 @@ def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None
     manager.person_classification_data(data)
 
+def classified_object_callback(manager, data):
+    # type: (LookManager, ClassifiedObjectArray) -> None
+    manager.classified_object_data(data)
 
 def init_message_listeners(manager):
     # type: (LookManager) -> None
@@ -17,6 +22,12 @@ def init_message_listeners(manager):
         person_classification_callback(manager, data)
 
     rospy.Subscriber("/camera/person/detection_data", PersonDetection, person_callback)
+
+    def object_callback(data):
+        # type: (ClassifiedObjectArray) -> None
+        classified_object_callback(manager, data)
+
+    rospy.Subscriber("/ssd_node/classification_result", ClassifiedObjectArray, object_callback)
 
 
 def init_message_publishers(manager):

@@ -2,6 +2,7 @@ import rospy
 import tf2_ros
 from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommULook
+from ssd.msg import ClassifiedObjectArray
 from util import get_srv_function
 import transform_broadcaster
 import math
@@ -42,6 +43,8 @@ class LookManager:
         self.webcam_r_y = math.radians(webcam_r_y)
         self.webcam_r_z = math.radians(webcam_r_z)
 
+        self.latest_classified_object_data = None  # type: ClassifiedObjectArray
+
         self.tfBuffer = tf2_ros.Buffer()
         self.tfListener = tf2_ros.TransformListener(self.tfBuffer)
 
@@ -58,6 +61,11 @@ class LookManager:
             z = center_of_mass_world.z
 
             transform_broadcaster.publish_person_transform(x, y, z)
+
+    def classified_object_data(self, data):
+        # type: (ClassifiedObjectArray) -> None
+
+        self.latest_classified_object_data = data
 
     def publish_static_transforms(self):
         transform_broadcaster.publish_commu_head_yaw_transform()
@@ -91,6 +99,12 @@ class LookManager:
 
         if not success:
             rospy.logerr("Call to /commu_wrapper/look failed!")
+
+    def publish_classified_objects(self):
+        if self.latest_classified_object_data is not None:
+            data = self.latest_classified_object_data
+
+            transform_broadcaster.publish_object_transform(data.camera_info, data.objects)
 
 
     def convert_ros_to_commu_coords(self, xRos, yRos, zRos):

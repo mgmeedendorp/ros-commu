@@ -7,7 +7,7 @@ import time
 import sys
 
 import skimage
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CameraInfo
 from geometry_msgs.msg import Pose2D
 from ssd.msg import ClassifiedObjectArray, ClassifiedObject, BoundingBox
 import numpy as np
@@ -23,6 +23,7 @@ from cv_bridge import CvBridge, CvBridgeError
 ssd = SSD(use_gpu=False)
 
 latest_image_data = None
+latest_camera_info = None
 bridge = CvBridge()
 
 publisher = None
@@ -32,16 +33,23 @@ def init_publisher():
     global publisher
     publisher = rospy.Publisher('ssd_node/classification_result', ClassifiedObjectArray, queue_size=5)
 
+
 def callback(data):
     global latest_image_data
     latest_image_data = data
 
 
+def camera_info_callback(data):
+    global latest_camera_info
+    latest_camera_info = data
+
+
 def init_listener():
     rospy.Subscriber("/cv_camera/image_raw", Image, callback)
+    rospy.Subscriber("/cv_camera/camera_info", CameraInfo, camera_info_callback)
 
     while not rospy.is_shutdown():
-        if latest_image_data is not None:
+        if latest_image_data is not None and latest_camera_info is not None:
             cv_image = bridge.imgmsg_to_cv2(latest_image_data, "bgr8")
 
             objects = ssd.classify_image(cv_image)
@@ -49,6 +57,7 @@ def init_listener():
             msg = ClassifiedObjectArray()
             msg.objects = []
             msg.image = latest_image_data
+            msg.camera_info = latest_camera_info
 
             for obj in objects:
                 msg.objects.append(obj.to_msg())
