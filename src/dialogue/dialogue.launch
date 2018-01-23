@@ -20,12 +20,9 @@ to specify the offset of the camera relative to the robot. For more information 
     <arg name="debug-mode" default="True" doc="Whether to start the commu_wrapper node in debug mode."/>
     <arg name="classification-topic" default="/ssd_node/classification_result" doc="The topic name of image classification data (only used in debug mode)."/>
     <arg name="euclid" default="EUCLID_70FD" doc="The hostname of the euclid device."/>
-    <arg name="audio-input-device" default="alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono" doc="The microphone device name for speech recognition."/>
 
     <!-- Set parameters for all packages -->
     <param name="/cv_camera/device_path" value="$(arg camera-path)"/>
-
-    <param name="/dialogue/audio_input_device" value="$(arg audio-input-device)"/>
 
     <param name="/commu_wrapper/commu_ip" value="$(arg commu-ip)"/>
     <param name="/commu_wrapper/commu_port" value="$(arg commu-port)"/>
