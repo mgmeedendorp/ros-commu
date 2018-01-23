@@ -74,7 +74,11 @@ def publish_object_transform(camera_info, objects, distance_from_camera=0.5):
 
         ray = camera.projectPixelTo3dRay(obj_center_rectified)
 
-        coordinate = ray * distance_from_camera
+        coordinate = (
+            ray[0] * distance_from_camera,
+            ray[1] * distance_from_camera,
+            ray[2] * distance_from_camera
+        )
 
         publish_dynamic_transform_euclidean(
             "webcam_frame_optical",
@@ -84,11 +88,6 @@ def publish_object_transform(camera_info, objects, distance_from_camera=0.5):
         )
 
         index += 1
-
-
-
-
-
 
 
 def publish_commu_head_yaw_transform():
