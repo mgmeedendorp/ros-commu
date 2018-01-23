@@ -77,6 +77,7 @@ if __name__ == '__main__':
 
     while not rospy.is_shutdown():
         manager.publish_static_transforms()
+        manager.publish_classified_objects()
         manager.request_commu_look()
 
         rate.sleep()
