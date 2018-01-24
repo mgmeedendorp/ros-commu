@@ -124,7 +124,7 @@ class LookManager:
         if self.latest_classified_object_data is not None:
             data = self.latest_classified_object_data
 
-            transform_broadcaster.publish_object_transform(data.camera_info, data.objects)
+            transform_broadcaster.publish_object_transform(data.camera_info, data.objects, 2.0)
 
 
     def convert_ros_to_commu_coords(self, xRos, yRos, zRos):
