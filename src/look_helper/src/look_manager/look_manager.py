@@ -102,11 +102,11 @@ class LookManager:
             ty = transform.transform.translation.y
             tz = transform.transform.translation.z
         else:
-            if random.randint(0, 8) != 0:
+            if random.randint(0, 20) != 0:
                 return
 
             # Look around somewhere
-            tx = 2 + random.random()
+            tx = 1.5 + random.random()
             ty = 0.5 - random.random()
             tz = 0.5 - random.random()
 
