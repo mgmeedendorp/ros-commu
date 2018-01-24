@@ -122,4 +122,4 @@ A rotation of 0 on all axes indicates that the camera is facing in the same dire
 For more info about the CommU coordinate system, see [CommU.md#coordinate-system](CommU.md#coordinate-system)
 For more info about the ROS coordinate system, see [REP 103](http://www.ros.org/reps/rep-0103.html) on the ROS wiki.
   
-Default setup parameters: `{euclid_rx: 0, euclid_ry: -50, euclid_rz: -90, euclid_tx: -0.1, euclid_ty: 0.3, euclid_tz: 0.1}`
+Default setup parameters: `{euclid_rx: 0, euclid_ry: -50, euclid_rz: -90, euclid_tx: -0.1, euclid_ty: 0.3, euclid_tz: 0.1, webcam_tx: 0.1, webcam_ty: -0.1, webcam_tz: 0.15}`

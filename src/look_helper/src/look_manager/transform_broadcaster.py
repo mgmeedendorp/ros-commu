@@ -80,11 +80,6 @@ def publish_object_transform(camera_info, objects, distance_from_camera=0.5):
             ray[2] * distance_from_camera
         )
 
-        rospy.loginfo((obj_center_x, obj_center_y))
-        rospy.loginfo(obj_center_rectified)
-        rospy.loginfo(ray)
-        rospy.loginfo(coordinate)
-
         publish_dynamic_transform_euclidean(
             "webcam_frame_optical",
             "classified_object_{}_{}".format(index, object.label),
