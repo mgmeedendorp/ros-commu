@@ -29,7 +29,7 @@ def look_callback(wrapper):
 
     return look
 
-def init_message_listeners(wrapper):
+def init_service_handlers(wrapper):
     rospy.loginfo("Initializing CommU wrapper node message listener.")
 
     rospy.Service('/commu_wrapper/utter', CommUUtter, utter_callback(wrapper))
@@ -62,6 +62,6 @@ if __name__ == '__main__':
     else:
         wrapper = CommUWrapper(commu_ip, commu_port, commu_volume)
 
-    init_message_listeners(wrapper)
+    init_service_handlers(wrapper)
 
     rospy.spin()

@@ -1,5 +1,6 @@
 import rospy
 import tf2_ros
+from geometry_msgs.msg import TransformStamped
 from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommULook
 from ssd.msg import ClassifiedObjectArray
@@ -48,6 +49,14 @@ class LookManager:
         self.tfBuffer = tf2_ros.Buffer()
         self.tfListener = tf2_ros.TransformListener(self.tfBuffer)
 
+        self.look_at_target = None  # type: str
+
+    def set_look_at_target(self, frame_name):
+        # type: (str) -> bool
+        self.look_at_target = frame_name
+
+        return True
+
     def person_classification_data(self, data):
         # type: (PersonDetection) -> None
 
@@ -79,26 +88,30 @@ class LookManager:
         )
 
     def request_commu_look(self):
-        try:
-            transform = self.tfBuffer.lookup_transform("commu_head_yaw", "person", rospy.Time(), rospy.Duration(1))  # type: geometry_msgs.msg.TransformStamped
+        if self.look_at_target is not None:
+            try:
+                transform = self.tfBuffer.lookup_transform("commu_head_yaw", self.look_at_target, rospy.Time(), rospy.Duration(1))  # type: geometry_msgs.msg.TransformStamped
 
-        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-            rospy.loginfo("No transform found between commu_head_yaw and person. This can happen occasionally.")
-            return
+            except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+                rospy.loginfo("No transform found between commu_head_yaw and person. This can happen occasionally.")
+                return
 
-        rospy.loginfo("person transform yay")
+            rospy.loginfo("person transform yay")
 
-        tx = transform.transform.translation.x
-        ty = transform.transform.translation.y
-        tz = transform.transform.translation.z
+            tx = transform.transform.translation.x
+            ty = transform.transform.translation.y
+            tz = transform.transform.translation.z
 
-        x, y, z = self.convert_ros_to_commu_coords(tx, ty, tz)
+            x, y, z = self.convert_ros_to_commu_coords(tx, ty, tz)
 
-        commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
-        success = commu_look_function(x, y, z)
+            commu_look_function = get_srv_function('/commu_wrapper/look', CommULook)
+            success = commu_look_function(x, y, z)
 
-        if not success:
-            rospy.logerr("Call to /commu_wrapper/look failed!")
+            if not success:
+                rospy.logerr("Call to /commu_wrapper/look failed!")
+        else:
+            #TODO: just look around idly.
+            pass
 
     def publish_classified_objects(self):
         if self.latest_classified_object_data is not None:

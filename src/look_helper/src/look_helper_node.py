@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+from look_helper.srv import SetLookAtTarget, SetLookAtTargetResponse, SetLookAtTargetRequest
 from ssd.msg import ClassifiedObjectArray
 
 from look_manager import *
@@ -17,6 +18,9 @@ def classified_object_callback(manager, data):
 
 def init_message_listeners(manager):
     # type: (LookManager) -> None
+
+    rospy.loginfo("Initializing look_helper node message subscriptions.")
+
     def person_callback(data):
         # type: (PersonDetection) -> None
         person_classification_callback(manager, data)
@@ -32,7 +36,27 @@ def init_message_listeners(manager):
 
 
 def init_message_publishers(manager):
+    # type: (LookManager) -> None
     pass
+
+def set_at_look_target_callback(manager, req):
+    # type: (LookManager, SetLookAtTargetRequest) -> bool
+
+    return manager.set_look_at_target(req.target_frame_name)
+
+def init_service_handlers(manager):
+    # type: (LookManager) -> None
+    rospy.loginfo("Initializing look_helper node service handlers.")
+
+    def set_at_look_target(req):
+        # type: (SetLookAtTargetRequest) -> SetLookAtTargetResponse
+
+        success = set_at_look_target_callback(manager, req)
+
+        return SetLookAtTargetResponse(success)
+
+    rospy.Service('/look_helper/look_target', SetLookAtTarget, set_at_look_target)
+
 
 
 if __name__ == '__main__':
@@ -73,6 +97,7 @@ if __name__ == '__main__':
 
     init_message_listeners(manager)
     init_message_publishers(manager)
+    init_service_handlers(manager)
 
     rate = rospy.Rate(10)
 

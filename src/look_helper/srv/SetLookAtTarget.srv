@@ -1,8 +1,9 @@
 # This service makes the Sota look a the specified the target transform.
 
-geometry_msgs/TransformStamped target
+# The name of the tf frame to look at.
+str target_frame_name
 
 ---
 
-#Whether the look operation was received by the CommU.
+# Whether the request succeeded.
 bool success
