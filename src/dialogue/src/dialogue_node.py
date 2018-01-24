@@ -68,5 +68,5 @@ if __name__ == '__main__':
 
     try:
         manager.start(utter, False)
-    finally:
-        manager.stop(force=True)
+    except:
+        rospy.loginfo("DialogueManager stopped.")
