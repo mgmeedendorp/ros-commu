@@ -46,7 +46,7 @@ class DialogueManager:
 
         rospy.loginfo("Starting Dialogue Manager in {} mode.".format("threaded" if threaded else "non-threaded"))
 
-        rospy.on_shutdown(self.stop(force=True))
+        rospy.on_shutdown(self.force_stop)
 
         if threaded:
             thread = threading.Thread(target=self.__start_worker(utter))
@@ -116,6 +116,9 @@ class DialogueManager:
 
             else:
                 rospy.loginfo("DialogueManager is done talking")
+
+    def force_stop(self):
+        self.stop(True)
 
     def stop(self, force=False):
         # type: () -> None
