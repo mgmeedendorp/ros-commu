@@ -32,8 +32,6 @@ class DialogueManager:
 
         self.topic_history = []  # type: List[DialogueTopic]
 
-        self.__add_topic_event = threading.Event()
-
 
     def start(self, utter, threaded=False):
         # type: (Callable[[str], None], bool) -> None
@@ -48,7 +46,7 @@ class DialogueManager:
 
         rospy.loginfo("Starting Dialogue Manager in {} mode.".format("threaded" if threaded else "non-threaded"))
 
-        rospy.on_shutdown(self.__add_topic_event.set)
+        rospy.on_shutdown(self.stop(force=True))
 
         if threaded:
             thread = threading.Thread(target=self.__start_worker(utter))
@@ -83,7 +81,7 @@ class DialogueManager:
                 self.topic_history.append(self.current_topic)
 
                 while self.current_dialogue.dialogue_remaining():
-                    if rospy.is_shutdown():
+                    if self.should_interrupt:
                         return
 
                     if self.switching_topic or self.should_interrupt:
@@ -117,8 +115,7 @@ class DialogueManager:
                 rospy.loginfo("The fallback dialogue has run out!") # maybe do something here? it shouldn't happen with mitsuku, but ..
 
             else:
-                rospy.loginfo("DialogueManager is done talking. Stopping..")
-                self.__cleanup()
+                rospy.loginfo("DialogueManager is done talking")
 
     def stop(self, force=False):
         # type: () -> None
@@ -168,8 +165,6 @@ class DialogueManager:
         if self.running and self.__get_next_current_topic() == t:
             rospy.loginfo("{} is the highest priority ({}) topic. Requesting topic switch...".format(topic, priority))
             self.switching_topic = True
-
-        self.__add_topic_event.set()
 
     def decrease_current_topic_priority(self):
         """
