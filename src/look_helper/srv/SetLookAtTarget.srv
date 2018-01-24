@@ -1,7 +1,7 @@
 # This service makes the Sota look a the specified the target transform.
 
 # The name of the tf frame to look at.
-str target_frame_name
+string target_frame_name
 
 ---
 
