@@ -103,9 +103,11 @@ class LookManager:
             tz = transform.transform.translation.z
         else:
             # Look around somewhere
-            tx = 0.5 - random.random()
+            tx = 2 + random.random()
             ty = 0.5 - random.random()
             tz = 0.5 - random.random()
+
+            rospy.loginfo("Looking around randomly.")
 
         x, y, z = self.convert_ros_to_commu_coords(tx, ty, tz)
 
