@@ -66,10 +66,8 @@ if __name__ == '__main__':
     init_message_listeners(manager)
     init_message_publishers(manager)
 
-    manager.start(utter, True)
+    manager.start(utter, False)
 
     rospy.loginfo("Dialogue node started.")
-
-    rospy.spin()
 
     manager.stop(force=True)

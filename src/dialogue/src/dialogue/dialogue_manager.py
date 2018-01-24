@@ -32,7 +32,6 @@ class DialogueManager:
 
         self.topic_history = []  # type: List[DialogueTopic]
 
-
     def start(self, utter, threaded=False):
         # type: (Callable[[str], None], bool) -> None
         """
