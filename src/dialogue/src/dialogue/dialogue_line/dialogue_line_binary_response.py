@@ -2,7 +2,6 @@ import rospy
 
 from user_input import *
 from abstract_dialogue_line import AbstractDialogueLine
-from dialogue_line_repeat_please import DialogueLineRepeatPlease
 
 
 class DialogueLineBinaryResponse(AbstractDialogueLine):
