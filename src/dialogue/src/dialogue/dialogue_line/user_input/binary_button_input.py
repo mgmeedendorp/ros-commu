@@ -18,9 +18,11 @@ class BinaryButtonInput(AbstractUserInput):
         # type: () -> str
 
         while True:
-            key = rospy.wait_for_message('/keyboard/keydown', Key)
+            key = rospy.wait_for_message('/keyboard/keydown', Key) # type: Key
 
-            if key == Key.KEY_y:
+            rospy.loginfo("Key {} pressed.".format(key.code))
+
+            if key.code == Key.KEY_y:
                 return self.BINARY_YES
-            if key == Key.KEY_n:
+            if key.code == Key.KEY_n:
                 return self.BINARY_NO
