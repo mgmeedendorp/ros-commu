@@ -4,5 +4,9 @@
 	branch = ssd
 [submodule "src/cv_camera"]
 	path = src/cv_camera
-	url = https://github.com/OTL/cv_camera
+	url = https://github.com/OTL/cv_camera.git
 	branch = master
+[submodule "ros-keyboard"]
+	path = ros-keyboard
+	url = https://github.com/lrse/ros-keyboard.git
+    branch = master
