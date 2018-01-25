@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+import sys
 from ssd.msg import ClassifiedObjectArray
 from commu_wrapper.srv import CommUUtter
 from dialogue.dialogue_definition_quiz_objects import DialogueLibraryQuiz
@@ -70,4 +71,6 @@ if __name__ == '__main__':
     try:
         manager.start(utter, False)
     except:
-        rospy.loginfo("DialogueManager stopped.")
+        e = sys.exc_info()[0]
+        rospy.loginfo("DialogueManager stopped because of an error.")
+        rospy.loginfo(e)

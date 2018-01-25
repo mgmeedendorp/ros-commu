@@ -27,6 +27,7 @@ class DialogueManager:
         self.running = False
         self.switching_topic = False
         self.should_interrupt = False
+        self.new_topic_found = threading.Event()
 
         self.fallback_dialogue = fallback_dialogue
 
@@ -67,54 +68,63 @@ class DialogueManager:
         time.sleep(5)
 
         while not self.should_interrupt:
-            while len(self.topics) > 0:
-                rospy.loginfo("Selecting new topic to talk about..")
+            self.__talk(utter)
 
-                self.current_topic = self.__get_next_current_topic()
-                self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic.label)
+            self.__talk_fallback(utter)
 
-                self.switching_topic = False
 
-                rospy.loginfo("New topic: {}".format(self.current_topic.label))
+    def __talk(self, utter):
+        while len(self.topics) > 0:
+            rospy.loginfo("Selecting new topic to talk about..")
 
-                self.topic_history.append(self.current_topic)
+            self.current_topic = self.__get_next_current_topic()
+            self.current_dialogue = self.dialogue_library.get_dialogue_for_topic(self.current_topic.label)
 
-                while self.current_dialogue.dialogue_remaining():
-                    if self.should_interrupt:
-                        return
+            self.switching_topic = False
 
-                    if self.switching_topic or self.should_interrupt:
-                        rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic.label))
-                        self.current_dialogue.cancel_dialogue(self.__get_next_current_topic())
+            rospy.loginfo("New topic: {}".format(self.current_topic.label))
 
-                    self.decrease_current_topic_priority()
+            self.topic_history.append(self.current_topic)
 
-                    self.current_dialogue.proceed_dialogue(utter, self.current_topic)
+            while self.current_dialogue.dialogue_remaining():
+                if self.should_interrupt:
+                    return
 
-                rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
+                if self.switching_topic or self.should_interrupt:
+                    rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic.label))
+                    self.current_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
-                self.__delete_topic(self.current_topic)
+                self.decrease_current_topic_priority()
 
-            if self.fallback_dialogue is not None and not self.should_interrupt:
-                rospy.loginfo("DialogueManager seems to be done talking. Starting Chatbot conversation...")
+                self.current_dialogue.proceed_dialogue(utter, self.current_topic)
 
-                self.fallback_dialogue.is_canceled = False
-                self.fallback_dialogue.should_cancel = False
+            rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
-                while self.fallback_dialogue.dialogue_remaining():
-                    if rospy.is_shutdown():
-                        return
+            self.__delete_topic(self.current_topic)
 
-                    if self.switching_topic or self.should_interrupt:
-                        rospy.loginfo("Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
-                        self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
+    def __talk_fallback(self, utter):
+        if self.fallback_dialogue is not None and not self.should_interrupt:
+            rospy.loginfo("DialogueManager seems to be done talking. Starting Chatbot conversation...")
 
-                    self.fallback_dialogue.proceed_dialogue(utter)
+            self.fallback_dialogue.is_canceled = False
+            self.fallback_dialogue.should_cancel = False
 
-                rospy.loginfo("The fallback dialogue has run out!") # maybe do something here? it shouldn't happen with mitsuku, but ..
+            while self.fallback_dialogue.dialogue_remaining():
+                if rospy.is_shutdown():
+                    return
 
-            else:
-                rospy.loginfo("DialogueManager is done talking")
+                if self.switching_topic or self.should_interrupt:
+                    rospy.loginfo(
+                        "Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
+                    self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
+
+                self.fallback_dialogue.proceed_dialogue(utter)
+
+            rospy.loginfo(
+                "The fallback dialogue has run out!")  # maybe do something here? it shouldn't happen with mitsuku, but ..
+
+        else:
+            rospy.loginfo("DialogueManager is done talking. Waiting for new subjects.")
 
     def force_stop(self):
         self.stop(True)
