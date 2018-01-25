@@ -91,6 +91,8 @@ class LookManager:
 
     def request_commu_look(self):
         if self.target_frame_name is not None:
+            rospy.loginfo("Looking for transform to {}.".format(self.target_frame_name))
+
             try:
                 transform = self.tfBuffer.lookup_transform("commu_head_yaw", self.target_frame_name, rospy.Time(), rospy.Duration(1))  # type: geometry_msgs.msg.TransformStamped
 
