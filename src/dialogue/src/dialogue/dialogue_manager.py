@@ -67,10 +67,13 @@ class DialogueManager:
 
         time.sleep(5)
 
+        rate = rospy.Rate(2)
+
         while not self.should_interrupt:
             self.__talk(utter)
 
             self.__talk_fallback(utter)
+            rate.sleep()
 
 
     def __talk(self, utter):
