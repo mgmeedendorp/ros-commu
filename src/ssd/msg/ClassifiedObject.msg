@@ -7,5 +7,8 @@ float64 score
 # The label attached to this object
 string label
 
+# The id of this object. This is only unique for one classification forom one image.
+string id
+
 # The bounding box for the classified object
 BoundingBox bbox

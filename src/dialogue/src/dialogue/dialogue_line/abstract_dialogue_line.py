@@ -26,3 +26,12 @@ class AbstractDialogueLine:
         :return: Whether the dialogue can be cancelled after this line.
         """
         raise NotImplementedError
+
+    def get_look_target(self, tf_talking_about):
+        # type: (str) -> str
+        """
+        What the robot should look at while uttering this dialogue line.
+        :param: The name of the tf_frame of the object that prompted this dialogue.
+        :return: The name of a tf frame that the robot should be looking at. None for the default action of looking around.
+        """
+        raise NotImplementedError

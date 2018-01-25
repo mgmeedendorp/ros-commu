@@ -3,7 +3,8 @@
 import rospy
 from ssd.msg import ClassifiedObjectArray
 from commu_wrapper.srv import CommUUtter
-from dialogue import *
+from dialogue.dialogue_definition_quiz_objects import DialogueLibraryQuiz
+from dialogue.dialogue_manager import DialogueManager
 from util import get_srv_function
 
 
@@ -17,9 +18,9 @@ def classification_result_callback(manager, data):
 
         if count <= 0:
             if obj.label == "person":
-                manager.add_topic(obj.label, 1)
+                manager.add_topic(obj.label, "person", 1)
             else:
-                manager.add_topic(obj.label, .9)
+                manager.add_topic(obj.label, obj.id, .9)
 
 
 def init_message_listeners(manager):
@@ -59,7 +60,7 @@ if __name__ == '__main__':
 
     rospy.loginfo("Creating DialogueManager..")
 
-    manager = DialogueManager(CommUDialogueLibrary())
+    manager = DialogueManager(DialogueLibraryQuiz())
 
     rospy.loginfo("DialogueManager created.")
 

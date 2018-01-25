@@ -12,7 +12,6 @@ from util import time_usage
 from std_msgs.msg import Header
 import rospy
 
-
 class SSD:
     caffe_root = '/home/maurice/catkin_ws/src/ssd/caffe/'
     input_resolution = []
@@ -26,7 +25,7 @@ class SSD:
         os.chdir(self.caffe_root)
         sys.path.insert(0, 'python')
 
-        if (use_gpu):
+        if use_gpu:
             caffe.set_mode_gpu()
             caffe.set_device(0)
         else:
@@ -147,7 +146,8 @@ class ClassificationResult:
     def get_height(self):
         return self.ymax - self.ymin
 
-    def to_msg(self):
+    def to_msg(self, index):
+        # type: (int) -> ClassifiedObject
         msg = ClassifiedObject()
 
         msg.header = Header()
@@ -161,6 +161,7 @@ class ClassificationResult:
 
         msg.label = self.label_name
         msg.score = self.score
+        msg.id = "classified_object_{}_{}".format(self.label_name, index)
 
         return msg
 

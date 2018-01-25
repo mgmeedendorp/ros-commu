@@ -64,8 +64,6 @@ def publish_object_transform(camera_info, objects, distance_from_camera=0.5):
     camera = PinholeCameraModel()
     camera.fromCameraInfo(camera_info)
 
-    index = 0
-
     for object in objects:
         obj_center_x = (object.bbox.x_min + object.bbox.x_size / 2.0)
         obj_center_y = (object.bbox.y_min + object.bbox.y_size / 2.0)
@@ -82,12 +80,10 @@ def publish_object_transform(camera_info, objects, distance_from_camera=0.5):
 
         publish_dynamic_transform_euclidean(
             "webcam_frame_optical",
-            "classified_object_{}_{}".format(index, object.label),
+            object.id,
             coordinate[0], coordinate[1], coordinate[2],
             0, 0, 0
         )
-
-        index += 1
 
 
 def publish_commu_head_yaw_transform():

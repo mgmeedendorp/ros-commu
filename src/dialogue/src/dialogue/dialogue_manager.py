@@ -57,7 +57,7 @@ class DialogueManager:
     def __start_worker(self, utter):
         # type: (Callable[str, None]) -> None
         """
-        The worker function for start(). This is a seperate function to ease threading.
+        The worker function for start(). This is a separate function to ease threading.
         :param utter: The function that can be called to utter a sentence.
         """
         rospy.loginfo("Starting DialogueManager worker...")
@@ -89,7 +89,7 @@ class DialogueManager:
 
                     self.decrease_current_topic_priority()
 
-                    self.current_dialogue.proceed_dialogue(utter)
+                    self.current_dialogue.proceed_dialogue(utter, self.current_topic)
 
                 rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
@@ -146,15 +146,16 @@ class DialogueManager:
         self.current_topic = None
         self.running = False
 
-    def add_topic(self, topic, priority):
-        # type: (str, float) -> None
+    def add_topic(self, topic, topic_id, priority):
+        # type: (str, str, float) -> None
         """
         Add a topic with a priority to the DialogueManager. This can be called before or
         after starting the start method.
         :param topic: The topic to add.
+        :param topic_id: The id of the topic.
         :param priority: The priority of the topic.
         """
-        t = DialogueTopic(priority, topic)
+        t = DialogueTopic(priority, topic_id, topic)
 
         if self.has_topic(topic):
             rospy.logdebug("Trying to add {} to the topics, but a topic with that label already exists! Skipping..".format(topic))
@@ -271,9 +272,10 @@ class DialogueManager:
 
 
 class DialogueTopic:
-    def __init__(self, priority, label):
+    def __init__(self, priority, topic_id, label):
         # type: (float, str) -> self
         self.label = label
+        self.topic_id = topic_id
         self.priority = priority
 
 

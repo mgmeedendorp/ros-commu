@@ -1,6 +1,10 @@
 import rospy
-from response import *
+from look_helper.srv import SetLookAtTarget
 from typing import Callable
+
+from dialogue_line import AbstractDialogueLine
+from dialogue_manager import DialogueTopic
+
 
 class Dialogue:
     """
@@ -18,8 +22,8 @@ class Dialogue:
         self.should_cancel = False
         self.is_canceled = False
 
-    def proceed_dialogue(self, utter):
-        # type: (Callable[[str], None]) -> bool
+    def proceed_dialogue(self, utter, tf_talking_about=None):
+        # type: (Callable[[str], None], DialogueTopic) -> bool
         """
         Proceed the dialogue to the next line by saying the next line, waiting for response and moving the pointer to
         current_line depending on the response.
@@ -28,6 +32,10 @@ class Dialogue:
         """
         if not self.dialogue_remaining():
             return False
+
+        look_target = self.current_line.get_look_target(tf_talking_about)
+
+        self.set_look_target(look_target)
 
         utter(self.current_line.get_utterance())
 
@@ -67,3 +75,18 @@ class Dialogue:
         rospy.loginfo("Dialogue cancel requested.")
 
         self.should_cancel = True
+
+    def set_look_target(self, target_tf_name):
+        # type: (str) -> bool
+        """
+        This function calls the look_helper/look_target service, to change the object the robot looks at.
+        :param target_tf_name:
+        :return:
+        """
+        rospy.wait_for_service('look_helper/look_target')
+        try:
+            set_look_at_target = rospy.ServiceProxy('look_helper/look_target', SetLookAtTarget)
+            success = set_look_at_target(target_tf_name)
+            return success
+        except rospy.ServiceException, e:
+            print "Service call failed: %s" % e

@@ -20,7 +20,7 @@ from util import image_to_opencv, draw_bounding_boxes, display_opencv_image, sav
 from cv_bridge import CvBridge, CvBridgeError
 
 
-ssd = SSD(use_gpu=False)
+ssd = SSD(use_gpu=True)
 
 latest_image_data = None
 latest_camera_info = None
@@ -52,15 +52,21 @@ def init_listener():
         if latest_image_data is not None and latest_camera_info is not None:
             cv_image = bridge.imgmsg_to_cv2(latest_image_data, "bgr8")
 
-            objects = ssd.classify_image(cv_image)
+            objects = ssd.classify_image(cv_image)  # type: list[ClassificationResult]
 
             msg = ClassifiedObjectArray()
             msg.objects = []
             msg.image = latest_image_data
             msg.camera_info = latest_camera_info
 
+            obj_count = {}
+
             for obj in objects:
-                msg.objects.append(obj.to_msg())
+                count = obj_count.get(obj.label_name, 0)
+
+                msg.objects.append(obj.to_msg(count))
+
+                obj_count[obj.label_name] = count + 1
 
             publisher.publish(msg)
 

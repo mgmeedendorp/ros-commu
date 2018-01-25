@@ -1,6 +1,7 @@
 from dialogue import DialogueLineNoResponse, Dialogue, DialogueLineBinaryResponse, DialogueLineAnyResponse
 from dialogue_manager import DialogueLibrary
 
+
 class CommUDialogueLibrary(DialogueLibrary):
     """
     A DialogueLibrary that can be used when a CommU robot sees an object.
