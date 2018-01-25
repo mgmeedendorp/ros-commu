@@ -28,7 +28,7 @@ class SSD:
 
         if (use_gpu):
             caffe.set_mode_gpu()
-            caffe.set_device(0)  # TODO: No multiple GPU cores?
+            caffe.set_device(0)
         else:
             caffe.set_mode_cpu()
 
@@ -80,6 +80,10 @@ class SSD:
 
     @time_usage
     def classify_image(self, cv_image, min_confidence=0.6):
+        # set net to batch size of 1
+        # image_resize = 300
+        self.net.blobs['data'].reshape(1, 3, 300, 300)
+
         transformed_image = self.transformer.preprocess('data', cv_image)
         self.net.blobs['data'].data[...] = transformed_image
 
