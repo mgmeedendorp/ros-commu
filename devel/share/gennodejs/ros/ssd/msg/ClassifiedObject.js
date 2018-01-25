@@ -23,6 +23,7 @@ class ClassifiedObject {
       this.header = null;
       this.score = null;
       this.label = null;
+      this.id = null;
       this.bbox = null;
     }
     else {
@@ -44,6 +45,12 @@ class ClassifiedObject {
       else {
         this.label = '';
       }
+      if (initObj.hasOwnProperty('id')) {
+        this.id = initObj.id
+      }
+      else {
+        this.id = '';
+      }
       if (initObj.hasOwnProperty('bbox')) {
         this.bbox = initObj.bbox
       }
@@ -61,6 +68,8 @@ class ClassifiedObject {
     bufferOffset = _serializer.float64(obj.score, buffer, bufferOffset);
     // Serialize message field [label]
     bufferOffset = _serializer.string(obj.label, buffer, bufferOffset);
+    // Serialize message field [id]
+    bufferOffset = _serializer.string(obj.id, buffer, bufferOffset);
     // Serialize message field [bbox]
     bufferOffset = BoundingBox.serialize(obj.bbox, buffer, bufferOffset);
     return bufferOffset;
@@ -76,6 +85,8 @@ class ClassifiedObject {
     data.score = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [label]
     data.label = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [id]
+    data.id = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [bbox]
     data.bbox = BoundingBox.deserialize(buffer, bufferOffset);
     return data;
@@ -85,7 +96,8 @@ class ClassifiedObject {
     let length = 0;
     length += std_msgs.msg.Header.getMessageSize(object.header);
     length += object.label.length;
-    return length + 44;
+    length += object.id.length;
+    return length + 48;
   }
 
   static datatype() {
@@ -95,7 +107,7 @@ class ClassifiedObject {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '0b067c6fde340b0853980c4c9045f0cd';
+    return 'fb5442e2046a6d60a459f1e47ecae020';
   }
 
   static messageDefinition() {
@@ -109,6 +121,9 @@ class ClassifiedObject {
     
     # The label attached to this object
     string label
+    
+    # The id of this object. This is only unique for one classification forom one image.
+    string id
     
     # The bounding box for the classified object
     BoundingBox bbox
@@ -166,6 +181,13 @@ class ClassifiedObject {
     }
     else {
       resolved.label = ''
+    }
+
+    if (msg.id !== undefined) {
+      resolved.id = msg.id;
+    }
+    else {
+      resolved.id = ''
     }
 
     if (msg.bbox !== undefined) {

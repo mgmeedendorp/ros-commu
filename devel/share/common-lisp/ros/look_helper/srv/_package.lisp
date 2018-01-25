@@ -1,0 +1,10 @@
+(cl:defpackage look_helper-srv
+  (:use )
+  (:export
+   "SETLOOKATTARGET"
+   "<SETLOOKATTARGET-REQUEST>"
+   "SETLOOKATTARGET-REQUEST"
+   "<SETLOOKATTARGET-RESPONSE>"
+   "SETLOOKATTARGET-RESPONSE"
+  ))
+

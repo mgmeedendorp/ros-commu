@@ -40,7 +40,7 @@ template<>
 struct MD5Sum< ::commu_wrapper::CommULook > {
   static const char* value()
   {
-    return "f140a05a390d4967a567a474c5dfde3f";
+    return "586b9328c974a82a91e07618b791be94";
   }
 
   static const char* value(const ::commu_wrapper::CommULook&) { return value(); }
