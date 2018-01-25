@@ -22,7 +22,7 @@ class Dialogue:
         self.is_canceled = False
 
     def proceed_dialogue(self, utter, tf_talking_about=None):
-        # type: (Callable[[str], None], DialogueTopic) -> bool
+        # type: (Callable[[str], None], str) -> bool
         """
         Proceed the dialogue to the next line by saying the next line, waiting for response and moving the pointer to
         current_line depending on the response.

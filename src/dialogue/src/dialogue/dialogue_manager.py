@@ -96,7 +96,7 @@ class DialogueManager:
 
                 self.decrease_current_topic_priority()
 
-                self.current_dialogue.proceed_dialogue(utter, self.current_topic)
+                self.current_dialogue.proceed_dialogue(utter, self.current_topic.topic_id)
 
             rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
@@ -118,7 +118,7 @@ class DialogueManager:
                         "Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
                     self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
-                self.fallback_dialogue.proceed_dialogue(utter)
+                self.fallback_dialogue.proceed_dialogue(utter, self.current_topic.topic_id)
 
             rospy.loginfo(
                 "The fallback dialogue has run out!")  # maybe do something here? it shouldn't happen with mitsuku, but ..
