@@ -3,7 +3,6 @@ from look_helper.srv import SetLookAtTarget
 from typing import Callable
 
 from dialogue_line import AbstractDialogueLine
-from dialogue_manager import DialogueTopic
 
 
 class Dialogue:
