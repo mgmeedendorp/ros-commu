@@ -41,6 +41,6 @@ to specify the offset of the camera relative to the robot. For more information 
     <node name="commu_wrapper_node" pkg="commu_wrapper" type="commu_wrapper_node.py"/>
     <node name="look_helper_node" pkg="look_helper" type="look_helper_node.py" machine="euclid"/>
     <node name="dialogue_node" pkg="dialogue" type="dialogue_node.py"/>
-    <node name="keyboard" pkg="keyboard" type="keyboard"/>
+    <node name="ros-keyboard" pkg="keyboard" type="keyboard"/>
 
 </launch>
