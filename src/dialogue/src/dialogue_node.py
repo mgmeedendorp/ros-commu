@@ -18,7 +18,7 @@ def classification_result_callback(manager, data):
 
         if count <= 0:
             if obj.label == "person":
-                manager.add_topic(obj.label, "person", 1)
+                manager.add_topic(obj.label, obj.id, 1)
             else:
                 manager.add_topic(obj.label, obj.id, .9)
 

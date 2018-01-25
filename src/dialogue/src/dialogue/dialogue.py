@@ -84,6 +84,7 @@ class Dialogue:
         """
         rospy.wait_for_service('look_helper/look_target')
         try:
+            rospy.loginfo("Setting look target to {}.".format(target_tf_name))
             set_look_at_target = rospy.ServiceProxy('look_helper/look_target', SetLookAtTarget)
             success = set_look_at_target(target_tf_name)
             return success

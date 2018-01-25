@@ -42,9 +42,9 @@ class DialogueLibraryQuiz(DialogueLibrary):
         # type: (str) -> str
 
         if noun[0].lower() in ['a', 'e', 'i', 'o', 'u']:
-            return 'an' + noun
+            return 'an ' + noun
         else:
-            return 'a' + noun
+            return 'a ' + noun
 
     def __get_object_noun(self, label):
         return self.object_proper_name_map.get(label, label)
