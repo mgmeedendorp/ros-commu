@@ -90,7 +90,7 @@ class LookManager:
         )
 
     def request_commu_look(self):
-        if self.target_frame_name is not None:
+        if self.target_frame_name is not None and self.target_frame_name is not "":
             rospy.loginfo("Looking for transform to {}.".format(self.target_frame_name))
 
             try:
