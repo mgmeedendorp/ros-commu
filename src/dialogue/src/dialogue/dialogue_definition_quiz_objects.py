@@ -53,7 +53,7 @@ class DialogueLibraryQuiz(DialogueLibrary):
         'aeroplane': 'airplane',
         'diningtable': 'dining table',
         'pottedplant': 'potted plant',
-        'monitor': 'screen'
+        'tvmonitor': 'screen'
     }
 
     positive_response_list = [
