@@ -5,6 +5,8 @@
           SCORE
           LABEL-VAL
           LABEL
+          ID-VAL
+          ID
           BBOX-VAL
           BBOX
 ))

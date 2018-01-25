@@ -161,7 +161,7 @@ namespace serialization
       stream.next(m.success);
     }
 
-    ROS_DECLARE_ALLINONE_SERIALIZER
+    ROS_DECLARE_ALLINONE_SERIALIZER;
   }; // struct CommULookResponse_
 
 } // namespace serialization

@@ -29,12 +29,14 @@ struct ClassifiedObject_
     : header()
     , score(0.0)
     , label()
+    , id()
     , bbox()  {
     }
   ClassifiedObject_(const ContainerAllocator& _alloc)
     : header(_alloc)
     , score(0.0)
     , label(_alloc)
+    , id(_alloc)
     , bbox(_alloc)  {
   (void)_alloc;
     }
@@ -49,6 +51,9 @@ struct ClassifiedObject_
 
    typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _label_type;
   _label_type label;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _id_type;
+  _id_type id;
 
    typedef  ::ssd::BoundingBox_<ContainerAllocator>  _bbox_type;
   _bbox_type bbox;
@@ -87,7 +92,7 @@ namespace message_traits
 
 
 // BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': True}
-// {'sensor_msgs': ['/opt/ros/kinetic/share/sensor_msgs/cmake/../msg'], 'ssd': ['/home/maurice/catkin_ws/src/ssd/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'geometry_msgs': ['/opt/ros/kinetic/share/geometry_msgs/cmake/../msg']}
+// {'sensor_msgs': ['/opt/ros/kinetic/share/sensor_msgs/cmake/../msg'], 'ssd': ['/home/euclid/catkin_ws/src/ssd/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'geometry_msgs': ['/opt/ros/kinetic/share/geometry_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
 
@@ -130,12 +135,12 @@ struct MD5Sum< ::ssd::ClassifiedObject_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "0b067c6fde340b0853980c4c9045f0cd";
+    return "fb5442e2046a6d60a459f1e47ecae020";
   }
 
   static const char* value(const ::ssd::ClassifiedObject_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x0b067c6fde340b08ULL;
-  static const uint64_t static_value2 = 0x53980c4c9045f0cdULL;
+  static const uint64_t static_value1 = 0xfb5442e2046a6d60ULL;
+  static const uint64_t static_value2 = 0xa459f1e47ecae020ULL;
 };
 
 template<class ContainerAllocator>
@@ -162,6 +167,9 @@ float64 score\n\
 \n\
 # The label attached to this object\n\
 string label\n\
+\n\
+# The id of this object. This is only unique for one classification forom one image.\n\
+string id\n\
 \n\
 # The bounding box for the classified object\n\
 BoundingBox bbox\n\
@@ -212,10 +220,11 @@ namespace serialization
       stream.next(m.header);
       stream.next(m.score);
       stream.next(m.label);
+      stream.next(m.id);
       stream.next(m.bbox);
     }
 
-    ROS_DECLARE_ALLINONE_SERIALIZER
+    ROS_DECLARE_ALLINONE_SERIALIZER;
   }; // struct ClassifiedObject_
 
 } // namespace serialization
@@ -238,6 +247,8 @@ struct Printer< ::ssd::ClassifiedObject_<ContainerAllocator> >
     Printer<double>::stream(s, indent + "  ", v.score);
     s << indent << "label: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.label);
+    s << indent << "id: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.id);
     s << indent << "bbox: ";
     s << std::endl;
     Printer< ::ssd::BoundingBox_<ContainerAllocator> >::stream(s, indent + "  ", v.bbox);

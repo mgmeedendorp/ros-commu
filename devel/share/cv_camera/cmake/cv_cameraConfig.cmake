@@ -67,14 +67,14 @@ set(cv_camera_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(cv_camera_SOURCE_PREFIX /home/maurice/catkin_ws/src/cv_camera)
-  set(cv_camera_DEVEL_PREFIX /home/maurice/catkin_ws/devel)
+  set(cv_camera_SOURCE_PREFIX /home/euclid/catkin_ws/src/cv_camera)
+  set(cv_camera_DEVEL_PREFIX /home/euclid/catkin_ws/devel)
   set(cv_camera_INSTALL_PREFIX "")
   set(cv_camera_PREFIX ${cv_camera_DEVEL_PREFIX})
 else()
   set(cv_camera_SOURCE_PREFIX "")
   set(cv_camera_DEVEL_PREFIX "")
-  set(cv_camera_INSTALL_PREFIX /home/maurice/catkin_ws/install)
+  set(cv_camera_INSTALL_PREFIX /home/euclid/catkin_ws/install)
   set(cv_camera_PREFIX ${cv_camera_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(cv_camera_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/maurice/catkin_ws/src/cv_camera/include;/opt/ros/kinetic/include/opencv-3.2.0-dev;/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv " STREQUAL " ")
+if(NOT "/home/euclid/catkin_ws/src/cv_camera/include;/opt/ros/kinetic/include/opencv-3.2.0;/opt/ros/kinetic/include/opencv-3.2.0/opencv " STREQUAL " ")
   set(cv_camera_INCLUDE_DIRS "")
-  set(_include_dirs "/home/maurice/catkin_ws/src/cv_camera/include;/opt/ros/kinetic/include/opencv-3.2.0-dev;/opt/ros/kinetic/include/opencv-3.2.0-dev/opencv")
+  set(_include_dirs "/home/euclid/catkin_ws/src/cv_camera/include;/opt/ros/kinetic/include/opencv-3.2.0;/opt/ros/kinetic/include/opencv-3.2.0/opencv")
   foreach(idir ${_include_dirs})
     if(IS_ABSOLUTE ${idir} AND IS_DIRECTORY ${idir})
       set(include ${idir})
@@ -103,7 +103,7 @@ if(NOT "/home/maurice/catkin_ws/src/cv_camera/include;/opt/ros/kinetic/include/o
         message(FATAL_ERROR "Project 'cv_camera' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  Ask the maintainer 'Takashi Ogura <t.ogura@gmail.com>' to fix it.")
       endif()
     else()
-      message(FATAL_ERROR "Project 'cv_camera' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/maurice/catkin_ws/src/cv_camera/${idir}'.  Ask the maintainer 'Takashi Ogura <t.ogura@gmail.com>' to fix it.")
+      message(FATAL_ERROR "Project 'cv_camera' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/euclid/catkin_ws/src/cv_camera/${idir}'.  Ask the maintainer 'Takashi Ogura <t.ogura@gmail.com>' to fix it.")
     endif()
     _list_append_unique(cv_camera_INCLUDE_DIRS ${include})
   endforeach()
@@ -122,7 +122,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/maurice/catkin_ws/devel/lib;/home/maurice/catkin_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/euclid/catkin_ws/devel/lib;/home/euclid/catkin_ws/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
