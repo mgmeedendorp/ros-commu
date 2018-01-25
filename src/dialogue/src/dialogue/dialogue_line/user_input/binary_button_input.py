@@ -1,3 +1,5 @@
+from keyboard.msg import Key
+
 from abstract_user_input import AbstractUserInput
 from pocketsphinx import *
 import rospy
@@ -15,6 +17,10 @@ class BinaryButtonInput(AbstractUserInput):
     def get_response(self):
         # type: () -> str
 
-        #TODO: Make this listen to a button
+        while True:
+            key = rospy.wait_for_message('/keyboard/keydown', Key)
 
-        return self.BINARY_NO
+            if key == Key.KEY_y:
+                return self.BINARY_YES
+            if key == Key.KEY_n:
+                return self.BINARY_NO
