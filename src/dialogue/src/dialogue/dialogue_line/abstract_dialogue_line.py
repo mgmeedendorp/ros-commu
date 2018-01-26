@@ -28,10 +28,13 @@ class AbstractDialogueLine:
         raise NotImplementedError
 
     def get_look_target(self, tf_talking_about):
-        # type: (str) -> str
+        # type: (str) -> (str, int)
         """
         What the robot should look at while uttering this dialogue line.
         :param: The name of the tf_frame of the object that prompted this dialogue.
-        :return: The name of a tf frame that the robot should be looking at. None for the default action of looking around.
+        :return: A tuple with the name of a tf frame that the robot should be looking at and the time that should be
+            spent looking at this object.
+            The default value for the tf frame name is None for the default action of looking around.
+            The default value for the time is 0 in seconds
         """
         raise NotImplementedError
