@@ -1,5 +1,6 @@
 from dialogue_action import *
-from __init__ import *
+from dialogue import Dialogue
+from dialogue_manager import DialogueLibrary
 
 
 class DialogueLibraryTalk(DialogueLibrary):
