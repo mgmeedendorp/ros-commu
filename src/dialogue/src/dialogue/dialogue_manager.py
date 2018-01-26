@@ -27,7 +27,6 @@ class DialogueManager:
         self.running = False
         self.switching_topic = False
         self.should_interrupt = False
-        self.new_topic_found = threading.Event()
 
         self.fallback_dialogue = fallback_dialogue
 
@@ -73,8 +72,8 @@ class DialogueManager:
             self.__talk(utter)
 
             self.__talk_fallback(utter)
-            rate.sleep()
 
+            rate.sleep()
 
     def __talk(self, utter):
         while len(self.topics) > 0:

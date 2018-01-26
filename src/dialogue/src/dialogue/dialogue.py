@@ -1,4 +1,5 @@
 import rospy
+import time
 from look_helper.srv import SetLookAtTarget
 from typing import Callable
 
@@ -32,7 +33,9 @@ class Dialogue:
         if not self.dialogue_remaining():
             return False
 
-        look_target = self.current_line.get_look_target(tf_talking_about)
+        look_target, look_time = self.current_line.get_look_target(tf_talking_about)
+
+        wait_until_time = time.time() + look_time
 
         self.set_look_target(look_target)
 
@@ -43,6 +46,9 @@ class Dialogue:
         if self.should_cancel and self.current_line.can_cancel():
             rospy.loginfo("Dialogue cancelled.")
             self.is_canceled = True
+
+        while time.time() < wait_until_time:
+            time.sleep(.5)
 
         self.current_line = self.current_line.get_next_line(response)
 

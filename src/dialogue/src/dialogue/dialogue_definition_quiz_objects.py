@@ -31,9 +31,12 @@ class DialogueLibraryQuiz(DialogueLibrary):
                     random.choice(self.negative_response_list),
                     cancelable=True,
                     next_line=None,
-                    look_at_conversation_object=True
+                    look_at_conversation_object=True,
+                    look_at_object_time=10
                 ),
-                look_at_conversation_object=False,
+                look_at_conversation_object=True,
+                look_at_object_frame="person",
+                look_at_object_time=5
             )
         )
 
