@@ -28,11 +28,13 @@ class AbstractDialogueActionTalk(AbstractDialogueAction):
         raise NotImplementedError
 
     @staticmethod
-    def utter(utterance):
-        # type: (str) -> bool
+    def utter(utterance, blocking=True, english=True):
+        # type: (str, bool, bool) -> bool
         """
         Call the CommUUtter service to make the CommU/Sota utter the specified utterance.
         :param utterance: The string to utter.
+        :param blocking: Whether to block the thread until saying is finished.
+        :param english: Pronounce the string in English (true) or Japanese (false)
         :return: Whether the robot received the utterance successfully.
         """
         service_name = '/commu_wrapper/utter'
@@ -45,7 +47,7 @@ class AbstractDialogueActionTalk(AbstractDialogueAction):
             rospy.loginfo("Uttering: " + str(utterance))
 
             if utterance is not None:
-                success = utter_srv(utterance, True, True)
+                success = utter_srv(utterance, blocking, english)
 
                 rospy.loginfo("Uttering " + ("succeeded" if success else "failed!"))
 

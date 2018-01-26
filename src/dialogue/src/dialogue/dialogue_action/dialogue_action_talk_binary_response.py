@@ -26,7 +26,9 @@ class DialogueActionTalkBinaryResponse(AbstractDialogueActionTalk):
         :param tf: The name of the tf2_ros transform of the object that is currently being talked about.
         :return: The next action in the Dialogue. Return None when there is no next action.
         """
-        AbstractDialogueActionTalk.utter(self.utterance)
+        AbstractDialogueActionTalk.utter(self.utterance, blocking=False)
+
+        rospy.loginfo("Waiting for either 'y' or 'n' to be pressed on the keyboard...")
 
         while True:
             key = rospy.wait_for_message('/keyboard/keydown', Key) # type: Key
