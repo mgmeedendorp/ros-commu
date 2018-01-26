@@ -42,6 +42,8 @@ def init_message_publishers(manager):
 def set_at_look_target_callback(manager, req):
     # type: (LookManager, SetLookAtTargetRequest) -> bool
 
+    rospy.loginfo("Received service call to change look_target to '{}'.".format(req.target_frame_name))
+
     return manager.set_look_at_target(req.target_frame_name)
 
 def init_service_handlers(manager):
