@@ -1,6 +1,6 @@
 import time
 
-from __init__ import *
+from abstract_dialogue_action import AbstractDialogueAction
 from typing import Union
 
 

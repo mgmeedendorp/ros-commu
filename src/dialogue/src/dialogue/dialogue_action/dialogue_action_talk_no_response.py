@@ -1,6 +1,7 @@
 from typing import Union
 
-from __init__ import *
+from abstract_dialogue_action import AbstractDialogueAction
+from abstract_dialogue_action_talk import AbstractDialogueActionTalk
 
 
 class DialogueActionTalkNoResponse(AbstractDialogueActionTalk):

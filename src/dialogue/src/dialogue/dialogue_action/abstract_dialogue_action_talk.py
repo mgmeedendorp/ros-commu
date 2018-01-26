@@ -1,7 +1,7 @@
 import rospy
 from commu_wrapper.srv import CommUUtter
 
-from __init__ import *
+from abstract_dialogue_action import AbstractDialogueAction
 
 
 class AbstractDialogueActionTalk(AbstractDialogueAction):

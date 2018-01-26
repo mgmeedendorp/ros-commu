@@ -2,7 +2,7 @@ import rospy
 from look_helper.srv import SetLookAtTarget
 from typing import Union
 
-from __init__ import *
+from abstract_dialogue_action import AbstractDialogueAction
 
 
 class DialogueActionLook(AbstractDialogueAction):
