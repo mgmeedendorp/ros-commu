@@ -1,56 +1,41 @@
 import rospy
-import time
-from look_helper.srv import SetLookAtTarget
-from typing import Callable
 
-from dialogue_line import AbstractDialogueLine
+from dialogue_action import *
 
 
 class Dialogue:
     """
     A Dialogue represents a conversation between CommU and a human as seen from CommU. The conversation structure is
-    defined by an AbstractDialogueLine.
+    defined by an AbstractDialogueAction.
     """
 
     def __init__(self, dialogue_root):
-        # type: (AbstractDialogueLine) -> None
+        # type: (AbstractDialogueAction) -> None
         """
-        :param dialogue_root: The first line of the conversation.
+        :param dialogue_root: The first action of the conversation.
         """
         self.dialogue_root = dialogue_root
-        self.current_line = dialogue_root
+        self.current_action = dialogue_root
         self.should_cancel = False
         self.is_canceled = False
 
-    def proceed_dialogue(self, utter, tf_talking_about=None):
-        # type: (Callable[[str], None], str) -> bool
+    def proceed_dialogue(self, tf_talking_about=None):
+        # type: (str) -> bool
         """
-        Proceed the dialogue to the next line by saying the next line, waiting for response and moving the pointer to
-        current_line depending on the response.
-        :param utter: a function that takes a string utterance as argument and makes CommU pronounce it.
+        Proceed the dialogue to the next action.
+        :param tf_talking_about: The transform that is being talked about. None if this does not apply.
         :return: Whether the dialogue was proceeded.
         """
         if not self.dialogue_remaining():
             return False
 
-        look_target, look_time = self.current_line.get_look_target(tf_talking_about)
+        next_action = self.current_action.run(tf_talking_about)
 
-        wait_until_time = time.time() + look_time
-
-        self.set_look_target(look_target)
-
-        utter(self.current_line.get_utterance())
-
-        response = self.current_line.request_user_response().get_response()
-
-        if self.should_cancel and self.current_line.can_cancel():
+        if self.should_cancel and self.current_action.can_cancel():
             rospy.loginfo("Dialogue cancelled.")
             self.is_canceled = True
 
-        while time.time() < wait_until_time:
-            time.sleep(.5)
-
-        self.current_line = self.current_line.get_next_line(response)
+        self.current_action = next_action
 
         return True
 
@@ -58,16 +43,16 @@ class Dialogue:
         # type: () -> bool
         """
         Checks whether the dialogue is finished.
-        :return: Whether there is a next line in the dialogue.
+        :return: Whether there is a next action in the dialogue.
         """
-        return self.current_line is not None and not self.is_canceled
+        return self.current_action is not None and not self.is_canceled
 
     def reset_dialogue(self):
         # type: () -> None
         """
         Restarts the dialogue from the start.
         """
-        self.current_line = self.dialogue_root
+        self.current_action = self.dialogue_root
         self.should_cancel = False
         self.is_canceled = False
 
@@ -80,19 +65,3 @@ class Dialogue:
         rospy.loginfo("Dialogue cancel requested.")
 
         self.should_cancel = True
-
-    def set_look_target(self, target_tf_name):
-        # type: (str) -> bool
-        """
-        This function calls the look_helper/look_target service, to change the object the robot looks at.
-        :param target_tf_name:
-        :return:
-        """
-        rospy.wait_for_service('look_helper/look_target')
-        try:
-            rospy.loginfo("Setting look target to {}.".format(target_tf_name))
-            set_look_at_target = rospy.ServiceProxy('look_helper/look_target', SetLookAtTarget)
-            success = set_look_at_target(target_tf_name)
-            return success
-        except rospy.ServiceException, e:
-            print "Service call failed: %s" % e

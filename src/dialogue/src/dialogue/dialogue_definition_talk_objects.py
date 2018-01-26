@@ -1,8 +1,8 @@
-from dialogue import DialogueLineNoResponse, Dialogue, DialogueLineBinaryResponse, DialogueLineAnyResponse
-from dialogue_manager import DialogueLibrary
+from dialogue_action import *
+from __init__ import *
 
 
-class CommUDialogueLibrary(DialogueLibrary):
+class DialogueLibraryTalk(DialogueLibrary):
     """
     A DialogueLibrary that can be used when a CommU robot sees an object.
     """
@@ -14,104 +14,268 @@ class CommUDialogueLibrary(DialogueLibrary):
         :param topic:   The label assigned by the ssd network
         :return:        The pre-scripted Dialogue concerning the object.
         """
-        return Dialogue(CommUDialogueLibrary.dialogue_map[topic])
+        return Dialogue(DialogueLibraryTalk.dialogue_map[topic])
 
     dialogue_map = {
         'aeroplane': None,
         'bicycle':
-            DialogueLineNoResponse("Hey, a bike!", True,
-                DialogueLineNoResponse("I wonder where he's going.", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "Hey, a bike!",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "I wonder where he's going.",
+                    cancelable  = True,
+                    next_action = None
+                )
             ),
         'bird':
-            DialogueLineAnyResponse("Do you know what kind of bird that is?", False,
-                DialogueLineNoResponse("Huh, interesting.", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "Do you know what kind of bird that is?",
+                cancelable  = False,
+                next_action = DialogueActionSleep(
+                    sleep_time  = 3,
+                    cancelable  = False,
+                    next_action = DialogueActionTalkNoResponse(
+                        utterance   = "Huh, interesting.",
+                        cancelable  = True,
+                        next_action = None
+                    )
+                )
             ),
         'boat':
-            DialogueLineNoResponse("I didn't think I would see a boat around here.", True,
-                DialogueLineNoResponse("What a coincidence.", True, None)
+            DialogueActionLook(
+                look_type   = DialogueActionLook.LOOK_TYPE_WATCH_CONVERSATION_PARTNER,
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "I didn't think I would see a boat around here.",
+                    cancelable  = True,
+                    next_action = DialogueActionTalkNoResponse(
+                        utterance   = "What a coincidence.",
+                        cancelable  = True,
+                        next_action = None
+                    )
+                ),
             ),
         'bottle':
-            DialogueLineAnyResponse("What are you drinking?", False,
-                DialogueLineNoResponse("That sounds tasty", True,
-                    DialogueLineBinaryResponse("Do you like orange juice?", False,
-                        next_line_yes= DialogueLineNoResponse("That's nice! Me too!", True, None),
-                        next_line_no = DialogueLineNoResponse("That's a shame. I like it a lot", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "What are you drinking?",
+                cancelable  = False,
+                next_action =  DialogueActionSleep(
+                    sleep_time  = 2,
+                    cancelable  = False,
+                    next_action = DialogueActionTalkNoResponse(
+                        utterance   = "That sounds tasty",
+                        cancelable  = True,
+                        next_action = DialogueActionTalkBinaryResponse(
+                            utterance       = "Do you like orange juice?",
+                            cancelable      = False,
+                            next_action_yes = DialogueActionTalkNoResponse(
+                                utterance   = "That's nice! Me too!",
+                                cancelable  = True,
+                                next_action = None
+                            ),
+                            next_action_no  = DialogueActionTalkNoResponse(
+                                utterance   = "That's a shame. I like it a lot",
+                                cancelable  = True,
+                                next_action = None
+                            )
+                        )
                     )
                 )
             ),
         'bus':
-            DialogueLineNoResponse("I wonder where that bus is going.", True,
-                DialogueLineAnyResponse("Do you know where it's going?", False,
-                    DialogueLineNoResponse("Cool, I'd like to go there too!", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "I wonder where that bus is going.",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "Do you know where it's going?",
+                    cancelable  = False,
+                    next_action = DialogueActionSleep(
+                        sleep_time  = 2,
+                        cancelable  = False,
+                        next_action = DialogueActionTalkNoResponse(
+                            utterance   = "Cool, I'd like to go there too!",
+                            cancelable  = True,
+                            next_action = None
+                        )
+                    )
                 )
             ),
         'car':
-            DialogueLineNoResponse("Nice car!", True, None),
+            DialogueActionTalkNoResponse(
+                utterance   = "Nice car!",
+                cancelable  = True,
+                next_action = None
+            ),
         'cat':
-            DialogueLineNoResponse("I see you have a cat", True,
-                DialogueLineNoResponse("I love cats!", True,
-                    DialogueLineNoResponse("I especially like black cats", True,
-                        DialogueLineBinaryResponse("Do you like cats too?", False,
-                            next_line_yes= DialogueLineNoResponse("Good!", True, None),
-                            next_line_no=  DialogueLineNoResponse("That's a shame", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "I see you have a cat",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "I love cats!",
+                    cancelable  = True,
+                    next_action = DialogueActionTalkNoResponse(
+                        utterance   = "I especially like black cats",
+                        cancelable  = True,
+                        next_action = DialogueActionTalkBinaryResponse(
+                            utterance     = "Do you like cats too?",
+                            cancelable    = False,
+                            next_action_yes = DialogueActionTalkNoResponse(
+                                utterance   = "Good!",
+                                cancelable  = True,
+                                next_action = None
+                            ),
+                            next_action_no  = DialogueActionTalkNoResponse(
+                                utterance   = "That's a shame",
+                                cancelable  = True,
+                                next_action = None
+                            )
                         )
                     )
                 )
             ),
         'chair':
-            DialogueLineNoResponse("That's a nice chair.", True,
-                DialogueLineNoResponse("I've always liked that kind of chair", True,
-                    DialogueLineBinaryResponse("Do you like it?", False,
-                        next_line_yes = DialogueLineNoResponse("That's nice", True, None),
-                        next_line_no = DialogueLineNoResponse("I still think it's cool", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "That's a nice chair.",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "I've always liked that kind of chair",
+                    cancelable  = True,
+                    next_action = DialogueActionTalkBinaryResponse(
+                        utterance       = "Do you like it?",
+                        cancelable      = False,
+                        next_action_yes = DialogueActionTalkNoResponse(
+                            utterance   = "That's nice",
+                            cancelable  = True,
+                            next_action = None
+                        ),
+                        next_action_no  = DialogueActionTalkNoResponse(
+                            utterance   = "I still think it's cool",
+                            cancelable  = True,
+                            next_action = None
+                        )
                     )
                 )
             ),
         'cow': None,
         'diningtable':
-            DialogueLineBinaryResponse("I see you have a table. Do you like it?", False,
-                next_line_yes = DialogueLineNoResponse("Yeah, me too!", True, None),
-                next_line_no = DialogueLineNoResponse("I think it seems somewhat inconvenient as well", True, None)
+            DialogueActionTalkBinaryResponse(
+                utterance       = "I see you have a table. Do you like it?",
+                cancelable      = False,
+                next_action_yes = DialogueActionTalkNoResponse(
+                    utterance   = "Yeah, me too!",
+                    cancelable  = True,
+                    next_action = None
+                ),
+                next_action_no  = DialogueActionTalkNoResponse(
+                    utterance   = "I think it seems somewhat inconvenient as well",
+                    cancelable  = True,
+                    next_action = None
+                )
             ),
         'dog':
-            DialogueLineNoResponse("That's a nice dog!", True,
-                DialogueLineNoResponse("Can I pet it?", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "That's a nice dog!",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "Can I pet it?",
+                    cancelable  = True,
+                    next_action = None
+                )
             ),
         'horse': None,
         'motorbike':
-            DialogueLineNoResponse("Motorbikes look so cool!", True,
-                DialogueLineNoResponse("They're way too scary for me though!", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "Motorbikes look so cool!",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "They're way too scary for me though!",
+                    cancelable  = True,
+                    next_action = None
+                )
             ),
         'person':
-            DialogueLineNoResponse("Hey there, nice to meet you!", True,
-                DialogueLineAnyResponse("Can I ask you a question?", False,
-                    DialogueLineBinaryResponse("Have you ever talked to a robot before?", False,
-                        next_line_yes = DialogueLineAnyResponse("Cool, what was his name?", False,
-                            DialogueLineNoResponse("I met him yesterday, he's such a nice person!", True,
-                                DialogueLineNoResponse("Let's have a chat.", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "Hey there, nice to meet you!",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "Can I ask you a question?",
+                    cancelable  = False,
+                    next_action = DialogueActionSleep(
+                        sleep_time  = 2,
+                        cancelable  = False,
+                        next_action = DialogueActionTalkBinaryResponse(
+                            utterance     = "Have you ever talked to a robot before?",
+                            cancelable    = False,
+                            next_action_yes = DialogueActionTalkNoResponse(
+                                utterance   = "Cool, what was his name?",
+                                cancelable  = False,
+                                next_action = DialogueActionTalkNoResponse(
+                                    utterance   = "I met him yesterday, he's such a nice person!",
+                                    cancelable  = True,
+                                    next_action = DialogueActionTalkNoResponse(
+                                        utterance   = "Let's have a chat.",
+                                        cancelable  = True,
+                                        next_action = None
+                                    )
+                                )
+                            ),
+                            next_action_no  = DialogueActionTalkNoResponse(
+                                utterance   = "Well, there's a first time for everything.",
+                                cancelable  = True,
+                                next_action = DialogueActionTalkNoResponse(
+                                    utterance   = "Let's have a chat.",
+                                    cancelable  = True,
+                                    next_action = None
+                                )
                             )
                         ),
-                        next_line_no  = DialogueLineNoResponse("Well, there's a first time for everything.", True,
-                            DialogueLineNoResponse("Let's have a chat.", True, None)
-                        )
                     )
                 )
             ),
         'pottedplant':
-            DialogueLineNoResponse("Nice plant you have there", True,
-                DialogueLineNoResponse("I like it a lot", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "Nice plant you have there",
+                cancelable  = True,
+                next_action = DialogueActionTalkNoResponse(
+                    utterance   = "I like it a lot",
+                    cancelable  = True,
+                    next_action = None
+                )
             ),
         'sheep': None,
         'sofa':
-            DialogueLineNoResponse("I love sofas!", True,
-                DialogueLineBinaryResponse("Did you know that sofas can also be used to sleep on?", False,
-                    next_line_yes = DialogueLineNoResponse("I won't be able to tell you anything new today then.", True, None),
-                    next_line_no  = DialogueLineNoResponse("You learn something new every day.", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "I love sofas!",
+                cancelable  = True,
+                next_action = DialogueActionTalkBinaryResponse(
+                    utterance       = "Did you know that sofas can also be used to sleep on?",
+                    cancelable      = False,
+                    next_action_yes = DialogueActionTalkNoResponse(
+                        utterance   = "I won't be able to tell you anything new today then.",
+                        cancelable  = True,
+                        next_action = None
+                    ),
+                    next_action_no  = DialogueActionTalkNoResponse(
+                        utterance   = "You learn something new every day.",
+                        cancelable  = True,
+                        next_action = None
+                    )
                 )
             ),
         'train': None,
         'tvmonitor':
-            DialogueLineAnyResponse("What are you using that screen over there for?", False,
-                DialogueLineNoResponse("Cool, I like to do that too.", True, None)
+            DialogueActionTalkNoResponse(
+                utterance   = "What are you using that screen over there for?",
+                cancelable  = False,
+                next_action = DialogueActionSleep(
+                    sleep_time  = 2,
+                    cancelable  = False,
+                    next_action = DialogueActionTalkNoResponse(
+                        utterance   = "Cool, I like to do that too.",
+                        cancelable  = True,
+                        next_action = None
+                    )
+                )
             ),
     }

@@ -1,8 +1,7 @@
 import random
 
-from dialogue_line import DialogueLineNoResponse, DialogueLineBinaryResponse, DialogueLineAnyResponse
-from dialogue_manager import DialogueLibrary
-from dialogue import Dialogue
+from dialogue_action import *
+from __init__ import *
 
 
 class DialogueLibraryQuiz(DialogueLibrary):
@@ -19,27 +18,43 @@ class DialogueLibraryQuiz(DialogueLibrary):
         """
 
         return Dialogue(
-            DialogueLineBinaryResponse(
-                "Do you also see {}?".format(self.__add_a_to_noun(self.__get_object_noun(topic))),
+            DialogueActionLook(
+                look_type=DialogueActionLook.LOOK_TYPE_WATCH_CONVERSATION_PARTNER,
                 cancelable=False,
-                next_line_yes=DialogueLineNoResponse(
-                    random.choice(self.positive_response_list),
-                    cancelable=True,
-                    next_line=None
-                ),
-                next_line_no=DialogueLineNoResponse(
-                    random.choice(self.negative_response_list),
-                    cancelable=True,
-                    next_line=None,
-                    look_at_conversation_object=True,
-                    look_at_object_time=10
-                ),
-                look_at_conversation_object=True,
-                look_at_object_frame="person",
-                look_at_object_time=5
+                next_action=
+                DialogueActionSleep(
+                    sleep_time=2,
+                    cancelable=False,
+                    next_action=
+                    DialogueActionTalkBinaryResponse(
+                        utterance="Do you also see {}?".format(self.__add_a_to_noun(self.__get_object_noun(topic))),
+                        cancelable=False,
+                        next_action_yes=
+                        DialogueActionTalkNoResponse(
+                            utterance=random.choice(self.positive_response_list),
+                            cancelable=True,
+                            next_action=None
+                        ),
+                        next_action_no=
+                        DialogueActionTalkNoResponse(
+                            utterance=random.choice(self.negative_response_list),
+                            cancelable=False,
+                            next_action=
+                            DialogueActionLook(
+                                look_type=DialogueActionLook.LOOK_TYPE_WATCH_CONVERSATION_TOPIC,
+                                cancelable=False,
+                                next_action=
+                                DialogueActionSleep(
+                                    sleep_time=3,
+                                    cancelable=False,
+                                    next_action=None
+                                )
+                            ),
+                        )
+                    )
+                )
             )
         )
-
 
     def __add_a_to_noun(self, noun):
         # type: (str) -> str

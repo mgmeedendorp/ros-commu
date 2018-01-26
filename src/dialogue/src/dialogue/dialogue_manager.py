@@ -1,5 +1,5 @@
 import threading
-from typing import Callable, List
+from typing import List, Union
 
 import rospy
 import time
@@ -32,13 +32,12 @@ class DialogueManager:
 
         self.topic_history = []  # type: List[DialogueTopic]
 
-    def start(self, utter, threaded=False):
-        # type: (Callable[[str], None], bool) -> None
+    def start(self, threaded=False):
+        # type: (bool) -> None
         """
         Start the DialogueManager. This uses the DialogueLibrary to go through every dialogue in the
         topics dict, based on their priority (high priority first). This can be run either synchronously or
         asynchronously (in a new thread).
-        :param utter: The function that can be called to utter a sentence.
         :param threaded: Whether to run the DialogueManager in a different thread.
         """
         self.running = True
@@ -48,17 +47,16 @@ class DialogueManager:
         rospy.on_shutdown(self.force_stop)
 
         if threaded:
-            thread = threading.Thread(target=self.__start_worker(utter))
+            thread = threading.Thread(target=self.__start_worker())
             thread.daemon = True
             thread.start()
         else:
-            self.__start_worker(utter)
+            self.__start_worker()
 
-    def __start_worker(self, utter):
-        # type: (Callable[str, None]) -> None
+    def __start_worker(self):
+        # type: () -> None
         """
         The worker function for start(). This is a separate function to ease threading.
-        :param utter: The function that can be called to utter a sentence.
         """
         rospy.loginfo("Starting DialogueManager worker...")
 
@@ -69,13 +67,13 @@ class DialogueManager:
         rate = rospy.Rate(2)
 
         while not self.should_interrupt:
-            self.__talk(utter)
+            self.__talk()
 
-            self.__talk_fallback(utter)
+            self.__talk_fallback()
 
             rate.sleep()
 
-    def __talk(self, utter):
+    def __talk(self):
         while len(self.topics) > 0:
             rospy.loginfo("Selecting new topic to talk about..")
 
@@ -98,13 +96,13 @@ class DialogueManager:
 
                 self.decrease_current_topic_priority()
 
-                self.current_dialogue.proceed_dialogue(utter, self.current_topic.topic_id)
+                self.current_dialogue.proceed_dialogue(self.current_topic.topic_id)
 
             rospy.loginfo("Dialogue about {} finished.".format(self.current_topic.label))
 
             self.__delete_topic(self.current_topic)
 
-    def __talk_fallback(self, utter):
+    def __talk_fallback(self):
         if self.fallback_dialogue is not None and not self.should_interrupt:
             rospy.loginfo("DialogueManager seems to be done talking. Starting Chatbot conversation...")
 
@@ -120,7 +118,7 @@ class DialogueManager:
                         "Canceling fallback dialogue in favor of {}..".format(self.__get_next_current_topic().label))
                     self.fallback_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
-                self.fallback_dialogue.proceed_dialogue(utter, self.current_topic.topic_id)
+                self.fallback_dialogue.proceed_dialogue(self.current_topic.topic_id)
 
             rospy.loginfo(
                 "The fallback dialogue has run out!")  # maybe do something here? it shouldn't happen with mitsuku, but ..
@@ -230,7 +228,7 @@ class DialogueManager:
         return False
 
     def __get_next_current_topic(self):
-        # type: () -> DialogueTopic
+        # type: () -> Union[DialogueTopic, None]
         """
         Get the topic from self.topics with the highest priority.
         :return: The topic with the highest priority.
@@ -275,7 +273,6 @@ class DialogueManager:
 
         for topic in self.topic_history:
             topic_history_labels.append(topic.label)
-
 
         return topic_history_labels
 

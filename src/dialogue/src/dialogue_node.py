@@ -6,7 +6,6 @@ from ssd.msg import ClassifiedObjectArray
 from commu_wrapper.srv import CommUUtter
 from dialogue.dialogue_definition_quiz_objects import DialogueLibraryQuiz
 from dialogue.dialogue_manager import DialogueManager
-from util import get_srv_function
 
 
 def classification_result_callback(manager, data):
@@ -41,20 +40,6 @@ def init_message_publishers(manager):
     rospy.loginfo("Initializing message publishers done.")
 
 
-def utter(utterance):
-    utter_srv = get_srv_function('/commu_wrapper/utter', CommUUtter)
-
-    rospy.loginfo("Uttering: " + str(utterance))
-
-    if utterance is not None:
-        success = utter_srv(utterance, True, True)
-
-        rospy.loginfo("Uttering " + ("succeeded" if success else "failed!"))
-
-        return success
-    return True
-
-
 if __name__ == '__main__':
     rospy.init_node("dialogue")
     rospy.loginfo("Starting dialogue node..")
@@ -69,7 +54,7 @@ if __name__ == '__main__':
     init_message_publishers(manager)
 
     try:
-        manager.start(utter, False)
+        manager.start(False)
     except:
         e = sys.exc_info()[0]
         rospy.loginfo("DialogueManager stopped because of an error.")
