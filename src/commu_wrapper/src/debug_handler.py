@@ -1,13 +1,14 @@
+import time
 from threading import Thread
 
 import cv2
 import numpy as np
-import time
-from cv_bridge import CvBridge, CvBridgeError
-from ssd.msg import ClassifiedObjectArray, ClassifiedObject, BoundingBox
-from sensor_msgs.msg import Image
-import util
 import rospy
+from cv_bridge import CvBridge
+from ssd.msg import ClassifiedObjectArray
+
+import util
+
 
 class DebugHandler:
 

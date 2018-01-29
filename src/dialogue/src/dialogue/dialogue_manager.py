@@ -1,8 +1,9 @@
 import threading
-from typing import List, Union
+import time
 
 import rospy
-import time
+from typing import List, Union
+
 from dialogue import Dialogue
 
 

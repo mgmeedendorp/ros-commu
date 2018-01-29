@@ -2,11 +2,11 @@
 
 import rospy
 from look_helper.srv import SetLookAtTarget, SetLookAtTargetResponse, SetLookAtTargetRequest
+from realsense_person.msg import PersonDetection
 from ssd.msg import ClassifiedObjectArray
 
 from look_manager import *
-from realsense_person.msg import PersonDetection
-import time
+
 
 def person_classification_callback(manager, data):
     # type: (LookManager, PersonDetection) -> None

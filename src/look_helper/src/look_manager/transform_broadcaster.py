@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import math
-import rospy
-
 # to get commandline arguments
 import sys
 
+import geometry_msgs
+import rospy
 # Because of transformations
 import std_msgs
 import tf
@@ -12,7 +12,6 @@ import tf2_ros
 from geometry_msgs.msg import TransformStamped
 from image_geometry import PinholeCameraModel
 from realsense_person.msg import PersonDetection
-import geometry_msgs
 from rospy import Time
 from sensor_msgs.msg import CameraInfo
 from ssd.msg import ClassifiedObject

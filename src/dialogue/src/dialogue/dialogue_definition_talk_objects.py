@@ -1,5 +1,5 @@
-from dialogue_action import *
 from dialogue import Dialogue
+from dialogue_action import *
 from dialogue_manager import DialogueLibrary
 
 

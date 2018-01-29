@@ -2,15 +2,16 @@
 import os
 import sys
 
-import numpy as np
-from google.protobuf import text_format
-from ssd.msg import ClassifiedObjectArray, ClassifiedObject, BoundingBox
-
 import caffe
-from caffe.proto import caffe_pb2
-from util import time_usage
-from std_msgs.msg import Header
+import numpy as np
 import rospy
+from caffe.proto import caffe_pb2
+from google.protobuf import text_format
+from ssd.msg import ClassifiedObject, BoundingBox
+from std_msgs.msg import Header
+
+from util import time_usage
+
 
 class SSD:
     caffe_root = '/home/maurice/catkin_ws/src/ssd/caffe/'

@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-import rospy
 import sys
+
+import rospy
 from ssd.msg import ClassifiedObjectArray
-from commu_wrapper.srv import CommUUtter
+
 from dialogue.dialogue_definition_quiz_objects import DialogueLibraryQuiz
 from dialogue.dialogue_manager import DialogueManager
 

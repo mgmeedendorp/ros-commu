@@ -2,8 +2,8 @@ import random
 import time
 
 import cv2
-from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
+from cv_bridge import CvBridge, CvBridgeError
 
 # Necessary to transform ROS images into OpenCv images for caffe
 bridge = CvBridge()

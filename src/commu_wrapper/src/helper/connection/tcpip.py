@@ -1,6 +1,7 @@
 from __future__ import print_function
+
 import socket
-from contextlib import closing
+
 
 class TCPServer:
   HOST = '127.0.0.1'

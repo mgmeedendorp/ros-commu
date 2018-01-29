@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
-import argparse
-
 import rospy
-import sys
+from commu_wrapper.srv import CommUUtter, CommUUtterResponse, CommUUtterRequest, CommULook, CommULookResponse, \
+    CommULookRequest
 
 from debug_handler import DebugHandler
 from wrapper import CommUWrapper
-from commu_wrapper.srv import CommUUtter, CommUUtterResponse, CommUUtterRequest, CommULook, CommULookResponse, CommULookRequest
 
 
 def utter_callback(wrapper):

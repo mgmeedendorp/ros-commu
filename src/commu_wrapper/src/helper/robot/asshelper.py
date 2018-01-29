@@ -7,9 +7,8 @@
 # ・ASSシナリオのロードと実行
 # ・ロギング
 
-import time
-import sys,os
-import datetime
+import os
+import sys
 from time import sleep
 
 sys.path.append(os.path.abspath("../../"))

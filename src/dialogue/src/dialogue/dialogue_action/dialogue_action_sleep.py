@@ -1,7 +1,8 @@
 import time
 
-from abstract_dialogue_action import AbstractDialogueAction
 from typing import Union
+
+from abstract_dialogue_action import AbstractDialogueAction
 
 
 class DialogueActionSleep(AbstractDialogueAction):

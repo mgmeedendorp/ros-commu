@@ -4,9 +4,10 @@ Created on 2015/10/03
 @author: arimoto
 '''
 
-from time import sleep
-import sys,os
 import argparse
+import os
+import sys
+from time import sleep
 
 sys.path.append(os.path.abspath("../../"))
 from helper.connection.I2CProtocol import I2CProtocol

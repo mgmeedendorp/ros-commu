@@ -1,24 +1,11 @@
 #!/usr/bin/env python
-import cv2
 
 import rospy
-import time
-
-import sys
-
-import skimage
+from cv_bridge import CvBridge
 from sensor_msgs.msg import Image, CameraInfo
-from geometry_msgs.msg import Pose2D
-from ssd.msg import ClassifiedObjectArray, ClassifiedObject, BoundingBox
-import numpy as np
-from skimage import img_as_ubyte
-import skimage.io
+from ssd.msg import ClassifiedObjectArray
 
-import caffe
 from ssd_wrapper import SSD, ClassificationResult
-from util import image_to_opencv, draw_bounding_boxes, display_opencv_image, save_opencv_image
-from cv_bridge import CvBridge, CvBridgeError
-
 
 ssd = SSD(use_gpu=True)
 

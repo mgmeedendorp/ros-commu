@@ -2,10 +2,8 @@ import random
 import time
 
 import cv2
-import sys, os
-from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
-import skimage.io
+from cv_bridge import CvBridge, CvBridgeError
 
 # Necessary to transform ROS images into OpenCv images for caffe
 bridge = CvBridge()

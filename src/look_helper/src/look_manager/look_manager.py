@@ -1,14 +1,14 @@
+import math
 import random
 
 import rospy
 import tf2_ros
-from geometry_msgs.msg import TransformStamped
-from realsense_person.msg import PersonDetection
 from commu_wrapper.srv import CommULook
+from realsense_person.msg import PersonDetection
 from ssd.msg import ClassifiedObjectArray
 from util import get_srv_function
+
 import transform_broadcaster
-import math
 
 
 class LookManager:
