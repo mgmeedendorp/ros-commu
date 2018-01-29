@@ -226,7 +226,7 @@ class DialogueManager:
         """
         rospy.loginfo("Removing {} from the topic list..".format(topic))
 
-        if self.running and self.current_topic.label == topic:
+        if self.running and self.current_topic is not None and self.current_topic.label == topic:
             rospy.loginfo("{} is the current topic while we are trying to remove it. Requesting change of topic before removal...".format(topic))
 
             self.switching_topic = True
