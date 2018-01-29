@@ -34,21 +34,30 @@ class DialogueLibraryQuiz(DialogueLibrary):
                         DialogueActionTalkNoResponse(
                             utterance=random.choice(self.positive_response_list),
                             cancelable=True,
-                            next_action=None
-                        ),
-                        next_action_no=
-                        DialogueActionTalkNoResponse(
-                            utterance=random.choice(self.negative_response_list),
-                            cancelable=False,
                             next_action=
                             DialogueActionLook(
-                                look_type=DialogueActionLook.LOOK_TYPE_WATCH_CONVERSATION_TOPIC,
+                                look_type=DialogueActionLook.LOOK_TYPE_WATCH_ENVIRONMENT,
+                                cancelable=True,
+                                next_action=None
+                            )
+                        ),
+                        next_action_no=
+                        DialogueActionLook(
+                            look_type=DialogueActionLook.LOOK_TYPE_WATCH_CONVERSATION_TOPIC,
+                            cancelable=False,
+                            next_action=
+                            DialogueActionTalkNoResponse(
+                                utterance=random.choice(self.negative_response_list),
                                 cancelable=False,
                                 next_action=
                                 DialogueActionSleep(
                                     sleep_time=3,
                                     cancelable=False,
-                                    next_action=None
+                                    next_action=DialogueActionLook(
+                                        look_type=DialogueActionLook.LOOK_TYPE_WATCH_ENVIRONMENT,
+                                        cancelable=True,
+                                        next_action=None
+                                    )
                                 )
                             ),
                         )

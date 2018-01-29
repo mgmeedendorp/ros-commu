@@ -95,7 +95,7 @@ class DialogueManager:
                     rospy.loginfo("Canceling dialogue about {}..".format(self.current_topic.label))
                     self.current_dialogue.cancel_dialogue(self.__get_next_current_topic())
 
-                self.decrease_current_topic_priority()
+                self.decrease_old_topic_priority()
 
                 self.current_dialogue.proceed_dialogue(self.current_topic.topic_id)
 
@@ -169,8 +169,9 @@ class DialogueManager:
         t = DialogueTopic(priority, topic_id, topic)
 
         if self.has_topic(topic):
-            rospy.logdebug("Trying to add {} to the topics, but a topic with that label already exists! Skipping..".format(topic))
-            return
+            rospy.logdebug("Trying to add {} to the topics, but a topic with that label already exists! Removing old topic..".format(topic))
+
+            self.remove_topic(topic)
 
         rospy.loginfo("Adding {} to the topic list with priority {}..".format(topic, priority))
 
@@ -199,6 +200,23 @@ class DialogueManager:
             if self.running and self.__get_next_current_topic() != self.current_topic:
                 rospy.loginfo("{} is not the highest priority ({}) topic anymore. Requesting topic switch...".format(self.current_topic.label, priority))
                 self.switching_topic = True
+
+    def decrease_old_topic_priority(self, reduction=0.5):
+        # type: (float) -> None
+        """
+        This decreases the priority of older topics as they are probably less relevant or not even in sight anymore.
+        :param reduction: The priority of all topics will be reduced by this amount.
+        """
+
+        rospy.loginfo("Reducing all topics' priority.")
+
+        for topic in self.topics:
+            priority = topic.priority - reduction
+
+            if priority <= 0:
+                self.remove_topic(topic.label)
+
+            topic.priority = priority
 
     def remove_topic(self, topic):
         # type: (str) -> None
