@@ -24,7 +24,7 @@ class DialogueLibraryQuiz(DialogueLibrary):
                 cancelable=False,
                 next_action=
                 DialogueActionSleep(
-                    sleep_time=2,
+                    sleep_time=1,
                     cancelable=False,
                     next_action=
                     DialogueActionTalkBinaryResponse(
@@ -51,7 +51,7 @@ class DialogueLibraryQuiz(DialogueLibrary):
                                 cancelable=False,
                                 next_action=
                                 DialogueActionSleep(
-                                    sleep_time=3,
+                                    sleep_time=2,
                                     cancelable=False,
                                     next_action=DialogueActionLook(
                                         look_type=DialogueActionLook.LOOK_TYPE_WATCH_ENVIRONMENT,
